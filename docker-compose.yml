@@ -1,0 +1,34 @@
+version: "3.2"
+services:
+  volumes:
+    pgdata:
+        driver: local
+
+services:
+  db:
+    container_name: db
+    image: postgres
+    environment:
+        POSTGRES_USER: admin
+        POSTGRES_PASSWORD: '123456'
+        POSTGRES_DB: stars
+        PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./pgdata/:/var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+
+  nodejs:
+    build: 
+      context: .
+      dockerfile: dockerfile
+    volumes:
+      - ./stars-backend:/srv/www/stars-backend
+    ports:
+      - 3000:3000
+    command: "bash entrypoint.sh"
+    depends_on: 
+      - db
+    environment: 
+      DATABASE_URL: postgres://admin:123456@db:5432/stars
+      PORT: 3000
