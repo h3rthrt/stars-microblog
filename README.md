@@ -4,4 +4,4 @@
 sudo bash start.sh
 ```
 
-__Стэк бэкенда :(bold)__ nodejs, express, body-parser, nodemon, sequelize, passport, JWT, multer, cloudinary.
+__Стэк бэкенда:__ nodejs, express, body-parser, nodemon, sequelize, passport, JWT, multer, cloudinary.
