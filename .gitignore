@@ -154,3 +154,5 @@ sketch
 
 # End of https://www.toptal.com/developers/gitignore/api/vscode,react,yarn,node
 stars-frontend/package-lock.json
+stars-backend/process.env
+stars-backend/package-lock.json
