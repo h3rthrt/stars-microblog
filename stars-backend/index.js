@@ -1,33 +1,19 @@
-const express = require('express')
-const sequelize = require('./sequelize')
-const app = express()
-const PORT = process.env.PORT
+const express = require('express');
+const { ApolloServer } = require('apollo-server-express');
 
+// Construct a schema, using GraphQL schema language
+const typeDefs = require('./graphql/hello.graphql');
 
-async function databaseConnection() {
-    console.log('Checking database connection...')
-    try {
-        await sequelize.authenticate()
-        console.log('Database connection OK!!')
+// Provide resolver functions for your schema fields
+const resolvers = {
+	Query: {
+		hello: () => 'Hello world!'
+	}
+};
 
-    } catch (e) {
-        console.log(`Unable to connect to the database: ${e}`)
-    }
-}
+const server = new ApolloServer({ typeDefs, resolvers });
 
-async function init() {
-    await databaseConnection()
+const app = express();
+server.applyMiddleware({ app });
 
-    console.log(`Starting sequelize + express on port ${PORT}...`)
-    
-    sequelize.sync({ force: true })
-
-    .catch((e) => {console.log(e)})
-
-    app.listen(PORT, () => {
-        console.log(`Server has been started on port ${PORT}..`)
-    })
-    console.log("All models were synchronized successfully.")
-}
-
-init()
+app.listen({ port: 4000 }, () => console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`));

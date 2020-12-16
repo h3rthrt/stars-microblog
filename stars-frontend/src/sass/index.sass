@@ -1,0 +1,102 @@
+@import "fonts"
+@import "vars"
+
+*
+	padding: 0
+	margin: 0
+	-webkit-box-sizing: border-box
+	-moz-box-sizing: border-box
+	box-sizing: border-box
+	font-family: $default-font
+	&:before, &:after
+		-webkit-box-sizing: border-box
+		-moz-box-sizing: border-box
+		box-sizing: border-box
+
+*::-webkit-input-placeholder
+	color: #666
+	opacity: 1
+
+*:-moz-placeholder
+	color: #666
+	opacity: 1
+
+*::-moz-placeholder
+	color: #666
+	opacity: 1
+
+*:-ms-input-placeholder
+	color: #666
+	opacity: 1
+
+body input:focus:required:invalid,
+body textarea:focus:required:invalid
+	color: #666
+body input:required:valid,
+body textarea:required:valid
+	color: #666
+
+html, body
+	height: 100%
+
+body
+	background: $primary-color
+	color: $white
+	font-size: 14px
+	min-width: 320px
+	position: relative
+	line-height: 1.65
+	font-family: $default-font
+	font-weight: 500
+	overflow-x: hidden
+
+h1
+	font-size: 24px
+	letter-spacing: -0.02em
+
+h2
+	line-height: 22px
+	font-size: 18px
+
+input
+	border: none
+	background-image: none
+	background-color: transparent
+	-webkit-box-shadow: none
+	-moz-box-shadow: none
+	box-shadow: none
+	&:focus
+		outline: none
+
+a
+	letter-spacing: $letter-spacing
+
+p
+	line-height: 17px
+
+.img-responsive
+	display: block
+	max-width: 100%
+	height: auto
+
+.text-center
+	text-align: center
+
+::selection
+	background-color: $accent
+	color: #fff
+
+.wrapper
+	padding-left: calc( 50% - 720px )
+	padding-right: calc( 50% - 720px )
+
+.container
+	display: flex
+	flex-wrap: nowrap
+	margin-top: 12px
+	padding-left: calc( 50% - 492px )
+	padding-right: calc( 50% - 593px )
+
+@media only screen and (max-width : 992px)
+	main
+		margin: 0 10px

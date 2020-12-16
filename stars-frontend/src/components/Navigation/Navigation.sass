@@ -1,0 +1,84 @@
+@import "./../../sass/vars"
+
+.nav
+    display: flex
+    align-items: center
+    padding-left: 26px
+    padding-top: 18px
+    padding-right: calc(50% - 733%)
+    .stars-logo
+        width: 35px
+        height: 50px
+        svg
+            width: 35px
+            height: 50px
+
+.search
+    align-items: center
+    display: flex
+    background: $forth-color
+    border-radius: 4px
+    box-shadow: 0px 0px 32px 4px rgba(0, 0, 0, 0.24)
+    padding: 14px 16px
+    margin-left: 167px
+    margin-right: 158px
+    width: 52%
+    input
+        color: $secondary-color
+        font-size: 18px
+        font-weight: bold
+        line-height: 22px
+        margin-left: 11px
+        &::placeholder
+            color: $secondary-color
+
+.true
+    a
+        color: $primary-color
+        background: $white
+
+nav
+    box-shadow: 0px 0px 32px 4px rgba(0, 0, 0, 0.3)
+    margin-right: 75px
+    ul
+        display: flex
+        align-items: center
+        li
+            list-style-type: none
+            a
+                transition: all 0.1s ease-in-out
+                font-size: 22px
+                display: flex
+                background: $forth-color
+                text-decoration: none
+                padding: 14px 13px
+                color: $secondary-color
+            &:nth-child(1)
+                a
+                    border-radius: 4px 0 0 4px
+            &:nth-child(4)
+                a
+                    border-radius: 0 4px 4px 0
+
+@media only screen and (max-width : 768px)
+    .nav
+        padding-left: 0px
+        justify-content: center
+        .search
+            margin: 0
+            width: 90%
+        .stars-logo
+            margin-right: 12px
+        nav
+            position: fixed
+            top: 91vh
+            margin: 0
+            z-index: 99999999999
+            ul
+                li
+                    a
+                        min-width: 64px
+                        padding: 14px 6vw
+                        display: flex
+                        align-items: center
+                        justify-content: center
