@@ -4,7 +4,7 @@ exports.up = function(knex) {
         table.increments()
         table.string('image')
         table.integer('post_id').unsigned().notNullable()
-        table.foreign('post_id').references('post.id').inTable('post')
+        table.foreign('post_id').references('posts.id').inTable('posts')
     })
 };
 
