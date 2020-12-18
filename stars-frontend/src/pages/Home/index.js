@@ -1,66 +1,34 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import api from '../../api/axios'
 import Post from '../../components/Post'
+import Tags from '../../components/PopularTags'
 import './Home.sass'
 
-function loadList() {
-    const postsList = [
-        {
-            avatar: '/img/user1106.jpg',
-            nickname: 'user1106',
-            author: 'user1106',
-            images: [],
-            head: 'Почему однократно воображение?', 
-            text: 'Весеннее равноденствие, после осторожного анализа, начинает эксцентриситет. Угловая скорость вращения, следовательно, гасит онтологический статус искусства – это скорее индикатор, чем примета. ',
-            likes: 42,
-            tags: []
-        },
-        {
-            avatar: '/img/user1106.jpg',
-            nickname: 'user1106',
-            author: 'unknown',
-            images: [],
-            head: 'Почему характерна Туманность Андромеды?',
-            text: 'У планет-гигантов нет твёрдой поверхности, таким образом прекрасное представляет собой меланхолик, как это случилось в 1994 году с кометой Шумейкеpов-Леви 9.',
-            likes: 42,
-            tags: ['космос', 'андромеда']
-        },
-        {
-            avatar: '/img/user1106.jpg',
-            nickname: 'user1106',
-            author: 'unknown',
-            images: ['/img/imagePost.png', '/img/imagePost2.png'],
-            head: '',
-            text: 'Исследователями из разных лабораторий неоднократно наблюдалось, как турбулентность переворачивает плазменный солитон.',
-            likes: 9,
-            tags: []
-        }
-    ]
-    return postsList
-}
-
 function Home() {
-    const [postsList] = useState(() => loadList())
+	const [ postsList, setLists ] = useState([])
 
-    return (
-        <div className="container">
-            <div className="left">
-                <h1>Лента</h1>
-                <div className="create-note">
-                    Создать запись
-                </div>
-                {
-                    postsList.map((post, index) => {
-                        return(
-                            <Post list={post} key={index} />
-                        )
-                    })
-                }
-            </div>
-            <div className="right">
+	useEffect(() => {
+		api.get('posts').then((response) => setLists(response.data))
+    }, []);
+    
+    function renderPosts() {
+        return postsList.map((post, index) => {
+            return <Post key={index} list={post} />
+        })
+    }
 
-            </div>
-        </div>
-    )
+	return (
+		<div className="container">
+			<div className="left">
+				<h1>Лента</h1>
+				<div className="create-note">Создать запись</div>
+				{ renderPosts() }
+			</div>
+			<div className="right">
+				<Tags />
+			</div>
+		</div>
+	)
 }
 
 export default Home

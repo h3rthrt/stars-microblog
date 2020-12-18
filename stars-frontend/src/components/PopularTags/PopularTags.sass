@@ -1,0 +1,36 @@
+@import "../../sass/vars"
+@import "../../sass/mixins/fadeIn"
+
+.tags
+    margin-top: 15px
+    text-align: right
+    margin-left: auto
+    max-width: 286px
+    hr
+        margin: 14px 0
+        border: 1px solid $white
+    &__list
+        display: flex
+        flex-wrap: wrap
+        justify-content: flex-end
+        a
+            @include animation
+            text-align: center
+            width: 31.3%
+            text-decoration: none
+            color: $primary-color
+            background: $white
+            padding: 3px 0
+            border-radius: 4px
+            margin: 4px 0
+            transition: 0.2s all ease-in-out
+            &:nth-child(3n+2)
+                margin: 4px 8px
+            &:last-child
+                margin-left: 8px
+                margin-right: 0px
+            &:hover
+                box-shadow: $white-shadow
+
+@keyframes fadeIn
+    @include keyframes
