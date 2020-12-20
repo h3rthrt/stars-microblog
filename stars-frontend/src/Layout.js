@@ -5,6 +5,7 @@ function Layout(props) {
     return (
         <div className="wrapper">
             <Nav/>
+            <h1 className="headerLocation">Лента</h1>
             <main>
                 {props.children}
             </main>

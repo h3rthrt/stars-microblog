@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react'
-import api from '../../api/axios'
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
+import { loadPopularTags } from '../../redux/actions/actions'
 import './PopularTags.sass'
 
-function Tags() {
-    const [tagsList, setTags] = useState([])
-
+function Tags(props) {
     useEffect(() => {
-        api.get('tags').then((response) => setTags(response.data))
+        props.loadPopularTags()
+        console.log(props.tagsList)
     }, [])
 
     return (
@@ -15,7 +15,7 @@ function Tags() {
             <hr />
             <div className="tags__list">
                 {
-                    tagsList.map((tag, index) => {
+                    props.tagsList.map((tag, index) => {
                         return(
                             <a href="/" key={ index }>
                                 #{ tag }
@@ -28,4 +28,16 @@ function Tags() {
     )
 }
 
-export default Tags
+function mapStateToProps(state) {
+    return {
+        tagsList: state.tag.popularTags
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        loadPopularTags: () => dispatch(loadPopularTags())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Tags)

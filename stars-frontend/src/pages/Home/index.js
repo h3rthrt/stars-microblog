@@ -1,28 +1,26 @@
-import React, { useState, useEffect } from 'react'
-import api from '../../api/axios'
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
+import { loadPosts } from '../../redux/actions/actions'
 import Post from '../../components/Post'
 import Tags from '../../components/PopularTags'
 import './Home.sass'
 
-function Home() {
-	const [ postsList, setLists ] = useState([])
-
+function Home(props) {
 	useEffect(() => {
-		api.get('posts').then((response) => setLists(response.data))
-    }, []);
-    
-    function renderPosts() {
-        return postsList.map((post, index) => {
-            return <Post key={index} list={post} />
-        })
-    }
+		props.loadPosts()
+	}, [])
+
+	function renderPosts() {
+		return props.postsList.map((post, index) => {
+			return <Post key={index} list={post} />
+		})
+	}
 
 	return (
 		<div className="container">
 			<div className="left">
-				<h1>Лента</h1>
 				<div className="create-note">Создать запись</div>
-				{ renderPosts() }
+				{renderPosts()}
 			</div>
 			<div className="right">
 				<Tags />
@@ -31,4 +29,16 @@ function Home() {
 	)
 }
 
-export default Home
+function mapStateToProps(state) {
+	return {
+		postsList: state.post.postsList
+	}
+}
+
+function mapDispatchToProps(dispatch) {
+	return {
+		loadPosts: () => dispatch(loadPosts())
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)
