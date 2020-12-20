@@ -7,7 +7,7 @@ const links = [
     {to: '/home', icon: 'home'},
     {to: '/', icon: 'globe'},
     {to: '/profile', icon: 'user'},
-    {to: '/setting', icon: 'cog'}
+    {to: '/settings', icon: 'cog'}
 ]
 
 
