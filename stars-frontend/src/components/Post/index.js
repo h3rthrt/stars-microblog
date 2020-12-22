@@ -1,10 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Post.sass'
 
 function Post(props) {
-	const [like, setLike] = useState(false)
-	const [repost, setRepost] = useState(false)
 
 	return (
 		<div className="post">
@@ -74,4 +72,4 @@ function Post(props) {
 	);
 }
 
-export default Post;
+export default Post

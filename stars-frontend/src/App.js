@@ -14,7 +14,7 @@ function App() {
       <Switch>
         <Route path='/home' component={Home} />
         <Route exact path='/' component={Main} />
-        <Route path='/profile' component={Profile} />
+        <Route path='/profile/:id' component={Profile} />
         <Route path='/settings' component={Settings} />
         <Route path='/404' component={NotFound} />
         <Redirect from='*' to='/404' />

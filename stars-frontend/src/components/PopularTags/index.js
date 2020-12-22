@@ -6,14 +6,14 @@ import './PopularTags.sass'
 function Tags(props) {
     useEffect(() => {
         props.loadPopularTags()
-        console.log(props.tagsList)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
-        <div className="tags">
+        <div className="right-block">
             <h2>Популярные теги</h2>
             <hr />
-            <div className="tags__list">
+            <div className="right-block__list">
                 {
                     props.tagsList.map((tag, index) => {
                         return(

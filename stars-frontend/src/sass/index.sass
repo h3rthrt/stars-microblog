@@ -1,5 +1,6 @@
 @import "fonts"
 @import "vars"
+@import "./mixins/fadeIn"
 
 *
 	padding: 0
@@ -68,6 +69,35 @@ input
 	&:focus
 		outline: none
 
+button
+	padding: 0
+	border: none
+	font: inherit
+	color: inherit
+	background-color: transparent
+	outline: none
+	&:hover
+		padding: 0
+		border: none
+		font: inherit
+		color: inherit
+		background-color: transparent
+		outline: none
+	&:active
+		padding: 0
+		border: none
+		font: inherit
+		color: inherit
+		outline: none
+		background-color: transparent
+	&:focus
+		outline: none
+		padding: 0
+		border: none
+		font: inherit
+		color: inherit
+		background-color: transparent
+
 a
 	letter-spacing: $letter-spacing
 
@@ -95,10 +125,123 @@ p
 	flex-wrap: nowrap
 	padding-left: calc( 50% - 492px )
 	padding-right: calc( 50% - 596px )
+	&__left
+		width: 57.7%
+	.post
+		margin-top: 48px
+		&:last-child
+			margin-bottom: 48px
+	&__right
+		width: 42%
 
-.headerLocation
+.header-location
 	margin-top: 12px
 	padding-left: calc( 50% - 492px )
+	margin-bottom: 18px
+
+.create-note
+	color: $primary-color
+	background: $white
+	box-shadow: 0px 0px 32px 4px rgba(0, 0, 0, 0.3)
+	border-radius: 4px
+	width: 100%
+	padding: 8px 16px
+	font-size: 14px
+	font-weight: 700
+	letter-spacing: -0.03em
+	cursor: pointer
+	transition: .2s all ease-in-out
+	&:hover
+		box-shadow: $white-shadow
+
+.right-block
+	text-align: right
+	margin-left: auto
+	max-width: 286px
+	position: relative
+	bottom: 45px
+	hr
+		margin: 14px 0
+		border: 1px solid $white
+	&__user-info
+		display: flex
+		justify-content: space-between
+		flex-wrap: nowrap
+		text-align: right
+		img
+			width: 40%
+			height: 40%
+			max-width: 130px
+			box-shadow: 0px 0px 30px 4px rgba(0, 0, 0, 0.3)
+			border-radius: 4px
+		p
+			font-weight: bold
+			font-size: 12px
+			line-height: 15px
+	&__subs
+		margin-top: 40px
+		a
+			text-align: left
+			font-weight: bold
+			font-size: 18px
+			line-height: 22px
+			align-items: center
+			letter-spacing: -0.04em
+			text-decoration: none
+			color: $white
+			cursor: pointer
+			transform: none
+			transition: .2s transform ease-in-out
+			&:hover
+				transform: perspective(400px) translateZ(-10px)
+		.subs-block
+			display: flex
+			flex-direction: column
+	&__media
+		margin-top: 40px
+		.media-list
+			display: flex
+			flex-wrap: wrap
+			a
+				width: 83px
+				height: 83px
+				img
+					border-radius: 4px
+					width: 100%
+					height: 100%
+					background-size: cover
+					transform: none
+					transition: .2s transform ease-in-out
+					object-fit: cover	
+					&:hover
+						transform: perspective(400px) translateZ(-10px)
+				&:nth-child(3n+2)
+					margin: 0 12px 12px 15px
+	&__list
+		display: flex
+		flex-wrap: wrap
+		justify-content: flex-end
+		a
+			@include animation
+			text-align: center
+			width: 31.3%
+			text-decoration: none
+			color: $primary-color
+			background: $white
+			padding: 3px 0
+			border-radius: 4px
+			margin: 4px 0
+			transition: 0.2s all ease-in-out
+			&:nth-child(3n+2)
+				margin: 4px 8px
+			&:last-child
+				margin-left: 8px
+				margin-right: 0px
+			&:hover
+				box-shadow: $white-shadow
+
+@keyframes fadeIn
+	@include keyframes
 
 @media only screen and (max-width : 992px)
 	main

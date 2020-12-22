@@ -1,12 +1,42 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
+import { loadPosts } from '../../redux/actions/actions'
+import Tags from '../../components/PopularTags'
+import Post from '../../components/Post'
 import './Main.sass'
 
-function Main() {
-    return (
-        <div>
-            <h2>Поиск</h2>
-        </div>
-    )
+function Main(props) {
+	useEffect(() => {
+		props.loadPosts()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
+
+	function renderPosts() {
+		return props.postsList.map((post, index) => {
+			return <Post key={index} list={post} />
+		})
+	}
+
+	return (
+		<div className="container">
+			<div className="container__left">{renderPosts()}</div>
+			<div className="container__right">
+				<Tags />
+			</div>
+		</div>
+	)
 }
 
-export default Main
+function mapStateToProps(state) {
+	return {
+		postsList: state.post.postsList
+	}
+}
+
+function mapDispatchToProps(dispatch) {
+	return {
+		loadPosts: () => dispatch(loadPosts())
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main)

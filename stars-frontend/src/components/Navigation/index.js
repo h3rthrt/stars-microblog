@@ -3,16 +3,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Navigation.sass'
 import { Link, NavLink, withRouter } from 'react-router-dom'
 
-const links = [
-    {to: '/home', icon: 'home'},
-    {to: '/', icon: 'globe'},
-    {to: '/profile', icon: 'user'},
-    {to: '/settings', icon: 'cog'}
-]
-
-
-
 function Nav(props) {
+    
+    const links = [
+        {to: '/home', icon: 'home'},
+        {to: '/', icon: 'globe'},
+        {to: '/profile/user1106', icon: 'user'},
+        {to: '/settings', icon: 'cog'}
+    ]
+
     function renderLinks() {
         return links.map((link, index) => {
             let cls = []

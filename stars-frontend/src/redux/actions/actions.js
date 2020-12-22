@@ -2,11 +2,13 @@ import {
 	LOAD_POSTS_SUCCESS,
 	LOAD_POSTS_ERROR,
 	LOAD_POPULAR_TAGS_ERROR,
-	LOAD_POPULAR_TAGS_SUCCESS
+	LOAD_POPULAR_TAGS_SUCCESS,
+	LOAD_PROFILE_SUCCESS,
+	LOAD_PROFILE_ERROR
 } from './actionsTypes'
 import axios from '../../api/axios'
 
-// Load all posts
+// Load posts
 
 export function loadPosts() {
 	return async (dispatch) => {
@@ -19,6 +21,19 @@ export function loadPosts() {
 		}
 	}
 }
+
+export function loadProfilePosts(payload) {
+	return async (dispatch) => {
+		try {
+			var posts = []
+			await axios.get(`${payload}?nickname=user1106`).then((response) => (posts = response.data))
+			dispatch(fetchPostsSuccess(posts))
+		} catch (e) {
+			dispatch(fetchPostsError(e))
+		}
+	}
+}
+
 
 export function fetchPostsSuccess(posts) {
 	return {
@@ -58,6 +73,34 @@ export function fetchPopularTagsSuccess(tags) {
 export function fetchPopularTagsError(e) {
 	return {
 		type: LOAD_POPULAR_TAGS_ERROR,
+		error: e
+	}
+}
+
+// Load profile
+
+export function loadProfile(payload) {
+	return async (dispatch) => {
+		try {
+			var profileData = []
+			await axios.get(`users?blogname=${payload}`).then((response) => (profileData = response.data))
+			dispatch(fetchProfileDataSuccess(profileData))
+		} catch (e) {
+			dispatch(fetchProfileDataError(e))
+		}
+	}
+}
+
+export function fetchProfileDataSuccess(profileData) {
+	return {
+		type: LOAD_PROFILE_SUCCESS,
+		data: profileData
+	}
+}
+
+export function fetchProfileDataError(e) {
+	return {
+		type: LOAD_PROFILE_ERROR,
 		error: e
 	}
 }

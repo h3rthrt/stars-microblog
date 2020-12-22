@@ -8,6 +8,7 @@ import './Home.sass'
 function Home(props) {
 	useEffect(() => {
 		props.loadPosts()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
 	function renderPosts() {
@@ -18,11 +19,11 @@ function Home(props) {
 
 	return (
 		<div className="container">
-			<div className="left">
+			<div className="container__left">
 				<div className="create-note">Создать запись</div>
 				{renderPosts()}
 			</div>
-			<div className="right">
+			<div className="container__right">
 				<Tags />
 			</div>
 		</div>

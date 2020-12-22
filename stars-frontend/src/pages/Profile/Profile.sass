@@ -1,0 +1,27 @@
+@import "../../sass/vars"
+
+.select-type
+    display: flex
+    justify-content: center
+    button
+        border-radius: 8px
+        background: $primary-color
+        color: $white
+        text-transform: uppercase
+        font-size: 12px
+        font-weight: bold
+        padding: 4px 8px
+        cursor: pointer
+        transform: none
+        filter: none
+        transition: .2s ease-in-out
+        &:active
+            transform: translateY(1px)
+        &:focus
+            background: $white
+            color: $primary-color
+        &:last-child
+            margin-left: 8px
+    .active
+        background: $white
+        color: $primary-color
