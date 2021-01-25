@@ -36,7 +36,7 @@ function User(props) {
                         { 
                             item.media.map((media, index) => {
                                 return (
-                                    <a alt="" href="/">
+                                    <a alt="" href="/" key={index}>
                                         <img alt="" src={media} key={index} />
                                     </a>
                                 )

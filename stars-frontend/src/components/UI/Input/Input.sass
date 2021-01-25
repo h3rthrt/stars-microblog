@@ -1,0 +1,29 @@
+@import "../../../sass/_vars"
+.input
+    .primary
+        border: 2px solid $primary-color
+    .error
+        border: 2px solid $red !important
+    span
+        color: $red
+        font-weight: 600
+        display: block
+        position: relative
+        top: -20px
+        bottom: 0
+        left: 0
+        right: 0
+        height: 0
+    input
+        border: 2px solid transparent
+        background: #F9F9F9
+        border-radius: 4px
+        font-style: normal
+        font-weight: 600
+        font-size: 18px
+        line-height: 29px
+        padding: 4px 16px
+        width: 100%
+        color: $primary-color
+        &::placeholder
+            color: $primary-color

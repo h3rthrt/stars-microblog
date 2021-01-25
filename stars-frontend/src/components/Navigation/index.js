@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Navigation.sass'
 import { Link, NavLink, withRouter } from 'react-router-dom'
+import {connect} from 'react-redux'
+import Button from '../UI/Button'
+import CreateAcc from '../../components/Modal/CreateAcc'
 
 function Nav(props) {
-    
+    const [modalVisible, setModalVisible] = useState(false)
     const links = [
         {to: '/home', icon: 'home'},
         {to: '/', icon: 'globe'},
@@ -13,19 +16,45 @@ function Nav(props) {
     ]
 
     function renderLinks() {
-        return links.map((link, index) => {
-            let cls = []
-            let classTrue = 'true'
-            if(props.location.pathname === link.to) 
-                cls.push(classTrue)
-            return(
-            <li key={index} className={cls}>
-                <NavLink to={link.to}>
-                    <FontAwesomeIcon icon={link.icon} />
-                </NavLink>
-            </li>
-            )   
-        })
+        if (props.isAuthenticated) {
+            return links.map((link, index) => {
+                let cls = []
+                let classTrue = 'true'
+                if(props.location.pathname === link.to) 
+                    cls.push(classTrue)
+                return(
+                <li key={index} className={cls}>
+                    <NavLink to={link.to}>
+                        <FontAwesomeIcon icon={link.icon} />
+                    </NavLink>
+                </li>
+                )   
+            })
+        } else if (props.location.pathname === '/auth') {
+            return (
+                <div>
+                    <Button 
+                        cls="navButton"
+                        color="green" 
+                        onClick={() => setModalVisible(true)}>
+                            Регистрация
+                    </Button> 
+                    <CreateAcc visible={modalVisible} onClose={() => setModalVisible(false)}/>
+                </div>
+            )
+        } else {
+            return (
+                <div>
+                    <Button 
+                        cls="navButton"
+                        color="blue" 
+                        onClick={() => props.history.push('/auth')}>
+                            Войти
+                    </Button> 
+                    <CreateAcc visible={modalVisible} onClose={() => setModalVisible(false)}/>
+                </div>
+            )
+        }
     }
 
     return (
@@ -54,4 +83,10 @@ function Nav(props) {
     )
 }
 
-export default withRouter(Nav)
+function mapStateToProps(state) {
+    return {
+        isAuthenticated: !!state.auth.token
+    }
+}
+
+export default connect(mapStateToProps)(withRouter(Nav))

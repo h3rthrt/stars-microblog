@@ -7,7 +7,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { createStore, applyMiddleware, compose } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
-import rootReducer from './redux/rootReducer'
+import rootReducer from './redux/reducers/rootReducer'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'
@@ -20,9 +20,10 @@ import {
 	faReply,
 	faHeart,
 	faPhotoVideo,
-	faFileAudio
+	faFileAudio,
+	faTimes
 } from '@fortawesome/free-solid-svg-icons'
-library.add(fab, far, faSearch, faHome, faGlobe, faUser, faCog, faReply, faHeart, faPhotoVideo, faFileAudio)
+library.add(fab, far, faSearch, faHome, faGlobe, faUser, faCog, faReply, faHeart, faPhotoVideo, faFileAudio, faTimes)
 
 const composeEnhancers =
 	typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__

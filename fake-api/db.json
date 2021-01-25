@@ -1,6 +1,17 @@
 {
     "posts":[
         {
+            "id": "228",
+            "avatar": "/img/user1106.jpg",
+            "nickname": "user1106",
+            "author": "user1106",
+            "images": [],
+            "head": "Проверка добавления записи", 
+            "text": "Проверка добавления вторичного текста",
+            "likes": 0,
+            "tags": []
+        },
+        {
             "id": "1",
             "avatar": "/img/user1106.jpg",
             "nickname": "user1106",
