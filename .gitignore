@@ -157,3 +157,4 @@ stars-frontend/package-lock.json
 stars-backend/process.env
 stars-backend/package-lock.json
 fake-api/yarn.lock
+stars-frontend/yarn.lock

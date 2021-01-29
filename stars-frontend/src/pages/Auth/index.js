@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import {auth} from '../../redux/actions/actions'
+import { auth } from '../../redux/actions/actions'
 import './Auth.sass'
 import is from 'is_js'
 import Button from '../../components/UI/Button'

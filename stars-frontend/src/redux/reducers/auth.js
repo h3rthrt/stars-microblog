@@ -1,7 +1,9 @@
 import { AUTH_LOGOUT, AUTH_SUCCESS } from "../actions/actionsTypes"
 
+let token = localStorage.getItem('token')
+
 const initialState = {
-    token: null
+    token: token ? token : null
 }
 
 export default function authReducer(state = initialState, action) {

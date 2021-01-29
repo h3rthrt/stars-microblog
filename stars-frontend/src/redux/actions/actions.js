@@ -15,7 +15,7 @@ import {
 export function loadPosts() {
 	return async (dispatch) => {
 		try {
-			var posts = []
+			let posts = []
 			await axios.get('posts').then((response) => (posts = response.data))
 			dispatch(fetchPostsSuccess(posts))
 		} catch (e) {
@@ -27,7 +27,7 @@ export function loadPosts() {
 export function loadProfilePosts(payload) {
 	return async (dispatch) => {
 		try {
-			var posts = []
+			let posts = []
 			await axios.get(`${payload}?nickname=user1106`).then((response) => (posts = response.data))
 			dispatch(fetchPostsSuccess(posts))
 		} catch (e) {
@@ -56,7 +56,7 @@ export function fetchPostsError(e) {
 export function loadPopularTags() {
 	return async (dispatch) => {
 		try {
-			var tags = []
+			let tags = []
 			await axios.get('tags').then((response) => (tags = response.data))
 			dispatch(fetchPopularTagsSuccess(tags))
 		} catch (e) {
@@ -84,7 +84,7 @@ export function fetchPopularTagsError(e) {
 export function loadProfile(payload) {
 	return async (dispatch) => {
 		try {
-			var profileData = []
+			let profileData = []
 			await axios.get(`users?blogname=${payload}`).then((response) => (profileData = response.data))
 			dispatch(fetchProfileDataSuccess(profileData))
 		} catch (e) {
@@ -115,7 +115,7 @@ export function auth(email, password, isLogin) {
 			email, password, 
 			returnSecureTocken: true
 		}
-		var url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyC-N3bpwnzf61N1QQzCto-G9V3PA0B-TLs'
+		let url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyC-N3bpwnzf61N1QQzCto-G9V3PA0B-TLs'
 		if (isLogin) {
 			url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyC-N3bpwnzf61N1QQzCto-G9V3PA0B-TLs'
 		}
@@ -131,6 +131,8 @@ export function auth(email, password, isLogin) {
 		// }
 	}
 }
+
+//todo: обработка авторизации на ошибки 
 
 export function authSuccess(token) {
 	return {
