@@ -15,8 +15,11 @@ function App(props) {
   var routers = (
     <Switch>
       <Route path='/auth' component={Auth} />
+      <Route path='/profile/:id' component={Profile} />
       <Route exact path='/' component={Main} />
       <Route path='/404' component={NotFound} />
+      <Redirect from='/home' to='/auth' />
+      <Redirect from='/settings' to='/auth' />
       <Redirect from='*' to='/404' />
     </Switch>
   )

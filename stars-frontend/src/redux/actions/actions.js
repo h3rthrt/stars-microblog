@@ -126,9 +126,9 @@ export function auth(email, password, isLogin) {
 		localStorage.setItem('userId', data.localId)
 		localStorage.setItem('expirationDate', expirationDate)
 		dispatch(authSuccess(data.idToken))
-		if (data.expiresIn) {
-			dispatch(autoLogout(data.expiresIn))
-		}
+		// if (data.expiresIn) {
+		// 	dispatch(autoLogout(data.expiresIn))
+		// }
 	}
 }
 
