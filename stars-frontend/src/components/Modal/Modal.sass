@@ -1,7 +1,7 @@
 @import "../../sass/_vars"
 @import "../../sass/mixins/fadeIn"
 .modal
-    @include animation
+    @include fadeInAnimation
     background: rgba(0, 0, 0, 0.30)
     position: fixed
     top: 0
@@ -41,4 +41,4 @@
             margin-top: 14px
 
 @keyframes fadeIn
-    @include keyframes
+    @include fadeInKeyframes

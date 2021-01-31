@@ -5,6 +5,7 @@ import './Auth.sass'
 import is from 'is_js'
 import Button from '../../components/UI/Button'
 import Input from '../../components/UI/Input'
+import Message from '../../components/Message'
 
 function Auth(props) {
     const [isFormValid, setFormValid] = useState(false)
@@ -34,6 +35,8 @@ function Auth(props) {
             }
         }
     ])
+
+
 
     function submitHandler228(event) {
         props.auth(
@@ -128,6 +131,7 @@ function Auth(props) {
                 </Button>
 
             </form>
+                <Message color="error" />
         </div>
     )
 }

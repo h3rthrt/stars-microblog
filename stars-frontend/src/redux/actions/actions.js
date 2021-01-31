@@ -7,7 +7,8 @@ import {
 	LOAD_PROFILE_SUCCESS,
 	LOAD_PROFILE_ERROR,
 	AUTH_SUCCESS,
-	AUTH_LOGOUT
+	AUTH_LOGOUT,
+	AUTH_ERROR
 } from './actionsTypes'
 
 // Load posts
@@ -119,25 +120,44 @@ export function auth(email, password, isLogin) {
 		if (isLogin) {
 			url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyC-N3bpwnzf61N1QQzCto-G9V3PA0B-TLs'
 		}
-		const response = await axios.post(url, authData)
-		const data = response.data
-		const expirationDate = new Date(new Date().getTime() + data.expiresIn * 1000)
-		localStorage.setItem('token', data.idToken)
-		localStorage.setItem('userId', data.localId)
-		localStorage.setItem('expirationDate', expirationDate)
-		dispatch(authSuccess(data.idToken))
-		// if (data.expiresIn) {
-		// 	dispatch(autoLogout(data.expiresIn))
-		// }
+		await axios.post(url, authData)
+			.then(response => {
+				const data = response.data
+				const expirationDate = new Date(new Date().getTime() + data.expiresIn * 1000)
+				localStorage.setItem('token', data.idToken)
+				localStorage.setItem('userId', data.localId)
+				localStorage.setItem('expirationDate', expirationDate)
+				dispatch(authSuccess(data.idToken))
+				if (data.expiresIn) {
+					dispatch(autoLogout(data.expiresIn))
+				}
+			})
+			.catch(e => {
+				dispatch(delError())
+				dispatch(authError(e.response.data.error.message))
+			})
+		
 	}
 }
-
-//todo: обработка авторизации на ошибки 
 
 export function authSuccess(token) {
 	return {
 		type: AUTH_SUCCESS,
 		token
+	}
+}
+
+export function authError(e) {
+	return {
+		type: AUTH_ERROR,
+		error: e
+	}
+}
+
+export function delError() {
+	return {
+		type: AUTH_ERROR,
+		error: null
 	}
 }
 

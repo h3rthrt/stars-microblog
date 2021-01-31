@@ -210,7 +210,7 @@ p
 		flex-wrap: wrap
 		justify-content: flex-end
 		a
-			@include animation
+			@include fadeInAnimation
 			text-align: center
 			width: 31.3%
 			text-decoration: none
@@ -229,7 +229,7 @@ p
 				box-shadow: $white-shadow
 
 @keyframes fadeIn
-	@include keyframes
+	@include fadeInKeyframes
 
 @media only screen and (max-width : 992px)
 	main

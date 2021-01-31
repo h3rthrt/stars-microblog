@@ -1,0 +1,35 @@
+@import "../../sass/vars"
+@import "../../sass/mixins/fadeInOut"
+.message
+    @include fadeInOutAnimation
+    display: flex
+    justify-content: center
+    color: $white
+    width: 50vw
+    border-radius: 4px
+    padding: 8px 14px
+    max-height: 200px
+    font-size: 18px
+    position: absolute
+    z-index: 99999
+    top: 5vh
+    left: 0
+    right: 0
+    text-align: center
+    margin: 0 auto
+    min-width: 291px
+    &__text
+        position: absolute
+    > button
+        cursor: pointer
+        margin-left: auto
+        
+
+.primary
+    background: $green
+
+.error
+    background: $red
+
+@keyframes fadeInOut
+    @include fadeInOutKeyframes

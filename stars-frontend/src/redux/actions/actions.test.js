@@ -1,4 +1,4 @@
-import { authSuccess } from "./actions"
+import { authSuccess, authError } from "./actions"
 import authReducer from './../reducers/auth'
 import axios from '../../api/axios'
 
@@ -17,8 +17,14 @@ async function auth(email, password, isLogin) {
 }
 
 it('if user enter correctly data for log in', async() => {
-	let token = await auth("test@ya.ru", "qwerty", false)
-	let action = authSuccess(token)
+	let token = null
+	let action = null
+	try {
+		token = await auth("test@ya.ru", "qwerty", false)
+		action = authSuccess(token)
+	} catch(e) {
+		action = authError(e)
+	}
     const state = {
         token: token ? token : null
 	}
@@ -28,15 +34,17 @@ it('if user enter correctly data for log in', async() => {
 
 it('if user enter not correctly data for log in', async() => {
 	let token = null
+	let action = null
 	try {
 		token = await auth("test@ya.ru", "qwerty1", false)
+		action = authSuccess(token)
 	} catch(e) {
-		console.log(e)
+		action = authError(e.response.data.error.message)
 	}
-	let action = authSuccess(token)
     const state = {
         token: token ? token : null
 	}
 	let newState = authReducer(state, action)
+	console.log(`Error message: ${newState.error}`)
     expect(newState.token).toBe(null)
 })
