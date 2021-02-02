@@ -8,10 +8,9 @@ import './Profile.sass'
 function Profile(props) {
 
 	useEffect(() => {
-		props.loadProfilePosts('posts')
+		// props.loadProfilePosts('posts')
 		document.getElementById('posts').classList.add("active")
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [props])
 
 	function renderPosts() {
 		return props.postsList.map((post, index) => {

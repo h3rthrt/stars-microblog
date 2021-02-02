@@ -7,9 +7,14 @@ import './Message.sass'
 function Message(props) {
     const [showError, setShowError] = useState(false)
     useEffect(() => {
-        if(props.error)
+        if(props.error) {
+            var timer = setTimeout(() => props.delError(), 4000)
             setShowError(true)
-    }, [props.error])
+        }
+        return() => {
+            clearTimeout(timer)
+        }
+    }, [props])
 
     let cls = ['message']
     props.color ? cls.push(props.color) : cls.push('primary')
@@ -18,8 +23,8 @@ function Message(props) {
         return(
             <div className={ cls.join(' ') } id="message">
                 <div className="message__text">{ props.error }</div>
-                <button onClick={ () => setShowError(false) }>
-                    <FontAwesomeIcon icon="times" className="times"/>
+                <button onClick={ () => props.delError() }>
+                    <FontAwesomeIcon icon="times" className="times" id="message"/>
                 </button>
             </div>
         )

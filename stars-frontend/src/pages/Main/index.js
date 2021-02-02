@@ -7,9 +7,8 @@ import './Main.sass'
 
 function Main(props) {
 	useEffect(() => {
-		props.loadPosts()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
+		// props.loadPosts()
+	}, [props])
 
 	function renderPosts() {
 		return props.postsList.map((post, index) => {

@@ -1,0 +1,52 @@
+@import "../../../sass/vars"
+.loading
+    display: flex
+    justify-content: center
+    align-items: center
+    flex-direction: column
+    width: 100vw
+    height: 100vh
+    &__svg
+        width: 80px
+        height: 80px
+    
+        path:nth-child(1)
+            transition: all .3s ease
+            animation: loadingAnimation .9s infinite
+            animation-delay: 0s
+        path:nth-child(2)
+            transition: all .6s ease
+            animation: loadingAnimation .9s infinite
+            animation-delay: .2s
+        path:nth-child(3)
+            transition: all .9s ease
+            animation: loadingAnimation .9s infinite
+            animation-delay: .4s
+        path:nth-child(4)
+            transition: all .3s ease
+            animation: loadingAnimation .9s infinite
+            animation-delay: 0s
+        path:nth-child(5)
+            transition: all .6s ease
+            animation: loadingAnimation .9s infinite
+            animation-delay: .2s
+        path:nth-child(6)
+            transition: all .9s ease
+            animation: loadingAnimation .9s infinite
+            animation-delay: .4s
+    &__text
+        margin-top: 8px
+        font-size: 18px
+        font-weight: 600
+
+
+@keyframes loadingAnimation
+    0%
+        fill: rgba(0, 0, 0, 0)
+        box-shadow: 0px 0px 10px rgba(249, 249, 249, 0)
+    50%
+        fill: $white
+        box-shadow: 0px 0px 10px rgba(249, 249, 249, 0.8)
+    100%
+        fill: rgba(0, 0, 0, 0)
+        box-shadow: 0px 0px 10px rgba(249, 249, 249, 0)

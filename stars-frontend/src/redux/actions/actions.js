@@ -1,4 +1,6 @@
 import axios from '../../api/axios'
+import firebase from '../../api/firebase'
+
 import {
 	LOAD_POSTS_SUCCESS,
 	LOAD_POSTS_ERROR,
@@ -110,40 +112,34 @@ export function fetchProfileDataError(e) {
 
 //auth
 
-export function auth(email, password, isLogin) {
+export function authUser(email, password, isLogin, name, blogname) {
 	return async dispatch => {
-		const authData = {
-			email, password, 
-			returnSecureTocken: true
-		}
-		let url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyC-N3bpwnzf61N1QQzCto-G9V3PA0B-TLs'
 		if (isLogin) {
-			url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyC-N3bpwnzf61N1QQzCto-G9V3PA0B-TLs'
+			firebase.auth().createUserWithEmailAndPassword(email, password)
+				.then((userCredential) => {
+					dispatch(authSuccess(userCredential.user.uid))
+				})
+				.catch((error) => {
+					dispatch(delError())
+					dispatch(authError(error.message))
+				})
+		} else {
+			firebase.auth().signInWithEmailAndPassword(email, password)
+				.then((userCredential) => {
+					dispatch(authSuccess(userCredential.user.uid))
+				})
+				.catch((error) => {
+					dispatch(delError())
+					dispatch(authError(error.message))
+				})
 		}
-		await axios.post(url, authData)
-			.then(response => {
-				const data = response.data
-				const expirationDate = new Date(new Date().getTime() + data.expiresIn * 1000)
-				localStorage.setItem('token', data.idToken)
-				localStorage.setItem('userId', data.localId)
-				localStorage.setItem('expirationDate', expirationDate)
-				dispatch(authSuccess(data.idToken))
-				if (data.expiresIn) {
-					dispatch(autoLogout(data.expiresIn))
-				}
-			})
-			.catch(e => {
-				dispatch(delError())
-				dispatch(authError(e.response.data.error.message))
-			})
-		
 	}
 }
 
-export function authSuccess(token) {
+export function authSuccess(uid) {
 	return {
 		type: AUTH_SUCCESS,
-		token
+		uid
 	}
 }
 
@@ -162,18 +158,23 @@ export function delError() {
 }
 
 export function logout() {
-	localStorage.removeItem('token')
-	localStorage.removeItem('userId')
-	localStorage.removeItem('expirationDate')
+	firebase.auth().signOut()
 	return {
 		type: AUTH_LOGOUT
 	}
 }
 
-export function autoLogout(time) {
-	return dispatch => {
-		setTimeout(() => {
-			dispatch(logout())
-		}, time * 1000)
+//auth state
+
+export function authState() {
+	return async dispatch => {
+		await firebase.auth().onAuthStateChanged((userState) => {
+			console.log(userState)
+			if (userState) {
+				dispatch(authSuccess(userState.uid))
+			} else {
+				dispatch(logout())
+			}
+		})
 	}
 }

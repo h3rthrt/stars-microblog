@@ -1,6 +1,7 @@
 import React from 'react'
 import { withRouter } from 'react-router'
 import Nav from './components/Navigation'
+import Message from './components/Message'
 
 function Layout(props) {
 
@@ -31,6 +32,7 @@ function Layout(props) {
 			<Nav />
 			{renderLocation()}
 			<main>{props.children}</main>
+			<Message color="error" />
 		</div>
 	)
 }

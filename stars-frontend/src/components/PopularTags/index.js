@@ -5,9 +5,8 @@ import './PopularTags.sass'
 
 function Tags(props) {
     useEffect(() => {
-        props.loadPopularTags()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+        // props.loadPopularTags()
+    }, [props])
 
     return (
         <div className="right-block">

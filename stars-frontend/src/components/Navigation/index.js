@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Navigation.sass'
 import { Link, NavLink, withRouter } from 'react-router-dom'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import Button from '../UI/Button'
 import CreateAcc from '../../components/Modal/CreateAcc'
 
@@ -85,7 +85,7 @@ function Nav(props) {
 
 function mapStateToProps(state) {
     return {
-        isAuthenticated: !!state.auth.token
+        isAuthenticated: !!state.auth.uid
     }
 }
 

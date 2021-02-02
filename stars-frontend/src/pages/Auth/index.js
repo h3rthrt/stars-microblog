@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { auth } from '../../redux/actions/actions'
+import { authUser } from '../../redux/actions/actions'
 import './Auth.sass'
 import is from 'is_js'
 import Button from '../../components/UI/Button'
 import Input from '../../components/UI/Input'
-import Message from '../../components/Message'
+
 
 function Auth(props) {
     const [isFormValid, setFormValid] = useState(false)
@@ -39,7 +39,7 @@ function Auth(props) {
 
 
     function submitHandler228(event) {
-        props.auth(
+        props.authUser(
             formControls[0].value,
             formControls[1].value,
             false
@@ -131,14 +131,13 @@ function Auth(props) {
                 </Button>
 
             </form>
-                <Message color="error" />
         </div>
     )
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        auth: (email, password, isLogin) => dispatch(auth(email, password, isLogin))
+        authUser: (email, password, isLogin) => dispatch(authUser(email, password, isLogin))
     }
 }
 
