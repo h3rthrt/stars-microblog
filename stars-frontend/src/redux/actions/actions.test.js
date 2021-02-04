@@ -24,7 +24,6 @@ it('if user enter correctly data for log in', async() => {
 
 it('if user enter not correctly data for log in', async() => {
 	const state = await auth('test4@ya.ru', 'qwerty1')
-	console.log(state)
-	expect(state.uid).toBe('')
+	expect(state.uid).toBe(undefined)
 	expect(state.error).toBe('The password is invalid or the user does not have a password.')
 })

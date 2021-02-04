@@ -12,7 +12,7 @@ export default function authReducer(state = initialState, action) {
 	switch (action.type) {
 		case AUTH_SUCCESS:
 			return {
-				...initialState,
+				...state,
 				uid: action.uid,
 				username: action.username,
 				blogname: action.blogname,
@@ -20,12 +20,12 @@ export default function authReducer(state = initialState, action) {
 			}
 		case AUTH_LOGOUT:
 			return {
-				...initialState,
+				...state,
 				uid: null
 			}
 		case AUTH_ERROR:
 			return {
-				...initialState,
+				...state,
 				error: action.error
 			}
 		default:
