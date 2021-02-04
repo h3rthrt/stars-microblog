@@ -8,9 +8,8 @@ function Layout(props) {
 	const links = [ 
 		{to: '/home', name: 'Лента'}, 
 		{to: '/', name: 'Поиск'}, 
-		{to: `/profile/${props.location.pathname.slice(9)}`, 
-			name: props.location.pathname.slice(9)},
-		{to: '/404', name: 'Страница не найдена :('} 
+		{to: '/404', name: 'Страница не найдена :('},
+		{to: `/profile/${props.location.pathname.slice(9)}`, name: props.location.pathname.slice(9)} 
 	]
 
 	function renderLocation() {

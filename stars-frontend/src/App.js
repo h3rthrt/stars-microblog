@@ -16,15 +16,15 @@ function App(props) {
   useEffect(() => {
     setTimeout(()=> {
       props.authState()
-    }, 800)
+    }, 700)
   },[props])
 
   var routers = (
     <Switch>
-      <Route path='/auth' component={Auth} />
-      <Route path='/profile/:id' component={Profile} />
+      <Route exact path='/auth' component={Auth} />
       <Route exact path='/' component={Main} />
-      <Route path='/404' component={NotFound} />
+      <Route exact path='/404' component={NotFound} />
+      <Route path='/profile/:id' component={Profile} />
       <Redirect from='/home' to='/auth' />
       <Redirect from='/settings' to='/auth' />
       <Redirect from='*' to='/404' />
@@ -34,11 +34,11 @@ function App(props) {
   if (props.isAuthenticated) {
     routers = (
       <Switch>
-        <Route path='/home' component={Home} />
+        <Route exact path='/home' component={Home} />
         <Route exact path='/' component={Main} />
+        <Route exact path='/settings' component={Settings} />
+        <Route exact path='/404' component={NotFound} />
         <Route path='/profile/:id' component={Profile} />
-        <Route path='/settings' component={Settings} />
-        <Route path='/404' component={NotFound} />
         <Redirect to='/' />
         <Redirect from='*' to='/404' />
       </Switch>

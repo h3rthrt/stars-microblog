@@ -24,8 +24,8 @@ function CreateAcc(props) {
         },
         {
             value: '',
-            placeholder: 'Ваше имя',
-            errorMessage: 'Введите верное имя',
+            placeholder: 'Никнейм',
+            errorMessage: 'Введите верный ник',
             valid: false,
             touched: false,
             validation: {

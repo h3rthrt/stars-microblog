@@ -11,7 +11,7 @@ function Nav(props) {
     const links = [
         {to: '/home', icon: 'home'},
         {to: '/', icon: 'globe'},
-        {to: '/profile/user1106', icon: 'user'},
+        {to: `/profile/${props.username}`, icon: 'user'},
         {to: '/settings', icon: 'cog'}
     ]
 
@@ -85,7 +85,8 @@ function Nav(props) {
 
 function mapStateToProps(state) {
     return {
-        isAuthenticated: !!state.auth.uid
+        isAuthenticated: !!state.auth.uid,
+        username: state.auth.username
     }
 }
 

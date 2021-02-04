@@ -41,7 +41,7 @@ function Profile(props) {
 				{ renderPosts() }
 			</div>
 			<div className="container__right">
-				<User username="user1106" />
+				<User username={props.username} blogname={props.blogname} photoURL={props.photoURL}/>
 			</div>
 		</div>
 	)
@@ -49,7 +49,10 @@ function Profile(props) {
 
 function mapStateToProps(state) {
 	return {
-		postsList: state.post.postsList
+		postsList: state.post.postsList,
+		username: state.auth.username,
+		blogname: state.auth.blogname,
+		photoURL: state.auth.photoURL
 	}
 }
 

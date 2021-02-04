@@ -2,6 +2,9 @@ import { AUTH_LOGOUT, AUTH_SUCCESS, AUTH_ERROR } from '../actions/actionsTypes'
 
 const initialState = {
 	uid: '',
+	username: '',
+	blogname: '',
+	photoURL: '',
 	error: ''
 }
 
@@ -10,7 +13,10 @@ export default function authReducer(state = initialState, action) {
 		case AUTH_SUCCESS:
 			return {
 				...state,
-				uid: action.uid
+				uid: action.uid,
+				username: action.username,
+				blogname: action.blogname,
+				photoURL: action.photoURL
 			}
 		case AUTH_LOGOUT:
 			return {
