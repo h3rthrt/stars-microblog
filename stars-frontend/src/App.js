@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
-import { Route, Switch, Redirect } from 'react-router-dom'
+import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import './App.sass'
 import { connect } from 'react-redux'
 import { authState } from './redux/actions/actions'
 import Layout from './Layout'
-import Home from './pages/Home'
+import Dashboard from './pages/Dashboard'
 import Main from './pages/Main'
 import Profile from './pages/Profile'
 import Settings from './pages/Settings'
@@ -16,7 +16,7 @@ function App(props) {
   useEffect(() => {
     setTimeout(()=> {
       props.authState()
-    }, 700)
+    }, 500)
   },[props])
 
   var routers = (
@@ -25,7 +25,7 @@ function App(props) {
       <Route exact path='/' component={Main} />
       <Route exact path='/404' component={NotFound} />
       <Route path='/profile/:id' component={Profile} />
-      <Redirect from='/home' to='/auth' />
+      <Redirect from='/dashboard' to='/auth' />
       <Redirect from='/settings' to='/auth' />
       <Redirect from='*' to='/404' />
     </Switch>
@@ -34,7 +34,7 @@ function App(props) {
   if (props.isAuthenticated) {
     routers = (
       <Switch>
-        <Route exact path='/home' component={Home} />
+        <Route exact path='/dashboard' component={Dashboard} />
         <Route exact path='/' component={Main} />
         <Route exact path='/settings' component={Settings} />
         <Route exact path='/404' component={NotFound} />
@@ -44,6 +44,7 @@ function App(props) {
       </Switch>
     )
   }
+
   if (props.isAuthenticated === '') {
     return <Loading />
   } else {
@@ -57,7 +58,8 @@ function App(props) {
 
 function mapStateToProps(state) {
   return {
-    isAuthenticated: state.auth.uid
+    isAuthenticated: state.auth.uid,
+    username: state.profile.username
   }
 }
 
@@ -67,4 +69,4 @@ function mapDispatchToProps(dispath) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App))

@@ -21,9 +21,30 @@ import {
 	faHeart,
 	faPhotoVideo,
 	faFileAudio,
-	faTimes
+	faTimes,
+	faSignOutAlt,
+	faKey,
+	faHeartBroken,
+	faUserEdit
 } from '@fortawesome/free-solid-svg-icons'
-library.add(fab, far, faSearch, faHome, faGlobe, faUser, faCog, faReply, faHeart, faPhotoVideo, faFileAudio, faTimes)
+library.add(
+	fab,
+	far,
+	faSearch,
+	faHome,
+	faGlobe,
+	faUser,
+	faCog,
+	faReply,
+	faHeart,
+	faPhotoVideo,
+	faFileAudio,
+	faTimes,
+	faSignOutAlt,
+	faKey,
+	faHeartBroken,
+	faUserEdit
+)
 
 const composeEnhancers =
 	typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
@@ -38,9 +59,9 @@ const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
 const app = (
 	<Provider store={store}>
 		<React.StrictMode>
-				<BrowserRouter>
-					<App />
-				</BrowserRouter>
+			<BrowserRouter>
+				<App />
+			</BrowserRouter>
 		</React.StrictMode>
 	</Provider>
 )

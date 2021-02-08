@@ -1,0 +1,22 @@
+@import "../../sass/_vars"
+@import "../../sass/mixins/fadeIn"
+
+.container
+    @include fadeInAnimation
+
+.create-note
+	color: $primary-color
+	background: $white
+	border-radius: 4px
+	width: 100%
+	padding: 8px 16px
+	font-size: 14px
+	font-weight: 700
+	letter-spacing: -0.03em
+	cursor: pointer
+	transition: .2s all ease-in-out
+	&:hover
+		box-shadow: $white-shadow
+
+@keyframes fadeIn
+    @include fadeInKeyframes

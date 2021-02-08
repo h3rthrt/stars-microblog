@@ -20,9 +20,9 @@ export function loadPosts() {
 		try {
 			let posts = []
 			await axios.get('posts').then((response) => (posts = response.data))
-			dispatch(fetchPostsSuccess(posts))
+			dispatch(loadPostsSuccess(posts))
 		} catch (e) {
-			dispatch(fetchPostsError(e))
+			dispatch(loadPostsError(e))
 		}
 	}
 }
@@ -32,22 +32,21 @@ export function loadProfilePosts(payload) {
 		try {
 			let posts = []
 			await axios.get(`${payload}?nickname=user1106`).then((response) => (posts = response.data))
-			dispatch(fetchPostsSuccess(posts))
+			dispatch(loadPostsSuccess(posts))
 		} catch (e) {
-			dispatch(fetchPostsError(e))
+			dispatch(loadPostsError(e))
 		}
 	}
 }
 
-
-export function fetchPostsSuccess(posts) {
+export function loadPostsSuccess(posts) {
 	return {
 		type: LOAD_POSTS_SUCCESS,
 		posts: posts
 	}
 }
 
-export function fetchPostsError(e) {
+export function loadPostsError(e) {
 	return {
 		type: LOAD_POSTS_ERROR,
 		error: e
@@ -61,21 +60,21 @@ export function loadPopularTags() {
 		try {
 			let tags = []
 			await axios.get('tags').then((response) => (tags = response.data))
-			dispatch(fetchPopularTagsSuccess(tags))
+			dispatch(loadPopularTagsSuccess(tags))
 		} catch (e) {
-			dispatch(fetchPopularTagsError(e))
+			dispatch(loadPopularTagsError(e))
 		}
 	}
 }
 
-export function fetchPopularTagsSuccess(tags) {
+export function loadPopularTagsSuccess(tags) {
 	return {
 		type: LOAD_POPULAR_TAGS_SUCCESS,
 		tags: tags
 	}
 }
 
-export function fetchPopularTagsError(e) {
+export function loadPopularTagsError(e) {
 	return {
 		type: LOAD_POPULAR_TAGS_ERROR,
 		error: e
@@ -84,26 +83,34 @@ export function fetchPopularTagsError(e) {
 
 // Load profile
 
-export function loadProfile(payload) {
-	return async (dispatch) => {
-		try {
-			let profileData = []
-			await axios.get(`users?blogname=${payload}`).then((response) => (profileData = response.data))
-			dispatch(fetchProfileDataSuccess(profileData))
-		} catch (e) {
-			dispatch(fetchProfileDataError(e))
-		}
+export function loadProfile(username) {
+	return async (dispatch) => { 
+		await  firebase.database().ref().child('users')
+		.orderByChild('username').equalTo(username)
+			.on('child_added', (snapshot) => {
+				let data = snapshot.val()
+				dispatch(loadProfileDataSuccess(data))
+			}, (error) => {
+				console.log('not found')
+				dispatch(loadProfileDataError(error))
+			})
 	}
 }
 
-export function fetchProfileDataSuccess(profileData) {
+export function loadProfileDataSuccess(data) {
 	return {
 		type: LOAD_PROFILE_SUCCESS,
-		data: profileData
+		username: data.username,
+		blogname: data.blogname,
+		photoURL: data.photoURL || null,
+		desc: data.desc || null,
+		followers: data.followers || null,
+		following: data.following || null,
+		media: data.media || null
 	}
 }
 
-export function fetchProfileDataError(e) {
+export function loadProfileDataError(e) {
 	return {
 		type: LOAD_PROFILE_ERROR,
 		error: e
@@ -118,18 +125,24 @@ export function authUser(email, password, isLogin, name, blogname) {
 			firebase.auth().createUserWithEmailAndPassword(email, password)
 				.then(() => {
 					var user = firebase.auth().currentUser
-						user.updateProfile({
-						displayName: `${name}`
-						}).then(function() {
-							firebase.database().ref('users/' + user.uid).set({
-								username: name,
-								blogname: blogname,
-								email: email
-							})
-							dispatch(authSuccess(user.uid), name, blogname, user.photoURL)
-						}).catch(function(e) {
-							console.log(e)
+					user.updateProfile({
+					displayName: `${name}`
+					}).then(function() {
+						firebase.database().ref('users/' + user.uid).set({
+							username: name,
+							blogname: blogname,
+							email: email,
+							photoURL: null,
+							desc: null,
+							followers: [],
+							following: [],
+							media: []
 						})
+						dispatch(authSuccess(user.uid, name, blogname))
+					}).catch(function(e) {
+						dispatch(delError())
+						dispatch(authError(e.message))
+					})
 				})
 				.catch((error) => {
 					dispatch(delError())
@@ -182,16 +195,16 @@ export function authState() {
 	return async dispatch => {
 		await firebase.auth().onAuthStateChanged((userState) => {
 			if (userState) {
-				console.log(`auth state`)
-				firebase.database().ref('/users/' + userState.uid).once('value').then((snapshot) => {
-					const username = snapshot.val().username || 'anonymous'
-					const blogname = snapshot.val().blogname || 'nameless'
-					const photoURL = snapshot.val().photoURL || 'null' 
-					dispatch(authSuccess(userState.uid, username, blogname, photoURL))
-				})
-			} else {
-				dispatch(logout())
-			}
+				firebase.database().ref('/users/' + userState.uid).once('value')
+					.then((snapshot) => {
+						const username = snapshot.val().username || 'anonymous'
+						const blogname = snapshot.val().blogname || 'nameless'
+						const photoURL = snapshot.val().photoURL || 'null' 
+						dispatch(authSuccess(userState.uid, username, blogname, photoURL))
+					})
+				} else {
+					dispatch(logout())
+				}
 		})
 	}
 }

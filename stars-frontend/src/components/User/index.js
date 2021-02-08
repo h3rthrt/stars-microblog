@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import './User.sass'
+import PhotoUser from './PhotoUser'
 
 function User(props) {
 
@@ -11,7 +12,7 @@ function User(props) {
         return (
             <div className="right-block">
                 <div className="right-block__user-info">
-                    <img alt="" src={props.photoURL} />
+                    <PhotoUser userId="l8eDHyP3BBPdK8SRLJBrhYBJxBh1" />
                     <div className="user-info__block">
                         <h1>{props.blogname}</h1>
                         <p>{props.desc}</p>

@@ -3,9 +3,9 @@ import { connect } from 'react-redux'
 import { loadPosts } from '../../redux/actions/actions'
 import Post from '../../components/Post'
 import Tags from '../../components/PopularTags'
-import './Home.sass'
+import './Dashboard.sass'
 
-function Home(props) {
+function Dashboard(props) {
 	useEffect(() => {
 		// props.loadPosts()
 	}, [props])
@@ -41,4 +41,4 @@ function mapDispatchToProps(dispatch) {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home)
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)
