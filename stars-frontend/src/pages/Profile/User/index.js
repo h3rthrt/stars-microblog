@@ -1,20 +1,19 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import './User.sass'
 import PhotoUser from './PhotoUser'
 
 function User(props) {
-
-    useEffect(() => {
-        // props.loadProfile(props.username)
-    }, [props])
-
     function renderProfileData() {
         return (
             <div className="right-block">
                 <div className="right-block__user-info">
-                    <PhotoUser userId="l8eDHyP3BBPdK8SRLJBrhYBJxBh1" />
-                    <div className="user-info__block">
-                        <h1>{props.blogname}</h1>
+                    <PhotoUser photoURL={props.photoURL} username={props.username} />
+                    <div className="user-info">
+                        {
+                            props.blogname.length <= 10
+                                ? <span className="blogname xl">{props.blogname}</span>
+                                : <span className="blogname s">{props.blogname}</span>
+                        }
                         <p>{props.desc}</p>
                     </div>
                 </div>
@@ -44,7 +43,6 @@ function User(props) {
             </div>
         )
     }
-
 	return (
 		renderProfileData()
 	)

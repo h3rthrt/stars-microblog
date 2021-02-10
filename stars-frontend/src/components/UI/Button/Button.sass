@@ -1,20 +1,29 @@
 @import '../../../sass/_vars'
 .button
     border-radius: 4px
-    font-size: 21px
-    font-weight: bold
     text-align: center
     color: $white
     letter-spacing: -0.03em
     cursor: pointer
-    padding: 10px 36px
     &:disabled
         background: $gray
-        cursor: not-allowed
+        cursor: not-allowed 
+    > svg 
+        margin-left: 4px  
+
+.button-l
+    font-size: 12px
+    letter-spacing: 0
+    font-weight: 600
+    padding: 4px 12px
+
+.button-xl
+    font-size: 21px
+    font-weight: bold
+    padding: 10px 36px
 
 .navButton
     font-size: 18px
-    
 
 .green
     background: $green

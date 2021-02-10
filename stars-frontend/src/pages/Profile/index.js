@@ -1,22 +1,27 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { loadProfile, loadProfilePosts } from '../../redux/actions/actions'
 import Post from '../../components/Post'
-import User from '../../components/User'
+import User from './User'
 import Spinner from '../../components/UI/Spinner'
 import './Profile.sass'
 
 function Profile(props) {
 	const [loadData, setLoadData] = useState(true)
+	const loadTimeOut = useRef(null)
+
 	useEffect(() => {
 		props.loadProfile(props.location.pathname.slice(9))
-		setTimeout(() => {
+		loadTimeOut.current = setTimeout(() => {
 			setLoadData(false)
-		}, 400)
+		}, 600)
 		if (props.username) {
 			setLoadData(false)
 			document.getElementById('posts').classList.add("active")
+		}
+		return () => {
+			clearTimeout(loadTimeOut.current)
 		}
     }, [props])
 

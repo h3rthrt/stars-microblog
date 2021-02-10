@@ -125,6 +125,7 @@ function Auth(props) {
                 { renderInputs() }
 
                 <Button 
+                cls="button-xl"
                 color="blue" 
                 disabled={!isFormValid}>
                     Войти

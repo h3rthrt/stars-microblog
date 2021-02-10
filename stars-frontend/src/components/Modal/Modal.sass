@@ -1,7 +1,9 @@
-@import "../../sass/_vars"
+@import "../../sass/vars"
 @import "../../sass/mixins/fadeIn"
+@import "../../sass/mixins/fadeOut"
+
 .modal
-    @include fadeInAnimation
+    @include fadeInAnimation(.2s)
     background: rgba(0, 0, 0, 0.30)
     position: fixed
     top: 0
@@ -17,14 +19,14 @@
         position: relative
         max-width: 660px
         margin: 15vh auto
-        padding: 14px 21px 21px 21px
+        padding: 21px 21px 21px 21px
         border-radius: 4px
         > svg
             width: 54px
             margin-bottom: 12px
         > h3
             font-size: 18px
-    &__footer
+    &__header
         width: 100%
         > button
             display: block
@@ -39,6 +41,40 @@
             margin-top: 21px
         > button
             margin-top: 14px
+    &__photo
+        display: flex
+        justify-content: center
+        align-items: center
+        width: 550px
+        height: 650px
+        overflow: hidden
+        .modal__header
+            width: 500px
+        .image-block
+            width: 500px
+            height: 500px
+            min-height: 500px
+            overflow: hidden
+            > img
+                height: 100%
+                width: auto
+        > h2
+            border-bottom: 1px solid $gray
+            width: 500px
+            text-align: left
+            margin-bottom: 14px
+            padding-bottom: 8px
+    &__footer
+        width: 500px
+        margin-top: auto
+        button
+            margin-left: 12px
+
+.hide
+    @include fadeOutAnimation(.1s)
 
 @keyframes fadeIn
     @include fadeInKeyframes
+
+@keyframes fadeOut
+    @include fadeOutKeyframes

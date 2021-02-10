@@ -34,7 +34,7 @@ function Nav(props) {
             return (
                 <div>
                     <Button 
-                        cls="navButton"
+                        cls="navButton button-xl"
                         color="green" 
                         onClick={() => setModalVisible(true)}>
                             Регистрация
@@ -46,7 +46,7 @@ function Nav(props) {
             return (
                 <div>
                     <Button 
-                        cls="navButton"
+                        cls="navButton button-xl"
                         color="blue" 
                         onClick={() => props.history.push('/auth')}>
                             Войти

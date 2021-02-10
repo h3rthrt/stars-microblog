@@ -10,5 +10,5 @@ export default combineReducers({
     tag: popularTags,
     profile: profileData,
     auth: authReducer,
-    upload: upload
+    progress: upload
 })

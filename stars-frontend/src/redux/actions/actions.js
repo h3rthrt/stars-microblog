@@ -10,7 +10,9 @@ import {
 	LOAD_PROFILE_ERROR,
 	AUTH_SUCCESS,
 	AUTH_LOGOUT,
-	AUTH_ERROR
+	AUTH_ERROR,
+	UPLOAD_ON_PROGRESS,
+	UPLOAD_LOADED
 } from './actionsTypes'
 
 // Load posts
@@ -85,7 +87,7 @@ export function loadPopularTagsError(e) {
 
 export function loadProfile(username) {
 	return async (dispatch) => { 
-		await  firebase.database().ref().child('users')
+		await firebase.database().ref().child('users')
 		.orderByChild('username').equalTo(username)
 			.on('child_added', (snapshot) => {
 				let data = snapshot.val()
@@ -122,13 +124,13 @@ export function loadProfileDataError(e) {
 export function authUser(email, password, isLogin, name, blogname) {
 	return async dispatch => {
 		if (isLogin) {
-			firebase.auth().createUserWithEmailAndPassword(email, password)
+			await firebase.auth().createUserWithEmailAndPassword(email, password)
 				.then(() => {
 					var user = firebase.auth().currentUser
 					user.updateProfile({
 					displayName: `${name}`
-					}).then(function() {
-						firebase.database().ref('users/' + user.uid).set({
+					}).then(async function() {
+						await firebase.database().ref('users/' + user.uid).set({
 							username: name,
 							blogname: blogname,
 							email: email,
@@ -138,7 +140,7 @@ export function authUser(email, password, isLogin, name, blogname) {
 							following: [],
 							media: []
 						})
-						dispatch(authSuccess(user.uid, name, blogname))
+						dispatch(authSuccess(user.uid, name, blogname, null))
 					}).catch(function(e) {
 						dispatch(delError())
 						dispatch(authError(e.message))
@@ -149,7 +151,7 @@ export function authUser(email, password, isLogin, name, blogname) {
 					dispatch(authError(error.message))
 				})
 		} else {
-			firebase.auth().signInWithEmailAndPassword(email, password)
+			await firebase.auth().signInWithEmailAndPassword(email, password)
 				.catch((error) => {
 					dispatch(delError())
 					dispatch(authError(error.message))
@@ -193,9 +195,9 @@ export function logout() {
 
 export function authState() {
 	return async dispatch => {
-		await firebase.auth().onAuthStateChanged((userState) => {
+		await firebase.auth().onAuthStateChanged(async (userState) => {
 			if (userState) {
-				firebase.database().ref('/users/' + userState.uid).once('value')
+				await firebase.database().ref('/users/' + userState.uid).once('value')
 					.then((snapshot) => {
 						const username = snapshot.val().username || 'anonymous'
 						const blogname = snapshot.val().blogname || 'nameless'
@@ -205,6 +207,55 @@ export function authState() {
 				} else {
 					dispatch(logout())
 				}
+		}, (error) => {
+			console.log(error)
 		})
+	}
+}
+
+//upload photo
+
+export function uploadPhoto(files, username) {
+	return async dispatch => {
+		await files.forEach((file) => {
+			const path = `${username}/${file.name}`
+			const ref = firebase.storage().ref(path)
+			const task = ref.put(file)
+			task.on('state_changed', () => {
+				dispatch(uploadOnProgress())
+			}, error => {
+				authError(error)
+			}, () => {
+				task.snapshot.ref.getDownloadURL()
+					.then((url) => {
+						firebase.database()
+						.ref()
+						.child('users')
+						.orderByChild('username')
+						.equalTo(username)
+						.on('child_added', (snapshot) =>{
+							snapshot.ref.update({
+								'photoURL': url
+							})
+						})
+					})
+				dispatch(uploadComplete())
+			})
+		})
+
+	}
+}
+
+export function uploadOnProgress() {
+	return {
+		type: UPLOAD_ON_PROGRESS,
+		upload: true
+	}
+}
+
+export function uploadComplete() {
+	return {
+		type: UPLOAD_LOADED,
+		upload: false
 	}
 }

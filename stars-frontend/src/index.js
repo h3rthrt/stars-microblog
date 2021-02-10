@@ -25,7 +25,9 @@ import {
 	faSignOutAlt,
 	faKey,
 	faHeartBroken,
-	faUserEdit
+	faUserEdit,
+	faCamera,
+	faSpinner
 } from '@fortawesome/free-solid-svg-icons'
 library.add(
 	fab,
@@ -43,7 +45,9 @@ library.add(
 	faSignOutAlt,
 	faKey,
 	faHeartBroken,
-	faUserEdit
+	faUserEdit,
+	faCamera,
+	faSpinner
 )
 
 const composeEnhancers =
