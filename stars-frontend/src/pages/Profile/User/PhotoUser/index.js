@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ViewPhoto from '../../../../components/Modal/ViewPhoto'
 
 function Photo(props) {
-
     const [showMenu, setShowMenu] = useState(false)
     const [showModal, setShowModal] = useState(false)
     const [image, setImage] = useState({
@@ -61,8 +60,19 @@ function Photo(props) {
         setShowModal(true)
     }
 
-    function clickHandler() {
-        
+    function clickImageHandler() {
+
+    }
+
+    function clickInputHandler() {
+        if(image) {
+            setImage({
+                base64: '',
+                alt: '',
+                files: ''
+            })
+        }
+        inputImageRef.current.click()
     }
 
     function updatePhotoHandler() {
@@ -95,11 +105,13 @@ function Photo(props) {
                 view={showModal}
                 onClose={() => closeModalHandler()}
             />
-            {
-                props.photoUser !== 'null' || undefined
-                    ? <img alt="" src="/img/defaultPhoto.svg" />
-                    : <img className="photo-user__img" alt="" src={props.photoUser} onClick={() => clickHandler()}/>
-            }
+            <div className="photo-user__img-block">
+                {
+                    !props.photoURL
+                        ? <img alt="" src="/img/defaultPhoto.svg" />
+                        : <img className="photo-user__img" alt="" src={props.photoURL} onClick={() => clickImageHandler()}/>
+                }
+            </div>
             {
                 props.username === props.authUser 
                     ? <button ref={buttonUpdateRef} className="photo-user__update" onClick={() => updatePhotoHandler()}>
@@ -112,7 +124,7 @@ function Photo(props) {
                 showMenu ? 
                     <ul className="photo-user__menu">
                         <li>
-                            <button className="photo-user__replace" onClick={() => inputImageRef.current.click()}>Заменить фото</button>
+                            <button className="photo-user__replace" onClick={() => clickInputHandler()}>Заменить фото</button>
                             <input ref={inputImageRef} type="file" accept="image/jpeg,image/pjpeg,image/gif,image/png" />
                         </li>
                         <li>

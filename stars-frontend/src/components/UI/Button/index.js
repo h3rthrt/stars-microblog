@@ -15,7 +15,7 @@ function Button(props) {
 			{props.children}
 			{
 				props.loading 
-					? <FontAwesomeIcon icon="spinner" pulse={'fa-pulse'} /> 
+					? <FontAwesomeIcon icon='spinner' pulse={true} /> 
 					: null
 			}
 		</button>

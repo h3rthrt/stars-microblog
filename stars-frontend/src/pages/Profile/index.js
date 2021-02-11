@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { loadProfile, loadProfilePosts } from '../../redux/actions/actions'
+import { loadProfile, loadProfilePosts, clearProfileData } from '../../redux/actions/actions'
 import Post from '../../components/Post'
 import User from './User'
 import Spinner from '../../components/UI/Spinner'
@@ -91,7 +91,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 	return {
 		loadProfile: (username) => dispatch(loadProfile(username)),
-		loadProfilePosts: (payload) => dispatch(loadProfilePosts(payload))
+		loadProfilePosts: (payload) => dispatch(loadProfilePosts(payload)),
+		clearProfileData: () => dispatch(clearProfileData())
 	}
 }
 

@@ -1,4 +1,4 @@
-import { AUTH_LOGOUT, AUTH_SUCCESS, AUTH_ERROR } from '../actions/actionsTypes'
+import { AUTH_LOGOUT, AUTH_SUCCESS, AUTH_ERROR, AUTH_BLOGNAME, AUTH_PHOTO } from '../actions/actionsTypes'
 
 const initialState = {
 	uid: '',
@@ -15,18 +15,30 @@ export default function authReducer(state = initialState, action) {
 				...state,
 				uid: action.uid,
 				username: action.username,
-				blogname: action.blogname,
 				photoURL: action.photoURL
 			}
 		case AUTH_LOGOUT:
 			return {
 				...state,
-				uid: null
+				uid: '',
+				username: '',
+				blogname: '',
+				photoURL: ''
 			}
 		case AUTH_ERROR:
 			return {
 				...state,
 				error: action.error
+			}
+		case AUTH_BLOGNAME:
+			return {
+				...state,
+				blogname: action.blogname
+			}
+		case AUTH_PHOTO:
+			return {
+				...state,
+				photoURL: action.photoURL
 			}
 		default:
 			return state

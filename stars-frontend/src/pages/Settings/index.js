@@ -1,10 +1,21 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Settings.sass'
 import { connect } from 'react-redux'
-import { logout } from '../../redux/actions/actions'
+import { logout, authLoadBlogname } from '../../redux/actions/actions'
+import Spinner from '../../components/UI/Spinner'
+import PhotoUser from '../Profile/User/PhotoUser'
 
 function Settings(props) {
+    const [loading, setLoading] = useState(false)
+    useEffect(() => {
+        if(!props.blogname) {
+            setLoading(true)
+            props.authLoadBlogname(props.uid)
+        } else if (props.blogname && loading) {
+            setLoading(false)
+        }
+    }, [props, loading])
     const buttons = [
         {icon: 'sign-out-alt', text: 'Выйти с аккаунта', onClick: () => props.logout()},
         {icon: 'user', text: 'Сведения об учетной записи'},
@@ -23,37 +34,40 @@ function Settings(props) {
         })
     }
 
-    return (
-        <div className="container">
-            <div className="settings">
-                <div className="settings__profileInfo">
-                    { 
-                        props.photoURL && props.photoURL === null
-                        ? <img alt="" src={ props.photoURL } />
-                        : <img alt="" src="/img/defaultPhoto.svg" />
-                    }
-                    <div className="settings__username">{ props.blogname }</div>
-                    <div className="settings__desc">null desc</div>
-                </div>
-                <div className="settings__buttons">
-                    { renderButtons() }
+    if(loading) {
+        return <Spinner />
+    } else {
+        return (
+            <div className="container">
+                <div className="settings">
+                    <div className="settings__profileInfo">
+                        <PhotoUser photoURL={props.photoURL} username={props.username} />
+                        <div className="settings__username">{ props.blogname }</div>
+                        <div className="settings__desc">null desc</div>
+                    </div>
+                    <div className="settings__buttons">
+                        { renderButtons() }
+                    </div>
                 </div>
             </div>
-        </div>
-    )
+        )
+    }
 }
 
 function mapStateToProps(state) {
     return {
         photoURL: state.auth.photoURL,
-        blogname: state.auth.blogname
+        uid: state.auth.uid,
+        blogname: state.auth.blogname,
+        username: state.auth.username
     }
     
 }
 
-function mapDispatchToProps(dispath) {
+function mapDispatchToProps(dispatch) {
     return{
-        logout: () => dispath(logout())
+        logout: () => dispatch(logout()),
+        authLoadBlogname: (uid) => dispatch(authLoadBlogname(uid))
     }
 }
 

@@ -117,7 +117,7 @@ function CreateAcc(props) {
         })
     }
 
-    async function submitHandler(event) {
+    function submitHandler(event) {
         const email = formControls[0].value
         const name = formControls[1].value
         const blogname = formControls[2].value

@@ -36,8 +36,6 @@ function Auth(props) {
         }
     ])
 
-
-
     function submitHandler228(event) {
         props.authUser(
             formControls[0].value,

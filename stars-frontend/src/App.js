@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import './App.sass'
 import { connect } from 'react-redux'
@@ -14,12 +14,18 @@ import Loading from './components/UI/Loading'
 
 function App(props) {
   const loadingAppTimeout = useRef()
+  const [loader, setLoader] = useState(true)
 
   useEffect(() => {
     if(!props.isAuthenticated) {
       loadingAppTimeout.current = setTimeout(() => {
         props.authState()
+        if (props.isAuthenticated) {
+          setLoader(false)
+        }
       }, 500)
+    } else {
+      setLoader(false)
     }
     return () => {
       clearTimeout(loadingAppTimeout.current)
@@ -52,7 +58,7 @@ function App(props) {
     )
   }
 
-  if (props.isAuthenticated === '') {
+  if (loader) {
     return <Loading />
   } else {
     return (

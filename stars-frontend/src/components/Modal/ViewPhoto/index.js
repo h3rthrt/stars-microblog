@@ -1,10 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { connect } from 'react-redux'
 import Button from '../../UI/Button'
 import { uploadPhoto } from '../../../redux/actions/actions'
 
 const ViewPhoto = ((props) => {
+	useEffect(() => {
+		console.log(props.complete, props.view)
+		if(props.complete && props.view) {
+			hideModalHandler()
+		}
+	})
+
 	function hideModalHandler() {
 		setTimeout(() => {
 			props.onClose()
@@ -12,18 +19,16 @@ const ViewPhoto = ((props) => {
 		document.getElementById('modal').classList.add('hide')
 	}
 
-	useState(() => {
-		return () => {
-			clearTimeout(hideModalHandler())
-		}
-	})
+	function uploadPhotoHandler() {
+		props.uploadPhoto(props.image.files, props.username)
+	}
 
 	if(props.view) { 
 		return (
 			<div id="modal" className="modal">
 				<div className="modal__dialog modal__photo">
 					<div className="modal__header">
-                        <button onClick={props.onClose}>
+                        <button onClick={() => hideModalHandler()}>
                             <FontAwesomeIcon icon="times" className="times"/>
                         </button>
                     </div>
@@ -33,8 +38,9 @@ const ViewPhoto = ((props) => {
 					</div>
 					<div className="modal__footer">
 						<Button onClick={() => hideModalHandler()} cls="gray button-l">Отменить</Button>
-						<Button disabled={props.upload} 
-							onClick={() => {props.uploadPhoto(props.image.files, props.username)}} 
+						<Button 
+							disabled={props.upload} 
+							onClick={() => {uploadPhotoHandler()}} 
 							loading={props.upload} 
 							cls="primary button-l">
 							Сохранить
@@ -51,7 +57,8 @@ const ViewPhoto = ((props) => {
 function mapStateToProps(state) {
 	return {
 		upload: state.progress.upload,
-		username: state.auth.username
+		username: state.auth.username,
+		complete: state.progress.complete
 	}
 }
 

@@ -1,6 +1,7 @@
 import { UPLOAD_ON_PROGRESS, UPLOAD_LOADED } from '../actions/actionsTypes'
 const initialState = {
-    upload: false
+    upload: false,
+    complete: false
 }
 
 export default function upload(state = initialState, action) {
@@ -8,12 +9,13 @@ export default function upload(state = initialState, action) {
         case UPLOAD_ON_PROGRESS:
             return {
                 ...state,
-                upload: action.upload
+                upload: true
             }
         case UPLOAD_LOADED:
             return {
                 ...state,
-                upload: action.upload
+                upload: false,
+                complete: action.complete
             }
         default:
             return state
