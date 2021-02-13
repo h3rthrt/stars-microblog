@@ -16,7 +16,7 @@ const initialState = {
 	error: ''
 }
 
-export default function profileData(state = initialState, action) {
+export default function profileReducer(state = initialState, action) {
 	switch (action.type) {
 		case LOAD_PROFILE_SUCCESS:
 			return {

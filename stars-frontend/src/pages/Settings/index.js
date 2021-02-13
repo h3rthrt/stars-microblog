@@ -1,27 +1,23 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Settings.sass'
 import { connect } from 'react-redux'
-import { logout, authLoadBlogname } from '../../redux/actions/actions'
+import { signOut } from '../../redux/actions/authActions'
+import { loadProfile } from '../../redux/actions/profileActions'
 import Spinner from '../../components/UI/Spinner'
 import PhotoUser from '../Profile/User/PhotoUser'
 
 function Settings(props) {
-    const [loading, setLoading] = useState(false)
-    useEffect(() => {
-        if(!props.blogname) {
-            setLoading(true)
-            props.authLoadBlogname(props.uid)
-        } else if (props.blogname && loading) {
-            setLoading(false)
-        }
-    }, [props, loading])
     const buttons = [
-        {icon: 'sign-out-alt', text: 'Выйти с аккаунта', onClick: () => props.logout()},
+        {icon: 'sign-out-alt', text: 'Выйти с аккаунта', onClick: () => props.signOut()},
         {icon: 'user', text: 'Сведения об учетной записи'},
         {icon: 'key', text: 'Изменение пароля'},
         {icon: 'heart-broken', text: 'Отключить свою учетную запись'}
     ]
+
+    useEffect(() => {
+        props.loadProfile(props.username)
+    })
     
     function renderButtons() {
         return buttons.map((item, index) => {
@@ -34,7 +30,7 @@ function Settings(props) {
         })
     }
 
-    if(loading) {
+    if(!props.blogname) {
         return <Spinner />
     } else {
         return (
@@ -56,18 +52,18 @@ function Settings(props) {
 
 function mapStateToProps(state) {
     return {
-        photoURL: state.auth.photoURL,
-        uid: state.auth.uid,
-        blogname: state.auth.blogname,
-        username: state.auth.username
+        photoURL: state.profile.photoURL,
+        uid: state.firebase.auth.uid,
+        blogname: state.firebase.profile.blogname,
+        username: state.firebase.auth.displayName
     }
     
 }
 
 function mapDispatchToProps(dispatch) {
     return{
-        logout: () => dispatch(logout()),
-        authLoadBlogname: (uid) => dispatch(authLoadBlogname(uid))
+        signOut: () => dispatch(signOut()),
+        loadProfile: (username) => dispatch(loadProfile(username))
     }
 }
 

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { loadPosts } from '../../redux/actions/actions'
 import Tags from '../../components/PopularTags'
 import Post from '../../components/Post'
 import './Main.sass'
@@ -34,7 +33,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		loadPosts: () => dispatch(loadPosts())
+		// loadPosts: () => dispatch(loadPosts())
 	}
 }
 

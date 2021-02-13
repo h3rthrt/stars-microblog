@@ -2,11 +2,11 @@ import React, { useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { connect } from 'react-redux'
 import Button from '../../UI/Button'
-import { uploadPhoto } from '../../../redux/actions/actions'
+import { uploadPhoto, uploadReset } from '../../../redux/actions/uploadActions'
 
 const ViewPhoto = ((props) => {
+	console.log(props.complete, props.upload)
 	useEffect(() => {
-		console.log(props.complete, props.view)
 		if(props.complete && props.view) {
 			hideModalHandler()
 		}
@@ -17,10 +17,11 @@ const ViewPhoto = ((props) => {
 			props.onClose()
 		}, 100)
 		document.getElementById('modal').classList.add('hide')
+		props.uploadReset()
 	}
 
-	function uploadPhotoHandler() {
-		props.uploadPhoto(props.image.files, props.username)
+	async function uploadPhotoHandler() {
+		await props.uploadPhoto(props.image.files, props.username)
 	}
 
 	if(props.view) { 
@@ -56,15 +57,16 @@ const ViewPhoto = ((props) => {
 
 function mapStateToProps(state) {
 	return {
-		upload: state.progress.upload,
-		username: state.auth.username,
-		complete: state.progress.complete
+		username: state.firebase.profile.username,
+		complete: state.progress.complete,
+		upload: state.progress.upload
 	}
 }
 
 function mapDispathToProps(dispatch) {
 	return {
-		uploadPhoto: (files, username) => dispatch(uploadPhoto(files, username))
+		uploadPhoto: (files, username) => dispatch(uploadPhoto(files, username)),
+		uploadReset: () => dispatch(uploadReset())
 	}
 }
 

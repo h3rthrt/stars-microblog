@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { authUser } from '../../redux/actions/actions'
+import { signIn } from '../../redux/actions/authActions'
 import './Auth.sass'
 import is from 'is_js'
 import Button from '../../components/UI/Button'
@@ -37,12 +37,12 @@ function Auth(props) {
     ])
 
     function submitHandler228(event) {
-        props.authUser(
+        event.preventDefault()
+        props.signIn(
             formControls[0].value,
             formControls[1].value,
             false
         )
-        event.preventDefault()
     }
 
     function validate(value, validation) {
@@ -134,10 +134,16 @@ function Auth(props) {
     )
 }
 
-function mapDispatchToProps(dispatch) {
+function mapStateToProps(state) {
     return {
-        authUser: (email, password, isLogin) => dispatch(authUser(email, password, isLogin))
+
     }
 }
 
-export default connect(null, mapDispatchToProps)(Auth)
+function mapDispatchToProps(dispatch) {
+    return {
+        signIn: (email, password, isLogin) => dispatch(signIn(email, password, isLogin))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Auth)

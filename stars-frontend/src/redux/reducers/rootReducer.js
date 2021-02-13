@@ -1,14 +1,16 @@
 import { combineReducers } from 'redux'
 import postsList from './postsList'
 import popularTags from './popularTags'
-import profileData from './profileData'
-import authReducer from './auth'
-import upload from './upload'
+import profileReducer from './profileReducer'
+import authReducer from './authReducer'
+import uploadReducer from './uploadReducer'
+import { firebaseReducer } from 'react-redux-firebase'
 
 export default combineReducers({
     post: postsList,
     tag: popularTags,
-    profile: profileData,
+    progress: uploadReducer,
+    profile: profileReducer,
     auth: authReducer,
-    progress: upload
+    firebase: firebaseReducer
 })

@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import './App.sass'
 import { connect } from 'react-redux'
-import { authState } from './redux/actions/actions'
 import Layout from './Layout'
 import Dashboard from './pages/Dashboard'
 import Main from './pages/Main'
@@ -13,24 +12,12 @@ import Auth from './pages/Auth'
 import Loading from './components/UI/Loading'
 
 function App(props) {
-  const loadingAppTimeout = useRef()
   const [loader, setLoader] = useState(true)
-
   useEffect(() => {
-    if(!props.isAuthenticated) {
-      loadingAppTimeout.current = setTimeout(() => {
-        props.authState()
-        if (props.isAuthenticated) {
-          setLoader(false)
-        }
-      }, 500)
-    } else {
+    if(props.isLoaded) {
       setLoader(false)
     }
-    return () => {
-      clearTimeout(loadingAppTimeout.current)
-    }
-  },[props])
+  }, [props])
 
   var routers = (
     <Switch>
@@ -44,7 +31,7 @@ function App(props) {
     </Switch>
   )
 
-  if (props.isAuthenticated) {
+  if (!props.isAuthenticated) {
     routers = (
       <Switch>
         <Route exact path='/dashboard' component={Dashboard} />
@@ -71,15 +58,9 @@ function App(props) {
 
 function mapStateToProps(state) {
   return {
-    isAuthenticated: state.auth.uid,
-    username: state.profile.username
+    isAuthenticated: state.firebase.auth.isEmpty,
+    isLoaded: state.firebase.auth.isLoaded
   }
 }
 
-function mapDispatchToProps(dispath) {
-  return {
-    authState: () => dispath(authState())
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App))
+export default connect(mapStateToProps, null)(withRouter(App))

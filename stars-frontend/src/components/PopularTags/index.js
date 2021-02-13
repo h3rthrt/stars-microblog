@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { loadPopularTags } from '../../redux/actions/actions'
 import './PopularTags.sass'
 
 function Tags(props) {
@@ -35,7 +34,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        loadPopularTags: () => dispatch(loadPopularTags())
+        // loadPopularTags: () => dispatch(loadPopularTags())
     }
 }
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { connect } from 'react-redux'
-import { authUser } from '../../../redux/actions/actions'
+import { signIn } from '../../../redux/actions/authActions'
 import '../Modal.sass'
 import is from 'is_js'
 import Input from '../../UI/Input'
@@ -118,18 +118,18 @@ function CreateAcc(props) {
     }
 
     function submitHandler(event) {
+        event.preventDefault()
         const email = formControls[0].value
         const name = formControls[1].value
         const blogname = formControls[2].value
         const pass = formControls[3].value
-        props.authUser(
+        props.signIn(
             email,
             pass,
             true,
             name,
             blogname
         )
-        event.preventDefault()
     }
     if(!props.visible) {
         return null
@@ -169,7 +169,7 @@ function CreateAcc(props) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        authUser: (email, password, name, blogname, isLogin) => dispatch(authUser(email, password, name, blogname, isLogin))
+        signIn: (email, password, name, blogname, isLogin) => dispatch(signIn(email, password, name, blogname, isLogin))
     }
 }
 

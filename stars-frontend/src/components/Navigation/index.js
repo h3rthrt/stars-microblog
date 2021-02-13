@@ -16,7 +16,7 @@ function Nav(props) {
     ]
 
     function renderLinks() {
-        if (props.isAuthenticated) {
+        if (!props.isAuthenticated) {
             return links.map((link, index) => {
                 let cls = []
                 let classTrue = 'true'
@@ -87,8 +87,8 @@ function Nav(props) {
 
 function mapStateToProps(state) {
     return {
-        isAuthenticated: !!state.auth.uid,
-        username: state.auth.username
+        isAuthenticated: state.firebase.auth.isEmpty,
+        username: state.firebase.auth.displayName
     }
 }
 

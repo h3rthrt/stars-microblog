@@ -43,7 +43,6 @@ function Photo(props) {
             if (!file.type.match('image')) {
                 return
             }
-
             const reader = new FileReader()
             reader.onload = ev => {
                 setImage((prevState) => {
@@ -139,7 +138,7 @@ function Photo(props) {
 
 function mapStateToProps(state) {
     return {
-        authUser: state.auth.username,
+        authUser: state.firebase.profile.username,
         blogname: state.profile.blogname
     }
 }

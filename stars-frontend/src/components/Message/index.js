@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { delError } from '../../redux/actions/actions'
+import { loginClear } from '../../redux/actions/authActions'
 import './Message.sass'
 
 function Message(props) {
     const [showError, setShowError] = useState(false)
     useEffect(() => {
         if(props.error) {
-            var timer = setTimeout(() => props.delError(), 4000)
+            var timer = setTimeout(() => props.loginClear(), 4000)
             setShowError(true)
         }
         return() => {
@@ -23,7 +23,7 @@ function Message(props) {
         return(
             <div className={ cls.join(' ') } id="message">
                 <div className="message__text">{ props.error }</div>
-                <button onClick={ () => props.delError() }>
+                <button onClick={ () => props.loginClear() }>
                     <FontAwesomeIcon icon="times" className="times" id="message"/>
                 </button>
             </div>
@@ -35,13 +35,13 @@ function Message(props) {
 
 function mapStateToProps(state) {
     return {
-        error: state.auth.error
+        error: state.auth.authError
     }
 }
 
 function mapDispatchToProps(dispath) {
     return {
-        delError: () => dispath(delError())
+        loginClear: () => dispath(loginClear())
     }
 }
 

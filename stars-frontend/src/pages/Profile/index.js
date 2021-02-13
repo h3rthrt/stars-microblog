@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { loadProfile, loadProfilePosts, clearProfileData } from '../../redux/actions/actions'
+import { loadProfile } from '../../redux/actions/profileActions'
 import Post from '../../components/Post'
 import User from './User'
 import Spinner from '../../components/UI/Spinner'
@@ -48,8 +48,8 @@ function Profile(props) {
 			<div className="container">
 				<div className="container__left">
 					<div className="select-type">
-						<button id="posts" onClick={()=> {props.loadProfilePosts('posts'); activeBtn('posts')}}>записи</button>
-						<button id="likes" onClick={()=> {props.loadProfilePosts('likes'); activeBtn('likes')}}>нравится</button>
+						<button id="posts" onClick={()=> {activeBtn('posts')}}>записи</button>
+						<button id="likes" onClick={()=> {activeBtn('likes')}}>нравится</button>
 					</div>
 					{ renderPosts() }
 				</div>
@@ -90,9 +90,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		loadProfile: (username) => dispatch(loadProfile(username)),
-		loadProfilePosts: (payload) => dispatch(loadProfilePosts(payload)),
-		clearProfileData: () => dispatch(clearProfileData())
+		loadProfile: (username) => dispatch(loadProfile(username))
 	}
 }
 
