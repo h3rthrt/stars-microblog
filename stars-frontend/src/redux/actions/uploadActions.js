@@ -21,6 +21,9 @@ export function uploadPhoto(files, username) {
 					user.updateProfile({
 						'photoURL': downloadURL
 					})
+					firebase.updateAuth({
+						'photoURL': downloadURL
+					})
 					dispatch(loadProfilePhoto(downloadURL))
 					return { fileUrl: downloadURL }
 				}

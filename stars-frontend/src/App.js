@@ -47,6 +47,8 @@ function App(props) {
 
   if (loader) {
     return <Loading />
+  } else if (!loader && !props.isAuthenticated && !props.username) {
+    return <Loading />
   } else {
     return (
       <Layout>
@@ -59,7 +61,8 @@ function App(props) {
 function mapStateToProps(state) {
   return {
     isAuthenticated: state.firebase.auth.isEmpty,
-    isLoaded: state.firebase.auth.isLoaded
+    isLoaded: state.firebase.auth.isLoaded,
+    username: state.firebase.auth.displayName
   }
 }
 

@@ -20,25 +20,28 @@ export function signIn(email, password, isLogin, name, blogname) {
 							following: [],
 							media: []
 						}, () => {
-							dispatch({ type: LOGIN_SUCCESS }, user.uid, name, null)
+							firebase.updateAuth({
+								'displayName': name
+							})
+							dispatch(loginSuccess())
 						})
-					}).catch(function(e) {
+					}).catch(function(error) {
 						dispatch({ type: LOGIN_CLEAR })
-						dispatch({ type: LOGIN_ERROR }, e)
+						dispatch(loginError(error))
 					})
 				})
 				.catch((error) => {
 					dispatch({ type: LOGIN_CLEAR })
-					dispatch({ type: LOGIN_ERROR }, error)
+					dispatch(loginError(error))
 				})
 		} else {
 			firebase.auth().signInWithEmailAndPassword(email, password)
 				.then(() => {
-					dispatch({ type: LOGIN_SUCCESS })
+					dispatch(loginSuccess())
 				})
 				.catch((error) => {
 					dispatch({ type: LOGIN_CLEAR })
-					dispatch({ type: LOGIN_ERROR, error })
+					dispatch(loginError(error))
 				})
 		}
 	}
@@ -56,5 +59,18 @@ export function signOut() {
 export function loginClear() {
 	return (dispatch, getState, getFirebase) => {
 		dispatch({ type: LOGIN_CLEAR })
+	}
+}
+
+export function loginSuccess() {
+	return {
+		type: LOGIN_SUCCESS
+	}
+}
+
+export function loginError(error) {
+	return {
+		type: LOGIN_ERROR,
+		error
 	}
 }

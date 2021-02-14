@@ -52,7 +52,7 @@ function Settings(props) {
 
 function mapStateToProps(state) {
     return {
-        photoURL: state.profile.photoURL,
+        photoURL: state.firebase.auth.photoURL,
         uid: state.firebase.auth.uid,
         blogname: state.firebase.profile.blogname,
         username: state.firebase.auth.displayName
