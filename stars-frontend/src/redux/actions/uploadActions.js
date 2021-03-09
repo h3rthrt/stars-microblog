@@ -1,17 +1,10 @@
 import { UPLOAD_ON_PROGRESS, UPLOAD_LOADED, UPLOAD_RESET, LOAD_PROFILE_PHOTO } from './actionsTypes'
 
-export function uploadPhoto(files, username) {
+export function uploadPhoto(files, username, uid) {
 	return (dispatch, getState, getFirebase) => {
-		let uid
 		files.forEach((file) => {
 			const firebase = getFirebase()
-			const path = `${username}/${file.name}`
-			firebase.ref().child('users')
-			.orderByChild('username')
-			.equalTo(username)
-			.on('value', (snapshot) => {
-				uid = Object.keys(snapshot.val()).toString()
-			})
+			const path = `${username}/profilePhoto`
 			const dbPath = `users/${uid}/photoURL`
 			dispatch(uploadOnProgress(true))
 			firebase

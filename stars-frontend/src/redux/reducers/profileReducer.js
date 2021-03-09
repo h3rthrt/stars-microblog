@@ -50,6 +50,11 @@ export default function profileReducer(state = initialState, action) {
 				media: [],
 				error: ''
 			}
+		case 'CLEAR_PHOTO':
+			return {
+				...state,
+				photoURL: ''
+			}
 		default:
 			return state
 	}

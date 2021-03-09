@@ -1,12 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react'
 import './PhotoUser.sass'
 import { connect } from 'react-redux'
+import { clearPhoto } from '../../../../redux/actions/profileActions'
+import { useFirebase } from 'react-redux-firebase'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ViewPhoto from '../../../../components/Modal/ViewPhoto'
+import WarningMsg from '../../../../components/Modal/WarningMsg'
 
 function Photo(props) {
-    const [showMenu, setShowMenu] = useState(false)
-    const [showModal, setShowModal] = useState(false)
+    const firebase = useFirebase()
+    const [showMenu, setShowMenu] = useState(false) //for show menu with buttons
+    const [showModal, setShowModal] = useState(false) //for update img
+    const [showWarning, setShowWarning] = useState(false) //warning modal for remove img
     const [image, setImage] = useState({
         base64: '',
         alt: '',
@@ -96,8 +101,32 @@ function Photo(props) {
         }, 100)
     }
 
+    function removePhoto() {
+        firebase.ref(`users/${props.uid}/photoURL`).remove()
+        const photoName = firebase.storage().refFromURL(props.photoURL).name
+        firebase.deleteFile(`${props.authUser}/profilePhoto/${photoName}`)
+        const user = firebase.auth().currentUser
+        user.updateProfile({
+            'photoURL': ''
+        })
+        firebase.updateAuth({
+            'photoURL': ''
+        })
+        props.clearPhoto()
+    }
+
     return (
         <div className="photo-user">
+            {
+                showWarning ?
+                    <WarningMsg 
+                        msg="Вы уверены?"
+                        accept="Удалить"
+                        onShow={() => setShowWarning(!showWarning)}
+                        action={() => removePhoto()}
+                    />
+                    : null
+            }
             <ViewPhoto 
                 blogname={props.blogname} 
                 image={image} 
@@ -127,7 +156,7 @@ function Photo(props) {
                             <input ref={inputImageRef} type="file" accept="image/jpeg,image/pjpeg,image/gif,image/png" />
                         </li>
                         <li>
-                            <button className="photo-user__remove">Удалить фото</button>
+                            <button className="photo-user__remove" onClick={() => setShowWarning(!showWarning)}>Удалить фото</button>
                         </li>
                     </ul>
                     : null
@@ -137,10 +166,19 @@ function Photo(props) {
 }
 
 function mapStateToProps(state) {
+    console.log(state)
     return {
         authUser: state.firebase.profile.username,
-        blogname: state.profile.blogname
+        blogname: state.profile.blogname,
+        uid: state.firebase.auth.uid,
+        photoURL: state.firebase.auth.photoURL
     }
 }
 
-export default connect(mapStateToProps)(Photo)
+function mapDispatchToProps(dispatch) {
+    return {
+        clearPhoto: () => dispatch(clearPhoto())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Photo)

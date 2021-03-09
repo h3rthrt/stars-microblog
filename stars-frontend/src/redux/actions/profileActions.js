@@ -25,6 +25,12 @@ export function loadProfile(username) {
 	}
 }
 
+export function clearPhoto() {
+	return {
+		type: 'CLEAR_PHOTO'
+	}
+}
+
 export function loadProfileDataSuccess(data) {
 	return {
 		type: LOAD_PROFILE_SUCCESS,

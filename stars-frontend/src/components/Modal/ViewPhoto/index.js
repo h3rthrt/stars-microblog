@@ -21,7 +21,7 @@ const ViewPhoto = ((props) => {
 	}
 
 	async function uploadPhotoHandler() {
-		await props.uploadPhoto(props.image.files, props.username)
+		await props.uploadPhoto(props.image.files, props.username, props.uid)
 	}
 
 	if(props.view) { 
@@ -38,10 +38,14 @@ const ViewPhoto = ((props) => {
 						<img alt={props.image.alt} src={props.image.base64} />
 					</div>
 					<div className="modal__footer">
-						<Button onClick={() => hideModalHandler()} cls="gray button-l">Отменить</Button>
+						<Button 
+							onClick={() => hideModalHandler()} 
+							cls="gray button-l">
+							Отменить
+						</Button>
 						<Button 
 							disabled={props.upload} 
-							onClick={() => {uploadPhotoHandler()}} 
+							onClick={() => uploadPhotoHandler()} 
 							loading={props.upload} 
 							cls="primary button-l">
 							Сохранить
@@ -59,13 +63,14 @@ function mapStateToProps(state) {
 	return {
 		username: state.firebase.profile.username,
 		complete: state.progress.complete,
-		upload: state.progress.upload
+		upload: state.progress.upload,
+		uid: state.firebase.auth.uid
 	}
 }
 
 function mapDispathToProps(dispatch) {
 	return {
-		uploadPhoto: (files, username) => dispatch(uploadPhoto(files, username)),
+		uploadPhoto: (files, username, uid) => dispatch(uploadPhoto(files, username, uid)),
 		uploadReset: () => dispatch(uploadReset())
 	}
 }
