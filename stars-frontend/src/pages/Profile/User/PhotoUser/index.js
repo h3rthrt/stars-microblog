@@ -30,7 +30,6 @@ function Photo(props) {
             }
         }
         if (showMenu) {
-            inputImageRef.current.addEventListener('change', changeHandler)
             document.addEventListener('click', beforeComponentClick)
             return () => {
                 document.removeEventListener('click', beforeComponentClick)
@@ -42,7 +41,6 @@ function Photo(props) {
         if(!event.target.files.length) {
             return
         }
-        
         const files = Array.from(event.target.files)
         files.forEach(file => {
             if (!file.type.match('image')) {
@@ -153,11 +151,15 @@ function Photo(props) {
                     <ul className="photo-user__menu">
                         <li>
                             <button className="photo-user__replace" onClick={() => clickInputHandler()}>Заменить фото</button>
-                            <input ref={inputImageRef} type="file" accept="image/jpeg,image/pjpeg,image/gif,image/png" />
+                            <input onChange={(event) => changeHandler(event)} ref={inputImageRef} type="file" accept="image/jpeg,image/pjpeg,image/gif,image/png" />
                         </li>
-                        <li>
-                            <button className="photo-user__remove" onClick={() => setShowWarning(!showWarning)}>Удалить фото</button>
-                        </li>
+                        {
+                            props.photoURL ?
+                            <li>
+                                <button className="photo-user__remove" onClick={() => setShowWarning(!showWarning)}>Удалить фото</button>
+                            </li>
+                            : null
+                        }
                     </ul>
                     : null
             }

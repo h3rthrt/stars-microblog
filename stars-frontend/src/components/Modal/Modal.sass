@@ -18,9 +18,10 @@
         align-items: center
         position: relative
         max-width: 660px
-        margin: 15vh auto
+        margin: auto
         padding: 21px 21px 21px 21px
         border-radius: 4px
+        top: 5%
         > svg
             width: 54px
             margin-bottom: 12px
@@ -64,11 +65,52 @@
             text-align: left
             margin-bottom: 14px
             padding-bottom: 8px
+    &__create
+        width: 100%
+        & .post__images .img-box
+            margin-bottom: 6px
+        & .input-image
+            display: none
+        & hr
+            margin: 5px 0
+        & textarea
+            resize: vertical
+            background: rgba(0, 0, 0, 0)
+            border: 0px
+            outline: 0
+        > .modal__header
+            font-size: 18px
+            color: $white
+            font-weight: bold
+            &::placeholder
+                color: $white
+        > .modal__text
+            width: 100%
+            font-size: 14px
+            color: $white
+            font-weight: 500
+            &::placeholder
+                color: $white
+        & button
+            cursor: pointer
+            > svg
+                font-size: 20px
+                margin-top: 5px
+                margin-right: 10px
+
     &__footer
         width: 500px
         margin-top: auto
         button
             margin-left: 12px
+    &__footer-create
+        margin-top: auto
+        display: flex
+        width: 100%
+        justify-content: space-between
+        align-items: center
+        & .modal__right .button-l
+            font-size: 14px
 
 .hide
     @include fadeOutAnimation(.1s)

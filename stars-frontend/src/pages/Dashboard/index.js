@@ -1,10 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import Post from '../../components/Post'
 import Tags from '../../components/PopularTags'
+import CreateNote from '../../components/Modal/CreatePost'
 import './Dashboard.sass'
 
 function Dashboard(props) {
+	const [showCreateNote, setShowCreateNote] = useState(false)
+
 	useEffect(() => {
 		// props.loadPosts()
 	}, [props])
@@ -17,8 +20,12 @@ function Dashboard(props) {
 
 	return (
 		<div className="container">
+			<CreateNote
+				view={showCreateNote} 
+				onShow={() => setShowCreateNote(!showCreateNote)}
+			/>
 			<div className="container__left">
-				<div className="create-note">Создать запись</div>
+				<div className="create-note" onClick={() => setShowCreateNote(true)}>Создать запись</div>
 				{renderPosts()}
 			</div>
 			<div className="container__right">
