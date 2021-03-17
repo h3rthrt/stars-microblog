@@ -36,11 +36,20 @@ function CreateNote(props) {
     }
 
     function clickInputHandler() {
-        console.log(image.images.length)
         if(image.images.length) {
             setImage({images: []})
         }
         inputImageRef.current.click()
+    }
+
+    function removeImageHandler(img) {
+        setImage((prevState) => {
+            const images = prevState.images.filter(imageState => imageState.alt !== img.alt)
+            return {
+                images
+            }
+        })
+        console.log(image)
     }
 
     if(props.view) {
@@ -58,21 +67,22 @@ function CreateNote(props) {
                             <div className="post__images">
                                 { image.images.length ? (
                                     image.images.map((image, index) => {
-                                        console.log('a')
                                         return (
-                                            <div className="img-box" key={index} >
-                                                <img alt={image.alt} src={image.base64}/>
+                                            <div className="img-box" key={index}>
+                                                <div className="img-box__times" onClick={() => removeImageHandler(image)}>&times;</div>
+                                                <img className="img-box__img" style={{display: "block"}} alt={image.alt} src={image.base64}/>
+                                                <div className="img-box__alt">
+                                                    <span>{
+                                                        image.alt.length > 21 
+                                                        ? image.alt.slice(0, (21 - image.alt.length)) + '...' 
+                                                        : image.alt}
+                                                    </span>
+                                                </div>
                                             </div>
                                         )
                                     }) 
                                 ) 
                                 : null }
-                                {/* <div className="img-box" >
-                                    <img alt="" src="https://64.media.tumblr.com/f97493058d2010f90cf1030b8096e052/8ea939676c3d758b-a0/s2048x3072/dceacaf12ac10561182626e008846d614b5d7912.jpg"/>
-                                </div>
-                                <div className="img-box" >
-                                    <img alt="" src="https://64.media.tumblr.com/55f0cbc15e7b37a4ab70326c6b04990f/9c42c28414223682-28/s2048x3072/36c50a7cc7ec22d17e7e9fbaea2e126115388570.jpg"/>
-                                </div> */}
                             </div>
                             <textarea placeholder="Текст" maxLength="140" className="modal__text" />
                             <hr />

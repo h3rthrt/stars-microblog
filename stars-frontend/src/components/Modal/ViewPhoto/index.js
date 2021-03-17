@@ -5,7 +5,7 @@ import Button from '../../UI/Button'
 import { uploadPhoto, uploadReset } from '../../../redux/actions/uploadActions'
 
 const ViewPhoto = ((props) => {
-	console.log(props.complete, props.upload)
+	// console.log(props.complete, props.upload)
 	useEffect(() => {
 		if(props.complete && props.view) {
 			hideModalHandler()
@@ -40,14 +40,14 @@ const ViewPhoto = ((props) => {
 					<div className="modal__footer">
 						<Button 
 							onClick={() => hideModalHandler()} 
-							cls="gray button-l">
+							cls="gray button-s">
 							Отменить
 						</Button>
 						<Button 
 							disabled={props.upload} 
 							onClick={() => uploadPhotoHandler()} 
 							loading={props.upload} 
-							cls="primary button-l">
+							cls="primary button-s">
 							Сохранить
 						</Button>
 					</div>

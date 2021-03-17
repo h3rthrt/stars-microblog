@@ -59,6 +59,7 @@
             > img
                 height: 100%
                 width: auto
+                display: block
         > h2
             border-bottom: 1px solid $gray
             width: 500px
@@ -111,6 +112,39 @@
         align-items: center
         & .modal__right .button-l
             font-size: 14px
+.img-box
+    position: relative
+    overflow: hidden
+    &__times
+        font-size: 21px
+        position: absolute
+        bottom: 0
+        top: 0
+        right: 0
+        margin-right: 6px
+        cursor: pointer
+        opacity: 0
+        transition: opacity .22s
+    &__alt
+        display: flex
+        flex-wrap: wrap
+        position: absolute
+        right: 0
+        bottom: -10px
+        left: 0
+        height: auto
+        background: rgba(0, 0, 0, 0.5)
+        opacity: 0
+        transition: .22s
+        > span
+            white-space: pre-line
+
+.post__images .img-box:hover
+    .img-box__times
+        opacity: 1
+    .img-box__alt
+        opacity: 1
+        bottom: 0
 
 .hide
     @include fadeOutAnimation(.1s)

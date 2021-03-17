@@ -30,6 +30,7 @@ function Photo(props) {
             }
         }
         if (showMenu) {
+            inputImageRef.current.addEventListener('change', changeHandler)
             document.addEventListener('click', beforeComponentClick)
             return () => {
                 document.removeEventListener('click', beforeComponentClick)
@@ -151,7 +152,11 @@ function Photo(props) {
                     <ul className="photo-user__menu">
                         <li>
                             <button className="photo-user__replace" onClick={() => clickInputHandler()}>Заменить фото</button>
-                            <input onChange={(event) => changeHandler(event)} ref={inputImageRef} type="file" accept="image/jpeg,image/pjpeg,image/gif,image/png" />
+                            <input type="file" 
+                                    accept="image/jpeg,image/pjpeg,image/gif,image/png" 
+                                    multiple={false}
+                                    ref={inputImageRef}
+                            />
                         </li>
                         {
                             props.photoURL ?
@@ -168,7 +173,6 @@ function Photo(props) {
 }
 
 function mapStateToProps(state) {
-    console.log(state)
     return {
         authUser: state.firebase.profile.username,
         blogname: state.profile.blogname,
