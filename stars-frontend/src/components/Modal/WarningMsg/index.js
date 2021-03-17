@@ -7,9 +7,11 @@ export default function WarningMsg(props) {
 		<div className="modal">
 			<div className="modal__dialog">
 				<div className="modal__main">
-					<h2>{ props.msg }</h2>
-					<Button onClick={() => props.onShow()} cls="gray button-l">{ props.cancel || "Отменить" }</Button>
-					<Button onClick={() => {props.action(); props.onShow()}} cls="red button-l">{ props.accept || "Принять" }</Button>
+					<h3 style={{textAlign: 'center'}}>{ props.msg }</h3>
+					<div className="warning-btns">
+						<Button onClick={() => props.onShow()} cls="gray button-s">{ props.cancel || "Отменить" }</Button>
+						<Button onClick={() => {props.action(); props.onShow()}} cls="red button-s">{ props.accept || "Принять" }</Button>
+					</div>
 				</div>
 			</div>
 		</div>

@@ -1976,6 +1976,11 @@
   dependencies:
     mkdirp "^1.0.4"
 
+"@pathofdev/react-tag-input@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@pathofdev/react-tag-input/-/react-tag-input-1.0.7.tgz#ace16c8903a65bb86f136623a761d6d505c7bd86"
+  integrity sha512-FxlX+rQhsun7uLDS7PzscJex4Vutq9+RjYlJR+Bf6rh/fH8Drxhl+klrUFxaMRtaTF44tM/jHVl5dxWIhUwejw==
+
 "@pmmmwh/react-refresh-webpack-plugin@0.4.2":
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/@pmmmwh/react-refresh-webpack-plugin/-/react-refresh-webpack-plugin-0.4.2.tgz#1f9741e0bde9790a0e13272082ed7272a083620d"
