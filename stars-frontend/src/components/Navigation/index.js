@@ -11,7 +11,7 @@ function Nav(props) {
     const links = [
         {to: '/dashboard', icon: 'home'},
         {to: '/', icon: 'globe'},
-        {to: `/profile/${props.username}`, icon: 'user'},
+        {to: `/profile/${props.authName}`, icon: 'user'},
         {to: '/settings', icon: 'cog'}
     ]
 
@@ -72,7 +72,7 @@ function Nav(props) {
             <div className="search">
                 <FontAwesomeIcon icon="search" size="lg"/>
                 { props.location.pathname === `/profile/${props.username}`
-                    ? <input type="text" placeholder={`Поиск ${props.username}`}/>
+                    ? <input type="text" placeholder={`Поиск ${props.blogname}`}/>
                     : <input type="text" placeholder="Поиск"/>
                 }
             </div>
@@ -88,7 +88,9 @@ function Nav(props) {
 function mapStateToProps(state) {
     return {
         isAuthenticated: state.firebase.auth.isEmpty,
-        username: state.firebase.auth.displayName
+        authName: state.firebase.auth.displayName,
+        username: state.profile.username,
+        blogname: state.profile.blogname
     }
 }
 

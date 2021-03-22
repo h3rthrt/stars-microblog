@@ -6,6 +6,7 @@
     @include fadeInAnimation(.2s)
     background: rgba(0, 0, 0, 0.30)
     position: fixed
+    overflow-y: auto
     top: 0
     right: 0
     bottom: 0
@@ -40,6 +41,8 @@
             margin-bottom: 12px
         > h3
             font-size: 18px
+    .mx-width
+        width: 25%
     &__header
         width: 100%
         > button
@@ -119,12 +122,16 @@
         margin-top: 14px
         button
             margin-left: 12px
+    &__photo-uploader
+        text-align: right
     &__footer-create
         margin-top: 9px
         display: flex
         width: 100%
         justify-content: space-between
         align-items: center
+        & .modal__left
+            width: 100%
         & .modal__right
             margin-left: 12px
 .img-box
@@ -145,6 +152,7 @@
         display: flex
         flex-wrap: wrap
         position: absolute
+        overflow: hidden
         right: 0
         bottom: -10px
         left: 0
@@ -155,7 +163,8 @@
         > span
             height: 24px
             overflow: hidden
-            white-space: pre-line
+            text-overflow: ellipsis
+            white-space: nowrap
 
 .post__images .img-box:hover
     .img-box__times

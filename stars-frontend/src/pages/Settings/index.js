@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Settings.sass'
 import { connect } from 'react-redux'
 import { signOut } from '../../redux/actions/authActions'
-import { loadProfile } from '../../redux/actions/profileActions'
+import { loadProfile, clearPhoto } from '../../redux/actions/profileActions'
 import Spinner from '../../components/UI/Spinner'
 import PhotoUser from '../Profile/User/PhotoUser'
 
@@ -30,7 +30,7 @@ function Settings(props) {
         })
     }
 
-    if(!props.blogname) {
+    if(!props.blogname || !props.photoURL) {
         return <Spinner />
     } else {
         return (
@@ -63,7 +63,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return{
         signOut: () => dispatch(signOut()),
-        loadProfile: (username) => dispatch(loadProfile(username))
+        loadProfile: (username) => dispatch(loadProfile(username)),
+        clearPhoto: () => dispatch(clearPhoto())
     }
 }
 

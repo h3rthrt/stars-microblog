@@ -136,7 +136,7 @@ function CreateAcc(props) {
     } else {
         return (
             <div className="modal">
-                <div className="modal__dialog">
+                <div className="modal__dialog mx-width">
                     <div className="modal__header">
                         <button onClick={props.onClose}>
                             <FontAwesomeIcon icon="times" className="times"/>
@@ -154,7 +154,7 @@ function CreateAcc(props) {
                     <form onSubmit={(event) => submitHandler(event)} className="modal__form" >
                         {renderInputs()}
                         <Button 
-                        cls="primary button-xl"
+                        cls="primary button-l"
                         color="green"
                         disabled={!isFormValid}
                         >

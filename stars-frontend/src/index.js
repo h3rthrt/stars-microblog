@@ -9,17 +9,20 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
 import rootReducer from './redux/reducers/rootReducer'
-import { ReactReduxFirebaseProvider, getFirebase } from 'react-redux-firebase'
-import { firebase, firebaseConfig } from './api/firebase'
 import 'firebase/auth'
 import 'firebase/database'
+import 'firebase/firestore'
 import 'firebase/storage'
+import { ReactReduxFirebaseProvider, getFirebase } from 'react-redux-firebase'
+import { createFirestoreInstance } from 'redux-firestore'
+import { firebase, firebaseConfig } from './api/firebase'
 
 const composeEnhancers =
 	typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
 		? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__(
 				{
-					// Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
+					// Specify extension’s options like name, 
+					// actionsBlacklist, actionsCreators, serialize...
 				}
 			)
 		: compose
@@ -33,8 +36,10 @@ const store = createStore(
 
 const rrfProps = {
 	firebase,
+	userProfile: 'users',
 	config: firebaseConfig,
-	dispatch: store.dispatch
+	dispatch: store.dispatch,
+	createFirestoreInstance
 }
 
 const app = (

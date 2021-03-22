@@ -1,17 +1,58 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
+import { useFirestore } from 'react-redux-firebase'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ReactTagInput from '@pathofdev/react-tag-input'
+import { connect } from 'react-redux'
 import './../Modal.sass'
 import Button from '../../UI/Button'
 
 function CreateNote(props) {
+	const firestore = useFirestore()
 	const inputImageRef = useRef()
+	const [ validate, setValidate] = useState(false)
 	const [ image, setImage ] = useState({ images: [] })
     const [ post, setPost ] = useState({
-        header: '',
-        text: '',
+		username: props.username,
+		blogname: props.blogname,
+        header: null,
+        text: null,
         tags: []
     })
+
+	useEffect(() => {
+		if(post.header || post.text || post.tags.length || image.images.length) {
+			setValidate(true)
+		} else {
+			setValidate(false)
+		}
+	}, [post.header, post.text, post.tags, image.images])
+
+	
+	function addPost() {
+		return firestore.collection('posts').add(post) 
+	}
+
+	function changeHeaderHandler(ev) {
+		return(
+			setPost((prevState) => {
+				return {
+					...prevState,
+					header: ev.target.value
+				}
+			})
+		)
+	}
+
+	function changeTextHandler(ev) {
+		return(
+			setPost((prevState) => {
+				return {
+					...prevState,
+					text: ev.target.value
+				}
+			})
+		)
+	}
 
 	function changeHandler(event) {
 		if (!event.target.files.length) {
@@ -76,7 +117,10 @@ function CreateNote(props) {
 						</button>
 					</div>
 					<div className="modal__create">
-						<input placeholder="Заголовок" className="modal__header" />
+						<input 
+							placeholder="Заголовок" 
+							className="modal__header" 
+							onChange={(ev) => changeHeaderHandler(ev)} />
 						<hr />
 						<div className="post__images">
 							{image.images.length ? (
@@ -100,7 +144,11 @@ function CreateNote(props) {
 								})
 							) : null}
 						</div>
-						<textarea placeholder="Текст" maxLength="140" className="modal__text" />
+						<textarea 
+							placeholder="Текст"
+							maxLength="280" 
+							className="modal__text" 
+							onChange={(ev) => changeTextHandler(ev)} />
 						<hr />
 						<button onClick={() => clickInputHandler()}>
 							<FontAwesomeIcon icon="photo-video" />
@@ -120,14 +168,24 @@ function CreateNote(props) {
 					<div className="modal__footer-create">
 						<div className="modal__left">
 							<ReactTagInput 
-                                tags={post.tags} 
-                                onChange={(newTags) => setTagsHandler(newTags)} 
-                                maxTags={5}
-                                placeholder='теги'
-                            />
+								tags={post.tags} 
+								onChange={(newTags) => setTagsHandler(newTags)} 
+								maxTags={5}
+								placeholder='теги'
+								validator={
+									(value) => {
+										const validate = value.length > 16
+										console.log(validate)
+										if (validate) {
+											alert('Количество символов в теге не должно превышать 16 символов')
+										}
+										return !validate
+									}
+								}
+							/>
 						</div>
 						<div className="modal__right">
-							<Button color="blue button-s">Создать</Button>
+							<Button disabled={!validate} color="blue button-s" onClick={() => addPost()}>Создать</Button>
 						</div>
 					</div>
 				</div>
@@ -138,4 +196,11 @@ function CreateNote(props) {
 	}
 }
 
-export default CreateNote
+function mapStateToProps(state) {
+	return {
+		blogname: state.firebase.profile.blogname,
+		username: state.firebase.auth.displayName
+	}
+}
+
+export default connect(mapStateToProps)(CreateNote)

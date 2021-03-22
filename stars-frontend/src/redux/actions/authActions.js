@@ -56,7 +56,7 @@ export function signOut() {
 	}
 }
 
-export function loginClear() {
+export function errorClear() {
 	return (dispatch, getState, getFirebase) => {
 		dispatch({ type: LOGIN_CLEAR })
 	}

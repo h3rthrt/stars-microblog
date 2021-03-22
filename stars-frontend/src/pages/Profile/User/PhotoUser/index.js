@@ -177,7 +177,6 @@ function mapStateToProps(state) {
         authUser: state.firebase.profile.username,
         blogname: state.profile.blogname,
         uid: state.firebase.auth.uid,
-        photoURL: state.firebase.auth.photoURL
     }
 }
 

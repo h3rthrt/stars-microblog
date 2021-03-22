@@ -7,7 +7,7 @@ export function loadProfile(username) {
 		.orderByChild('username').equalTo(username)
 			.on('child_added', (snapshot) => {
 				const data = snapshot.val()
-				let photoURL
+				let photoURL = null
 				snapshot.ref
 				.child('photoURL')
 				.on('child_added', (snapshot) => {

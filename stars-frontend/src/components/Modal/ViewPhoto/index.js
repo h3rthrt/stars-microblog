@@ -37,7 +37,7 @@ const ViewPhoto = ((props) => {
 					<div className="image-block">
 						<img alt={props.image.alt} src={props.image.base64} />
 					</div>
-					<div className="modal__footer">
+					<div className="modal__footer modal__photo-uploader">
 						<Button 
 							onClick={() => hideModalHandler()} 
 							cls="gray button-s">
