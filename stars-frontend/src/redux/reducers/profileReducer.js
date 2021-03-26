@@ -41,14 +41,7 @@ export default function profileReducer(state = initialState, action) {
 			}
 		case CLEAR_PROFILE_DATA:
 			return {
-				username: '',
-				blogname: '',
-				photoURL: '',
-				desc: '',
-				followers: [],
-				following: [],
-				media: [],
-				error: ''
+				initialState
 			}
 		case 'CLEAR_PHOTO':
 			return {

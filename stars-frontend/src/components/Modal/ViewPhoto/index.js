@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { connect } from 'react-redux'
 import Button from '../../UI/Button'
-import { uploadPhoto, uploadReset } from '../../../redux/actions/uploadActions'
+import { upload, uploadReset } from '../../../redux/actions/uploadActions'
 
 const ViewPhoto = ((props) => {
 	// console.log(props.complete, props.upload)
@@ -20,7 +20,7 @@ const ViewPhoto = ((props) => {
 		props.uploadReset()
 	}
 
-	async function uploadPhotoHandler() {
+	async function uploadHandler() {
 		await props.uploadPhoto(props.image.files, props.username, props.uid)
 	}
 
@@ -45,7 +45,7 @@ const ViewPhoto = ((props) => {
 						</Button>
 						<Button 
 							disabled={props.upload} 
-							onClick={() => uploadPhotoHandler()} 
+							onClick={() => uploadHandler()} 
 							loading={props.upload} 
 							cls="primary button-s">
 							Сохранить
@@ -70,7 +70,7 @@ function mapStateToProps(state) {
 
 function mapDispathToProps(dispatch) {
 	return {
-		uploadPhoto: (files, username, uid) => dispatch(uploadPhoto(files, username, uid)),
+		uploadPhoto: (files, username, uid) => dispatch(upload(files, username, uid)),
 		uploadReset: () => dispatch(uploadReset())
 	}
 }

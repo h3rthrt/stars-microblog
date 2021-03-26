@@ -1,7 +1,7 @@
 import { LOGIN_ERROR, LOGIN_SUCCESS, LOGIN_SIGNOUT, LOGIN_CLEAR } from "./actionsTypes"
 
 export function signIn(email, password, isLogin, name, blogname) {
-	return (dispatch, getState, getFirebase) => {
+	return (dispatch, getState, {getFirebase, getFirestore}) => {
 		const firebase = getFirebase()
 		if (isLogin) {
 			firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -48,7 +48,7 @@ export function signIn(email, password, isLogin, name, blogname) {
 }
 
 export function signOut() {
-	return (dispatch, getState, getFirebase) => {
+	return (dispatch, getState, {getFirebase, getFirestore}) => {
 		const firebase = getFirebase()
 		firebase.auth().signOut().then(() => {
 			dispatch({ type: LOGIN_SIGNOUT })
@@ -57,7 +57,7 @@ export function signOut() {
 }
 
 export function errorClear() {
-	return (dispatch, getState, getFirebase) => {
+	return (dispatch, getState, {getFirebase, getFirestore}) => {
 		dispatch({ type: LOGIN_CLEAR })
 	}
 }

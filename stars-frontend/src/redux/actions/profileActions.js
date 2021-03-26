@@ -1,7 +1,7 @@
 import { LOAD_PROFILE_SUCCESS, LOAD_PROFILE_ERROR } from './actionsTypes'
 
 export function loadProfile(username) {
-	return (dispatch, getState, getFirebase) => { 
+	return (dispatch, getState, {getFirebase, getFirestore}) => { 
 		const firebase = getFirebase()
 		firebase.ref().child('users')
 		.orderByChild('username').equalTo(username)

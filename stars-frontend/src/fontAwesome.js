@@ -17,7 +17,8 @@ import {
 	faHeartBroken,
 	faUserEdit,
 	faCamera,
-	faSpinner
+	faSpinner,
+	faSyncAlt
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(fab,
@@ -37,5 +38,6 @@ library.add(fab,
 	faHeartBroken,
 	faUserEdit,
 	faCamera,
-	faSpinner
+	faSpinner,
+	faSyncAlt
 )

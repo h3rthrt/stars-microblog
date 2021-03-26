@@ -27,7 +27,7 @@ function Main(props) {
 
 function mapStateToProps(state) {
 	return {
-		postsList: state.post.postsList
+		postsList: state.posts.postsList
 	}
 }
 

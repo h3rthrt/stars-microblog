@@ -9,7 +9,8 @@ function Layout(props) {
 		{to: '/dashboard', name: 'Лента'}, 
 		{to: '/', name: 'Поиск'}, 
 		{to: '/404', name: 'Страница не найдена :('},
-		{to: `/profile/${props.location.pathname.slice(9)}`, name: '@' + props.location.pathname.slice(9)} 
+		{to: `/profile/${props.location.pathname.slice(9)}`, 
+			name: '@' + props.location.pathname.slice(9)} 
 	]
 
 	function renderLocation() {

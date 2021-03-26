@@ -1,6 +1,7 @@
 import firebase from 'firebase/app'
+import 'firebase/firestore'
 
-const firebaseConfig = {
+const fbConfig = {
     apiKey: "AIzaSyC-N3bpwnzf61N1QQzCto-G9V3PA0B-TLs",
     authDomain: "stars-microblog.firebaseapp.com",
     databaseURL: "https://stars-microblog-default-rtdb.europe-west1.firebasedatabase.app",
@@ -11,6 +12,7 @@ const firebaseConfig = {
     userProfile: "users"
 }
 
-firebase.initializeApp(firebaseConfig)
+firebase.initializeApp(fbConfig)
+firebase.firestore().settings({ timestampsInSnapshots: true })
 
-export { firebaseConfig, firebase } 
+export { fbConfig, firebase } 

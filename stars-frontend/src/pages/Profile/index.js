@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { loadProfile } from '../../redux/actions/profileActions'
@@ -8,22 +8,16 @@ import Spinner from '../../components/UI/Spinner'
 import './Profile.sass'
 
 function Profile(props) {
-	const [loadData, setLoadData] = useState(true)
-	const loadTimeOut = useRef(null)
+	const [ loadData, setLoadData ] = useState(true)
+	const [ active, setActive ] = useState('posts')
 
 	useEffect(() => {
 		props.loadProfile(props.location.pathname.slice(9))
-		loadTimeOut.current = setTimeout(() => {
+		if(props.isLoaded) {
 			setLoadData(false)
-		}, 600)
-		if (props.username) {
-			setLoadData(false)
-			document.getElementById('posts').classList.add("active")
 		}
-		return () => {
-			clearTimeout(loadTimeOut.current)
-		}
-    }, [props])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.username, props.isLoaded])
 
 	function renderPosts() {
 		return props.postsList.map((post, index) => {
@@ -35,11 +29,9 @@ function Profile(props) {
 
 	function activeBtn(id) {
 		if (id === 'posts') { 
-			document.getElementById('posts').classList.add("active")
-			document.getElementById('likes').classList.remove("active")
+			setActive('posts')
 		} else {
-			document.getElementById('posts').classList.remove("active")
-			document.getElementById('likes').classList.add("active")
+			setActive('likes')
 		}
 	}
 
@@ -48,8 +40,16 @@ function Profile(props) {
 			<div className="container">
 				<div className="container__left">
 					<div className="select-type">
-						<button id="posts" onClick={()=> {activeBtn('posts')}}>записи</button>
-						<button id="likes" onClick={()=> {activeBtn('likes')}}>нравится</button>
+						<button id="posts" 
+							className={active === 'posts' ? 'active' : ''} 
+							onClick={()=> { activeBtn('posts') }}>
+							записи
+						</button>
+						<button id="likes" 
+							className={active === 'likes' ? 'active' : ''} 
+							onClick={()=> { activeBtn('likes') }}>
+							нравится
+						</button>
 					</div>
 					{ renderPosts() }
 				</div>
@@ -60,12 +60,12 @@ function Profile(props) {
 		)
 	}
 
-	if (loadData && props.username === '') {
+	if (loadData) {
 		return <Spinner />
 	} else {
 		if(props.username) {
 			return renderProfile()
-		} else if(props.username === '') {
+		} else if (props.username === '') {
 			return(
 				<div className="container">
 					<div>Пользователь не найден</div>
@@ -76,15 +76,17 @@ function Profile(props) {
 }
 
 function mapStateToProps(state) {
+	console.log(state)
 	return {
-		postsList: state.post.postsList,
+		postsList: state.posts.postsList,
 		username: state.profile.username,
 		blogname: state.profile.blogname,
 		photoURL: state.profile.photoURL,
 		desc: state.profile.desc,
 		followers: state.profile.followers,
 		following: state.profile.following,
-		media: state.profile.media
+		media: state.profile.media,
+		isLoaded: state.firebase.profile.isLoaded
 	}
 }
 

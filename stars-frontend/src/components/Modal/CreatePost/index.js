@@ -1,35 +1,55 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { useFirestore } from 'react-redux-firebase'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import ReactTagInput from '@pathofdev/react-tag-input'
 import { connect } from 'react-redux'
+import { upload, uploadReset } from '../../../redux/actions/uploadActions'
+import ReactTagInput from '@pathofdev/react-tag-input'
 import './../Modal.sass'
 import Button from '../../UI/Button'
 
 function CreateNote(props) {
-	const firestore = useFirestore()
 	const inputImageRef = useRef()
 	const [ validate, setValidate] = useState(false)
 	const [ image, setImage ] = useState({ images: [] })
     const [ post, setPost ] = useState({
-		username: props.username,
-		blogname: props.blogname,
+		username: null,
+		blogname: null,
         header: null,
         text: null,
+		photoURL: [],
         tags: []
     })
 
+	const closeModal = useCallback(() => {
+		props.onClose()
+		setPost(() => {
+			return {
+				username: null,
+				blogname: null,
+				header: null,
+				text: null,
+				photoURL: [],
+				tags: []
+			}
+		})
+		setImage(() => {
+			return { images: [] }
+		})
+		props.uploadReset()
+	}, [props]) 
+
 	useEffect(() => {
+		if(props.complete) {
+			closeModal()
+		}
 		if(post.header || post.text || post.tags.length || image.images.length) {
 			setValidate(true)
 		} else {
 			setValidate(false)
 		}
-	}, [post.header, post.text, post.tags, image.images])
+	}, [closeModal, post.header, post.text, post.tags, image.images, props.blogname, props.complete])
 
-	
-	function addPost() {
-		return firestore.collection('posts').add(post) 
+	function addPostHandler() {
+		props.uploadPost(image.images, props.username, props.uid, true, post, props.blogname)
 	}
 
 	function changeHeaderHandler(ev) {
@@ -107,12 +127,12 @@ function CreateNote(props) {
         })
     }
 
-	if (props.view) {
+	if (props.view && props.blogname) {
 		return (
 			<div className="modal">
 				<div className="modal__dialog">
 					<div className="modal__header">
-						<button onClick={() => props.onShow()}>
+						<button onClick={() => closeModal()}>
 							<FontAwesomeIcon icon="times" className="times" />
 						</button>
 					</div>
@@ -166,7 +186,7 @@ function CreateNote(props) {
 						</button>
 					</div>
 					<div className="modal__footer-create">
-						<div className="modal__left">
+						<div className="modal-left">
 							<ReactTagInput 
 								tags={post.tags} 
 								onChange={(newTags) => setTagsHandler(newTags)} 
@@ -184,8 +204,14 @@ function CreateNote(props) {
 								}
 							/>
 						</div>
-						<div className="modal__right">
-							<Button disabled={!validate} color="blue button-s" onClick={() => addPost()}>Создать</Button>
+						<div className="modal-right">
+							<Button 
+								loading={props.upload} 
+								disabled={!validate} 
+								color="blue button-s" 
+								onClick={() => addPostHandler()}>
+								Создать
+							</Button>
 						</div>
 					</div>
 				</div>
@@ -198,9 +224,17 @@ function CreateNote(props) {
 
 function mapStateToProps(state) {
 	return {
-		blogname: state.firebase.profile.blogname,
-		username: state.firebase.auth.displayName
+		complete: state.progress.complete,
+		upload: state.progress.upload,
+		storagePost: state.post
 	}
 }
 
-export default connect(mapStateToProps)(CreateNote)
+function mapDispatchToProps(dispatch) {
+	return {
+		uploadPost: (files, username, uid, forFirestore, post, blogname) => dispatch(upload(files, username, uid, forFirestore, post, blogname)),
+		uploadReset: () => dispatch(uploadReset())
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateNote)

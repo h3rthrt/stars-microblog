@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Post from '../../components/Post'
 import Tags from '../../components/PopularTags'
 import CreateNote from '../../components/Modal/CreatePost'
@@ -9,8 +10,8 @@ function Dashboard(props) {
 	const [showCreateNote, setShowCreateNote] = useState(false)
 
 	useEffect(() => {
-		// props.loadPosts()
-	}, [props])
+
+	}, [props.blogname])
 
 	function renderPosts() {
 		return props.postsList.map((post, index) => {
@@ -22,10 +23,18 @@ function Dashboard(props) {
 		<div className="container">
 			<CreateNote
 				view={showCreateNote} 
-				onShow={() => setShowCreateNote(!showCreateNote)}
+				onClose={() => setShowCreateNote(!showCreateNote)}
+				username={props.username}
+				blogname={props.blogname}
+				uid={props.uid}
 			/>
+
 			<div className="container__left">
-				<div className="create-note" onClick={() => setShowCreateNote(true)}>Создать запись</div>
+				{ 
+					props.blogname
+					? <div className="create-note" onClick={() => setShowCreateNote(true)}>Создать запись</div>
+					: <center><FontAwesomeIcon icon="sync-alt" size="1x" pulse={true} /></center>
+				}
 				{renderPosts()}
 			</div>
 			<div className="container__right">
@@ -37,7 +46,10 @@ function Dashboard(props) {
 
 function mapStateToProps(state) {
 	return {
-		postsList: state.post.postsList
+		postsList: state.posts.postsList,
+		blogname: state.firebase.profile.blogname,
+		username: state.firebase.auth.displayName,
+		uid: state.firebase.auth.uid
 	}
 }
 

@@ -10,7 +10,7 @@ function Button(props) {
 	return (
 		<button 
         className={cls.join(' ')} 
-		disabled={props.disabled}
+		disabled={props.loading ? true : props.disabled}
 		onClick={props.onClick}>
 			{props.children}
 			{
