@@ -4,6 +4,7 @@ import popularTags from './popularTags'
 import profileReducer from './profileReducer'
 import authReducer from './authReducer'
 import uploadReducer from './uploadReducer'
+import notificationReducer from './notificationReducer'
 import { firebaseReducer } from 'react-redux-firebase'
 import { firestoreReducer } from 'redux-firestore'
 
@@ -13,6 +14,7 @@ export default combineReducers({
     progress: uploadReducer,
     profile: profileReducer,
     auth: authReducer,
+    notification: notificationReducer,
     firebase: firebaseReducer,
     firestore: firestoreReducer
 })

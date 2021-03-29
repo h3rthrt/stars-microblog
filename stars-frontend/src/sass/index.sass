@@ -1,7 +1,9 @@
 @import "node_modules/@pathofdev/react-tag-input/src/styles/index.scss"
+@import "node_modules/react-notifications-component/dist/scss/notification.scss"
 @import "fonts"
 @import "vars"
 @import "./mixins/fadeIn"
+@import "./mixins/fadeOut"
 
 *
 	padding: 0
@@ -95,6 +97,9 @@ p
 hr
 	border-bottom: 1px solid $white
 	border-top: 0px
+
+.notification__item--success 
+	background-color: $green
 
 .react-tag-input
 	font-size: 13px
@@ -224,8 +229,16 @@ hr
 		.s
 			font-size: 18px 
 
+.animate__fadeIn
+	@include fadeInAnimation(.2s)
+.animate__fadeOut
+	@include fadeOutAnimation(.2s)
+
 @keyframes fadeIn
 	@include fadeInKeyframes
+
+@keyframes fadeOut
+	@include fadeOutKeyframes
 
 @media only screen and (max-width : 992px)
 	main

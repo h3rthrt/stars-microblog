@@ -16,7 +16,8 @@ function CreateNote(props) {
         header: null,
         text: null,
 		photoURL: [],
-        tags: []
+        tags: [],
+		data: ''
     })
 
 	const closeModal = useCallback(() => {
@@ -28,7 +29,8 @@ function CreateNote(props) {
 				header: null,
 				text: null,
 				photoURL: [],
-				tags: []
+				tags: [],
+				data: ''
 			}
 		})
 		setImage(() => {
@@ -38,15 +40,20 @@ function CreateNote(props) {
 	}, [props]) 
 
 	useEffect(() => {
-		if(props.complete) {
+		if(props.complete)
 			closeModal()
-		}
-		if(post.header || post.text || post.tags.length || image.images.length) {
+		if(post.header || post.text || image.images.length) {
 			setValidate(true)
 		} else {
 			setValidate(false)
 		}
-	}, [closeModal, post.header, post.text, post.tags, image.images, props.blogname, props.complete])
+	}, [closeModal, 
+		post.header, 
+		post.text, 
+		image.images, 
+		props.blogname, 
+		props.complete
+	])
 
 	function addPostHandler() {
 		props.uploadPost(image.images, props.username, props.uid, true, post, props.blogname)

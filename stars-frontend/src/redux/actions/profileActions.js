@@ -1,4 +1,5 @@
 import { LOAD_PROFILE_SUCCESS, LOAD_PROFILE_ERROR } from './actionsTypes'
+import notification from './notificationActions'
 
 export function loadProfile(username) {
 	return (dispatch, getState, {getFirebase, getFirestore}) => { 
@@ -19,7 +20,7 @@ export function loadProfile(username) {
 				)
 				dispatch(loadProfileDataSuccess(newData))
 			}, (error) => {
-				console.log('not found')
+				dispatch(notification('Danger', error.code, error.message))
 				dispatch(loadProfileDataError(error))
 			})
 	}

@@ -1,21 +1,35 @@
 import { UPLOAD_ON_PROGRESS, UPLOAD_LOADED, UPLOAD_RESET, LOAD_PROFILE_PHOTO } from './actionsTypes'
+import notification from './notificationActions'
+
+const titleSuccess = 'Запись успешно опубликована'
+const titleDanger = 'Ошибка публикации записи'
 
 export function upload(files, username, uid, forFirestore = false, post, blogname) {
 	return (dispatch, getState, {getFirebase, getFirestore}) => {
 		dispatch(uploadOnProgress(true))
 		const firebase = getFirebase()
 		const firestore = getFirestore()
+		var totalEach = 0
 		if(forFirestore) {
 			post.username = username
 			post.blogname = blogname
+			const date = new Date()
+			post.data =
+				("00" + (date.getMonth() + 1)).slice(-2) + "/" +
+				("00" + date.getDate()).slice(-2) + "/" +
+				date.getFullYear() + " " +
+				("00" + date.getHours()).slice(-2) + ":" +
+				("00" + date.getMinutes()).slice(-2) + ":" +
+				("00" + date.getSeconds()).slice(-2);
 			if(files.length === 0)
 				firestore.collection('posts').add(post)
 				.then(() => {
+					dispatch(notification('Success', titleSuccess, 'Ура!'))
 					dispatch(uploadComplete(true))
 					dispatch(uploadOnProgress(false))
 				})
 				.catch((error) => {
-					console.log(error)
+					dispatch(notification('Danger', titleDanger, error.message))
 				})
 		}
 		files.forEach((file) => {
@@ -25,7 +39,6 @@ export function upload(files, username, uid, forFirestore = false, post, blognam
 				file = file.file
 			firebase.uploadFile(storagePath, file, dbPath, {
 				metadataFactory: (uploadRes, firebase, metadata, downloadURL) => {
-					//for firebase
 					if(!forFirestore) { 
 						const user = firebase.auth().currentUser
 						user.updateProfile({
@@ -36,20 +49,30 @@ export function upload(files, username, uid, forFirestore = false, post, blognam
 						})
 						dispatch(loadProfilePhoto(downloadURL))
 					} else {
-					//for firestore posts
-						post.photoURL = downloadURL
+						post.photoURL.push(downloadURL)
 					}
 					return { fileUrl: downloadURL }
 				}
 			})
 			.then(() => {
-				if(forFirestore)
+				totalEach++
+				if(forFirestore && totalEach === files.length) {
 					firestore.collection('posts').add(post)
-				dispatch(uploadComplete(true))
-				dispatch(uploadOnProgress(false))
+						.then(() => {
+							dispatch(notification('Success', titleSuccess, 'Ура!'))
+							dispatch(uploadComplete(true))
+							dispatch(uploadOnProgress(false))
+						})
+						.catch((error) => {
+							dispatch(notification('Danger', titleDanger, error.message))
+						})
+				} else if (!forFirestore) {
+					dispatch(uploadComplete(true))
+					dispatch(uploadOnProgress(false))
+				}
 			})
-			.catch((error) => {
-				console.log(error)
+			.catch(() => {
+				dispatch(notification('Danger', titleDanger, 'Ошибка загрузки медиа на сервер'))
 			})
 		})
 	}

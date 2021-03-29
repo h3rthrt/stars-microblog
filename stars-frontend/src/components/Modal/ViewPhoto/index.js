@@ -47,7 +47,7 @@ const ViewPhoto = ((props) => {
 							disabled={props.upload} 
 							onClick={() => uploadHandler()} 
 							loading={props.upload} 
-							cls="primary button-s">
+							cls="green button-s">
 							Сохранить
 						</Button>
 					</div>

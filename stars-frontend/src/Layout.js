@@ -1,7 +1,7 @@
 import React from 'react'
 import { withRouter } from 'react-router'
 import Nav from './components/Navigation'
-import Message from './components/Message'
+import ReactNotification from 'react-notifications-component'
 
 function Layout(props) {
 
@@ -28,12 +28,14 @@ function Layout(props) {
     }
     
 	return (
-		<div className="wrapper">
-			<Nav />
-			{renderLocation()}
-			<main>{props.children}</main>
-			<Message color="error" />
-		</div>
+		<>
+			<ReactNotification />
+			<div className="wrapper">
+				<Nav />
+				{renderLocation()}
+				<main>{props.children}</main>
+			</div>
+		</>
 	)
 }
 

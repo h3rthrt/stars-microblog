@@ -30,7 +30,7 @@ function Settings(props) {
         })
     }
 
-    if(!props.blogname || !props.photoURL) {
+    if(!props.isLoaded) {
         return <Spinner />
     } else {
         return (
@@ -55,7 +55,8 @@ function mapStateToProps(state) {
         photoURL: state.firebase.auth.photoURL,
         uid: state.firebase.auth.uid,
         blogname: state.firebase.profile.blogname,
-        username: state.firebase.auth.displayName
+        username: state.firebase.auth.displayName,
+        isLoaded: state.firebase.profile.isLoaded
     }
     
 }

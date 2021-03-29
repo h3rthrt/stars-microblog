@@ -17,7 +17,7 @@ function Profile(props) {
 			setLoadData(false)
 		}
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.username, props.isLoaded])
+    }, [props.username, props.isLoaded, props.photoURL])
 
 	function renderPosts() {
 		return props.postsList.map((post, index) => {
@@ -76,7 +76,6 @@ function Profile(props) {
 }
 
 function mapStateToProps(state) {
-	console.log(state)
 	return {
 		postsList: state.posts.postsList,
 		username: state.profile.username,
