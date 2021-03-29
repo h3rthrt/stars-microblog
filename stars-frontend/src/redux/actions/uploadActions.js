@@ -13,14 +13,7 @@ export function upload(files, username, uid, forFirestore = false, post, blognam
 		if(forFirestore) {
 			post.username = username
 			post.blogname = blogname
-			const date = new Date()
-			post.data =
-				("00" + (date.getMonth() + 1)).slice(-2) + "/" +
-				("00" + date.getDate()).slice(-2) + "/" +
-				date.getFullYear() + " " +
-				("00" + date.getHours()).slice(-2) + ":" +
-				("00" + date.getMinutes()).slice(-2) + ":" +
-				("00" + date.getSeconds()).slice(-2);
+			post.data = firestore.Timestamp.now()
 			if(files.length === 0)
 				firestore.collection('posts').add(post)
 				.then(() => {
