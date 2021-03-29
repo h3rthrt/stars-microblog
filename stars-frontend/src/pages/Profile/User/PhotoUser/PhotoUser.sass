@@ -6,9 +6,10 @@
     height: 130px
     position: relative
     font-size: 12px
-    box-shadow: 0px 0px 30px 4px rgba(0, 0, 0, 0.3)
+    box-shadow: 0px 0px 30px 4px var(--shadow)
     &__img-block
         border-radius: 4px
+        border: 2px solid var(--border)
         width: 130px
         min-width: 130px
         height: 130px
@@ -33,10 +34,10 @@
         right: 0
         left: 0
         text-align: center
-        color: $primary-color
-        background: $white
+        color: var(--primary-color)
+        background: var(--secondary-color)
         cursor: pointer
-        border: 1px solid $gray !important
+        border: 1px solid var(--gray) !important
         padding: 4px 2px
         width: 100%
         opacity: 0
@@ -46,9 +47,9 @@
     &__menu
         border-radius: 4px
         list-style: none
-        color: $primary-color
-        background: $white
-        border: 1px solid $gray !important
+        color: var(--primary-color)
+        background: var(--secondary-color)
+        border: 1px solid var(--gray) !important
         position: relative
         bottom: 2px
         > li
@@ -58,7 +59,7 @@
                 width: 100%
                 text-align: left
                 &:hover
-                    color: $accent
+                    color: var(--accent)
             input
                 display: none
     .show

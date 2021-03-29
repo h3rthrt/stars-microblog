@@ -8,11 +8,22 @@ import Spinner from '../../components/UI/Spinner'
 import PhotoUser from '../Profile/User/PhotoUser'
 
 function Settings(props) {
+
+    function setDataTheme() {
+        const html = document.documentElement
+        if(html.getAttribute('data-theme') !== 'white') {
+            html.setAttribute('data-theme', 'white')
+        } else {
+            html.removeAttribute('data-theme', 'white')
+        }
+    }
+
     const buttons = [
-        {icon: 'sign-out-alt', text: 'Выйти с аккаунта', onClick: () => props.signOut()},
+        {icon: 'palette', text: 'Сменить цветовую тему', onClick: () => setDataTheme()},
         {icon: 'user', text: 'Сведения об учетной записи'},
         {icon: 'key', text: 'Изменение пароля'},
-        {icon: 'heart-broken', text: 'Отключить свою учетную запись'}
+        {icon: 'heart-broken', text: 'Отключить свою учетную запись'},
+        {icon: 'sign-out-alt', text: 'Выйти с аккаунта', onClick: () => props.signOut()}
     ]
 
     useEffect(() => {
@@ -36,7 +47,7 @@ function Settings(props) {
         return (
             <div className="container">
                 <div className="settings">
-                    <div className="settings__profileInfo">
+                    <div className="settings__profile-info">
                         <PhotoUser photoURL={props.photoURL} username={props.username} />
                         <div className="settings__username">{ props.blogname }</div>
                         <div className="settings__desc">null desc</div>

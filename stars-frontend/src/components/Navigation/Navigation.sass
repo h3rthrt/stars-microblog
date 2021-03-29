@@ -12,33 +12,38 @@
         svg
             width: 35px
             height: 50px
+            path
+                fill: var(--secondary-color)
 
 .search
     align-items: center
     display: flex
-    background: $forth-color
+    background: var(--forth-color)
     border-radius: 4px
-    box-shadow: 0px 0px 32px 4px rgba(0, 0, 0, 0.24)
+    box-shadow: 0px 0px 32px 4px var(--shadow)
+    border: 2px solid var(--border)
     padding: 14px 16px
     margin-left: 167px
     width: 48.9%
     input
-        color: $secondary-color
+        color: var(--secondary-color)
         font-size: 18px
         font-weight: bold
         line-height: 22px
         margin-left: 11px
         width: 100%
         &::placeholder
-            color: $secondary-color
+            color: var(--secondary-color)
 
 .true
     a
-        color: $primary-color
-        background: $white
+        color: var(--primary-color)
+        background: var(--secondary-color)
 
 nav
-    box-shadow: 0px 0px 32px 4px rgba(0, 0, 0, 0.3)
+    box-shadow: 0px 0px 32px 4px var(--shadow)
+    border: 2px solid var(--border)
+    border-radius: 6px
     margin-left: auto
     ul
         display: flex
@@ -49,10 +54,10 @@ nav
                 transition: all 0.1s ease-in-out
                 font-size: 22px
                 display: flex
-                background: $forth-color
+                background: var(--forth-color)
                 text-decoration: none
                 padding: 14px 13px
-                color: $secondary-color
+                color: var(--secondary-color)
             &:nth-child(1)
                 a
                     border-radius: 4px 0 0 4px
@@ -71,9 +76,9 @@ nav
             margin-right: 12px
         nav
             position: fixed
-            top: 91vh
+            bottom: 10px
             margin: 0
-            z-index: 99999999999
+            z-index: 1000000
             ul
                 li
                     a

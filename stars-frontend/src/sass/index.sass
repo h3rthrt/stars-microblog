@@ -33,6 +33,34 @@
 	color: #666
 	opacity: 1
 
+html
+	--accent: #4BA1DF
+	--primary-color: #2C254A
+	--secondary-color: #F9F9F9
+	--third-color: #CFCFCF
+	--forth-color: #3D3A5A 
+	--gray: #8B8B8B
+	--white: #F9F9F9
+	--blue: #4BA1DF
+	--green: #5BBF83
+	--red: #FE492E
+	--shadow: rgba(0, 0, 0, 0.3)
+	--border: rgba(0, 0, 0, 0.0)
+
+html[data-theme='white']
+	--accent: #4BA1DF
+	--primary-color: #F7F6FB
+	--secondary-color: #636175
+	--third-color: #CFCFCF
+	--forth-color: #F9F9F9 
+	--gray: #8B8B8B
+	--white: #F9F9F9
+	--blue: #4BA1DF
+	--green: #5BBF83
+	--red: #FE492E
+	--shadow: rgba(0, 0, 0, 0.0)
+	--border: #636175
+
 body input:focus:required:invalid,
 body textarea:focus:required:invalid
 	color: #666
@@ -42,10 +70,11 @@ body textarea:required:valid
 
 html, body
 	height: 100%
+	box-sizing: border-box
 
 body
-	background: $primary-color
-	color: $white
+	background: var(--primary-color)
+	color: var(--secondary-color)
 	font-size: 14px
 	min-width: 320px
 	position: relative
@@ -95,11 +124,11 @@ p
 	line-height: 17px
 
 hr
-	border-bottom: 1px solid $white
+	border-bottom: 1px solid var(--secondary-color)
 	border-top: 0px
 
 .notification__item--success 
-	background-color: $green
+	background-color: var(--green)
 
 .react-tag-input
 	font-size: 13px
@@ -113,7 +142,7 @@ hr
 	text-align: center
 
 ::selection
-	background-color: $accent
+	background-color: var(--accent)
 	color: #fff
 
 .wrapper
@@ -167,7 +196,7 @@ hr
 			align-items: center
 			letter-spacing: -0.04em
 			text-decoration: none
-			color: $white
+			color: var(--white)
 			cursor: pointer
 			transform: none
 			transition: .2s transform ease-in-out
@@ -205,8 +234,8 @@ hr
 			text-align: center
 			width: 31.3%
 			text-decoration: none
-			color: $primary-color
-			background: $white
+			color: var(--primary-color)
+			background: var(--white)
 			padding: 3px 0
 			border-radius: 4px
 			margin: 4px 0

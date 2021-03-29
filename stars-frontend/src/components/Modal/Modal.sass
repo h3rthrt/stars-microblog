@@ -24,7 +24,7 @@
                 &:nth-child(2)
                     margin-left: 8px
     &__dialog
-        background: $primary-color
+        background: var(--primary-color)
         display: flex
         flex-direction: column
         align-items: center
@@ -49,7 +49,7 @@
             display: block
             cursor: pointer
             margin-left: auto
-            color: $white
+            color: var(--white)
     &__form
         display: flex
         flex-direction: column
@@ -75,12 +75,13 @@
             height: 500px
             min-height: 500px
             overflow: hidden
+            border: 2px solid var(--border)
             > img
                 height: 100%
                 width: auto
                 display: block
         > h2
-            border-bottom: 1px solid $gray
+            border-bottom: 1px solid var(--gray)
             width: 500px
             text-align: left
             margin-bottom: 14px
@@ -100,17 +101,17 @@
             outline: 0
         > .modal__header
             font-size: 18px
-            color: $white
+            color: var(--white)
             font-weight: bold
             &::placeholder
-                color: $white
+                color: var(--white)
         > .modal__text
             width: 100%
             font-size: 14px
-            color: $white
+            color: var(--white)
             font-weight: 500
             &::placeholder
-                color: $white
+                color: var(--white)
         & button
             cursor: pointer
             > svg

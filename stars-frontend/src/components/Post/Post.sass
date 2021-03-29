@@ -7,7 +7,7 @@
 .post
     @include fadeInAnimation(.2s)
     display: flex
-    color: $primary-color
+    color: var(--primary-color)
     &__left
         width: 11.4%
         img
@@ -28,9 +28,9 @@
     &__right
         width: 100%
         margin-left: 20px
-        box-shadow: 0px 0px 32px 4px rgba(0, 0, 0, 0.3)
+        box-shadow: 0px 0px 32px 4px var(--shadow)
         border-radius: 4px
-        background: $white
+        background: var(--white)
         .nickname
             display: flex
             padding: 12px 14px
@@ -39,11 +39,11 @@
             letter-spacing: -0.03em
             &__list
                 text-decoration: none
-                color: $primary-color
+                color: var(--primary-color)
             .author-post
                 display: flex
                 align-items: center
-                color: $gray
+                color: var(--gray)
                 .reply
                     margin: 0 4px
                     transform: scale(-1, 1)
@@ -51,7 +51,7 @@
                     height: 9px
                 a
                     text-decoration: none
-                    color: $gray
+                    color: var(--gray)
         .footer-post
             justify-content: space-between
             display: flex
@@ -65,21 +65,21 @@
                 display: flex
             &__repost
                 cursor: pointer
-                stroke: $primary-color
+                stroke: var(--primary-color)
                 svg
                     width: 24px
                     height: 24px
             &__heart
                 cursor: pointer
                 margin-left: 14px
-                stroke: $primary-color
+                stroke: var(--primary-color)
                 svg
                     width: 24px
                     height: 24px
             &__tags
                 a
                     font-weight: 500
-                    color: $gray
+                    color: color(--gray)
                     margin-left: 12px
     h2
         padding: 0 12px

@@ -1,14 +1,14 @@
 @import "../../sass/vars"
 .settings
     width: 100%
-    &__profileInfo
+    &__profile-info
         display: flex
         flex-direction: column
         align-items: center
         margin-top: 28px
         > img
             width: 130px
-            box-shadow: 0px 0px 30px 4px rgba(0, 0, 0, 0.3)
+            box-shadow: 0px 0px 30px 4px var(--shadow)
             border-radius: 4px
     &__username
         font-weight: bold
@@ -26,7 +26,7 @@
             margin-top: 12px
             display: flex
             align-items: center
-            border: 2px solid $white
+            border: 2px solid var(--secondary-color)
             border-radius: 3px
             width: 100%
             font-size: 18px
@@ -39,5 +39,5 @@
                 font-size: 24px
                 margin-right: 16px
             &:hover
-                background: $white
-                color: $primary-color
+                background: var(--secondary-color)
+                color: var(--primary-color)

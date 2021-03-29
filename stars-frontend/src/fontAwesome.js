@@ -18,7 +18,8 @@ import {
 	faUserEdit,
 	faCamera,
 	faSpinner,
-	faSyncAlt
+	faSyncAlt,
+	faPalette
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(fab,
@@ -39,5 +40,6 @@ library.add(fab,
 	faUserEdit,
 	faCamera,
 	faSpinner,
-	faSyncAlt
+	faSyncAlt,
+	faPalette
 )
