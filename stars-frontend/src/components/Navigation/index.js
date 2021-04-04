@@ -51,7 +51,7 @@ function Nav(props) {
 	}
 
 	return (
-		<div className="nav">
+		<div className="nav container">
 			<Link to="/" className="stars-logo">
 				<svg width="35" height="50" viewBox="0 0 35 50" fill="none" xmlns="http://www.w3.org/2000/svg">
 					<path

@@ -20,7 +20,8 @@ function Dashboard(props) {
 	}
 
 	return (
-		<div className="container">
+		<div className="container container__main">
+			{/* modal */}
 			<CreateNote
 				view={showCreateNote} 
 				onClose={() => setShowCreateNote(!showCreateNote)}
@@ -31,8 +32,18 @@ function Dashboard(props) {
 
 			<div className="container__left">
 				{ 
-					props.blogname
-					? <div className="create-note" onClick={() => setShowCreateNote(true)}>Создать запись</div>
+					props.isLoaded
+					? <div className="post">
+						<div className="post__left">
+							<img 
+							src={ props.photoURL ? props.photoURL : '/img/defaultPhoto.svg' } 
+							alt=""
+							className="ava" />
+						</div>
+						<div className="post__right post__create">
+							<div className="create-note" onClick={() => setShowCreateNote(true)}>Создать запись</div>
+						</div>
+					</div>
 					: <center><FontAwesomeIcon icon="sync-alt" size="1x" pulse={true} /></center>
 				}
 				{renderPosts()}
@@ -49,7 +60,9 @@ function mapStateToProps(state) {
 		postsList: state.posts.postsList,
 		blogname: state.firebase.profile.blogname,
 		username: state.firebase.auth.displayName,
-		uid: state.firebase.auth.uid
+		uid: state.firebase.auth.uid,
+		isLoaded: state.firebase.profile.isLoaded,
+		photoURL: state.firebase.auth.photoURL
 	}
 }
 

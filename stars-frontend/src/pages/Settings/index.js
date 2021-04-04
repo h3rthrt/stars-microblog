@@ -45,7 +45,7 @@ function Settings(props) {
         return <Spinner />
     } else {
         return (
-            <div className="container">
+            <div className="container container__main">
                 <div className="settings">
                     <div className="settings__profile-info">
                         <PhotoUser photoURL={props.photoURL} username={props.username} />

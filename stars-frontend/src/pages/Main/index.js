@@ -16,7 +16,7 @@ function Main(props) {
 	}
 
 	return (
-		<div className="container">
+		<div className="container container__main">
 			<div className="container__left">{renderPosts()}</div>
 			<div className="container__right">
 				<Tags />

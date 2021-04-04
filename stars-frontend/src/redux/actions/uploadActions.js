@@ -60,6 +60,7 @@ export function upload(files, username, uid, forFirestore = false, post, blognam
 							dispatch(notification('Danger', titleDanger, error.message))
 						})
 				} else if (!forFirestore) {
+					dispatch(notification('Success', 'Изображение профиля успешно изменено', 'Ура!'))
 					dispatch(uploadComplete(true))
 					dispatch(uploadOnProgress(false))
 				}

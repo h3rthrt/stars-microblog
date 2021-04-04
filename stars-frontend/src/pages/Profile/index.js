@@ -37,7 +37,7 @@ function Profile(props) {
 
 	function renderProfile() {
 		return (
-			<div className="container">
+			<div className="container container__main">
 				<div className="container__left">
 					<div className="select-type">
 						<button id="posts" 

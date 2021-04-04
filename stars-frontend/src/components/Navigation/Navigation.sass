@@ -3,10 +3,13 @@
 .nav
     display: flex
     align-items: center
-    padding-left: 26px
     padding-top: 18px
-    padding-right: calc(50% - 594px)
+    position: relative
     .stars-logo
+        position: absolute
+        bottom: 2px
+        right: 0
+        left: 10px
         width: 35px
         height: 50px
         svg
@@ -14,6 +17,10 @@
             height: 50px
             path
                 fill: var(--secondary-color)
+
+@media only screen and (max-width: 1100px)
+    .search
+        margin-left: 60px
 
 .search
     align-items: center
@@ -23,8 +30,7 @@
     box-shadow: 0px 0px 32px 4px var(--shadow)
     border: 2px solid var(--border)
     padding: 14px 16px
-    margin-left: 167px
-    width: 48.9%
+    width: 57.9%
     input
         color: var(--secondary-color)
         font-size: 18px
