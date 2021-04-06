@@ -16,3 +16,5 @@ const useInfiniteScroll = (callback, isFetching) => {
 
 	return [lastElementRef]
 }
+
+export default useInfiniteScroll

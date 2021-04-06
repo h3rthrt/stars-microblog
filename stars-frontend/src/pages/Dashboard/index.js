@@ -28,6 +28,7 @@ function Dashboard(props) {
 				username={props.username}
 				blogname={props.blogname}
 				uid={props.uid}
+				photoURL={props.photoURL}
 			/>
 
 			<div className="container__left">
@@ -46,7 +47,7 @@ function Dashboard(props) {
 					</div>
 					: <center><FontAwesomeIcon icon="sync-alt" size="1x" pulse={true} /></center>
 				}
-				{renderPosts()}
+				{/* {renderPosts()} */}
 			</div>
 			<div className="container__right">
 				<Tags />
@@ -56,8 +57,9 @@ function Dashboard(props) {
 }
 
 function mapStateToProps(state) {
+	
 	return {
-		postsList: state.posts.postsList,
+		// postsList: state.posts.postsList,
 		blogname: state.firebase.profile.blogname,
 		username: state.firebase.auth.displayName,
 		uid: state.firebase.auth.uid,

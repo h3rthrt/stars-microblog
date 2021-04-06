@@ -11,7 +11,9 @@ function CreateNote(props) {
 	const [ validate, setValidate] = useState(false)
 	const [ image, setImage ] = useState({ images: [] })
     const [ post, setPost ] = useState({
+		author: props.username,
 		username: null,
+		userPhotoURL: null,
 		blogname: null,
         header: null,
         text: null,
@@ -24,7 +26,9 @@ function CreateNote(props) {
 		props.onClose()
 		setPost(() => {
 			return {
+				author: props.username,
 				username: null,
+				userPhotoURL: null,
 				blogname: null,
 				header: null,
 				text: null,
@@ -56,7 +60,13 @@ function CreateNote(props) {
 	])
 
 	function addPostHandler() {
-		props.uploadPost(image.images, props.username, props.uid, true, post, props.blogname)
+		props.uploadPost(image.images, 
+						props.username, 
+						props.uid, 
+						true, 
+						post, 
+						props.blogname,
+						props.photoURL)
 	}
 
 	function changeHeaderHandler(ev) {
@@ -239,7 +249,20 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		uploadPost: (files, username, uid, forFirestore, post, blogname) => dispatch(upload(files, username, uid, forFirestore, post, blogname)),
+		uploadPost: (files, 
+					username, 
+					uid, 
+					forFirestore, 
+					post, 
+					blogname, 
+					userPhotoURL) => 
+						dispatch(upload(files, 
+										username, 
+										uid, 
+										forFirestore, 
+										post, 
+										blogname, 
+										userPhotoURL)),
 		uploadReset: () => dispatch(uploadReset())
 	}
 }

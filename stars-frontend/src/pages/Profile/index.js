@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { loadProfile } from '../../redux/actions/profileActions'
+import { getUserPosts } from '../../redux/actions/notesActions'
 import Post from '../../components/Post'
 import User from './User'
 import Spinner from '../../components/UI/Spinner'
@@ -14,13 +15,14 @@ function Profile(props) {
 	useEffect(() => {
 		props.loadProfile(props.location.pathname.slice(9))
 		if(props.isLoaded) {
+			props.getUserPosts(props.username, 0)
 			setLoadData(false)
 		}
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.username, props.isLoaded, props.photoURL])
 
 	function renderPosts() {
-		return props.postsList.map((post, index) => {
+		return props.notes.map((post, index) => {
             return (
                 <Post list={post} key={index} />
             )
@@ -76,8 +78,9 @@ function Profile(props) {
 }
 
 function mapStateToProps(state) {
+	console.log(state.notes.userPosts)
 	return {
-		postsList: state.posts.postsList,
+		notes: state.notes.userPosts,
 		username: state.profile.username,
 		blogname: state.profile.blogname,
 		photoURL: state.profile.photoURL,
@@ -91,7 +94,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		loadProfile: (username) => dispatch(loadProfile(username))
+		loadProfile: (username) => dispatch(loadProfile(username)),
+		getUserPosts: (username, first) => dispatch(getUserPosts(username, first))
 	}
 }
 

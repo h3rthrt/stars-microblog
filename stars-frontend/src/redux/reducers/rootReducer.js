@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
-import postsList from './postsList'
 import popularTags from './popularTags'
+import notesReducer from './notesReducer'
 import profileReducer from './profileReducer'
 import authReducer from './authReducer'
 import uploadReducer from './uploadReducer'
@@ -9,8 +9,8 @@ import { firebaseReducer } from 'react-redux-firebase'
 import { firestoreReducer } from 'redux-firestore'
 
 export default combineReducers({
-    posts: postsList,
     tag: popularTags,
+    notes: notesReducer,
     progress: uploadReducer,
     profile: profileReducer,
     auth: authReducer,

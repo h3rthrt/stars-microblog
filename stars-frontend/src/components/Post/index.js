@@ -3,41 +3,39 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Post.sass'
 
 function Post(props) {
-
 	return (
 		<div className="post">
 			<div className="post__left">
-				<img src={'http://localhost:3000' + props.list.avatar} alt="" className="ava" />
+				<img src={ props.list.userPhotoURL || '/img/defaultPhoto.svg' } alt="" className="ava" />
 			</div>
 			<div className="post__right">
 				<div className="nickname">
-					<a href="/" className="nickname__list">
-						{' '}
-						{props.list.nickname}{' '}
+					<a href='/' className="nickname__list">
+						{ props.list.blogname }
 					</a>
-					{props.list.author === props.list.nickname ? 
-					null 
-					: (
-						<div className="author-post">
-							<FontAwesomeIcon icon="reply" className="reply" />
-							<a href="/">{props.list.author}</a>
-						</div>
-					)}
+					{ props.list.author === props.list.username 
+						? null 
+						: (
+							<div className="author-post">
+								<FontAwesomeIcon icon="reply" className="reply" />
+								<a href="/">{props.list.author}</a>
+							</div>
+						) 
+					}
 				</div>
+				{ <h2>{props.list.header}</h2> || null }
 				<div className="post__images">
-					{props.list.images ? (
-						props.list.images.map((image, index) => {
+					{
+						props.list.photoURL.map((image, index) => {
 							return (
 								<div className="img-box" key={index}>
 									<img alt="" src={image} />
 								</div>
 							)
-						})
-					) 
-					: null}
+						}) || null
+					}
 				</div>
-				{props.list.head ? <h2>{props.list.head}</h2> : null}
-				{props.list.text ? <p>{props.list.text}</p> : null}
+				{ <p>{props.list.text}</p> || null}
 				<div className="footer-post">
 					<div className="footer-post__left">
 						заметки {props.list.likes}

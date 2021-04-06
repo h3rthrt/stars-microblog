@@ -10,11 +10,15 @@
     color: var(--primary-color)
     &__left
         width: 11.4%
+        min-width: 70px
+        max-height: 70px
+        display: flex
+        justify-content: center
+        overflow: hidden
+        border-radius: 4px
+        border: 2px solid var(--border)
         img
-            width: 70px
             height: 70px
-            border-radius: 4px
-            border: 2px solid var(--border)
     &__images
         display: flex
         justify-content: space-between
@@ -27,8 +31,9 @@
         img
             height: 320px
     &__right
-        width: 100%
+        width: calc(88.6% - 20px)
         margin-left: 20px
+        margin-top: 2px
         box-shadow: 0px 0px 32px 4px var(--shadow)
         border-radius: 4px
         background: var(--white)
@@ -56,35 +61,36 @@
     &__create
         background: none
         box-shadow: none
-        .footer-post
-            justify-content: space-between
+    .footer-post
+        justify-content: space-between
+        display: flex
+        align-items: center
+        padding: 0 12px 2px 12px
+        font-weight: 600
+        margin-top: 16px
+        &__left
             display: flex
-            align-items: center
-            padding: 0 12px 2px 12px
-            font-weight: 600
-            margin-top: 16px
-            &__left
-                display: flex
-            &__right
-                display: flex
-            &__repost
-                cursor: pointer
-                stroke: var(--primary-color)
-                svg
-                    width: 24px
-                    height: 24px
-            &__heart
-                cursor: pointer
-                margin-left: 14px
-                stroke: var(--primary-color)
-                svg
-                    width: 24px
-                    height: 24px
-            &__tags
-                a
-                    font-weight: 500
-                    color: color(--gray)
-                    margin-left: 12px
+        &__tags
+            a
+                text-decoration: none
+                font-weight: 500
+                color: var(--gray)
+                margin-left: 12px
+        &__right
+            display: flex
+        &__repost
+            cursor: pointer
+            stroke: var(--primary-color)
+            svg
+                width: 24px
+                height: 24px
+        &__heart
+            cursor: pointer
+            margin-left: 14px
+            stroke: var(--primary-color)
+            svg
+                width: 24px
+                height: 24px
     h2
         padding: 0 12px
     p
