@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { loadProfile } from '../../redux/actions/profileActions'
-import { getUserPosts } from '../../redux/actions/notesActions'
+import { getUserPosts, getUserLikePosts } from '../../redux/actions/notesActions'
 import Post from '../../components/Post'
 import User from './User'
 import Spinner from '../../components/UI/Spinner'
@@ -14,8 +14,8 @@ function Profile(props) {
 
 	useEffect(() => {
 		props.loadProfile(props.location.pathname.slice(9))
-		if(props.isLoaded) {
-			props.getUserPosts(props.username, 0)
+		if(props.isLoaded  && loadData && props.username) {
+			props.getUserPosts(props.username, 1)
 			setLoadData(false)
 		}
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -24,7 +24,7 @@ function Profile(props) {
 	function renderPosts() {
 		return props.notes.map((post, index) => {
             return (
-                <Post list={post} key={index} />
+                <Post post={post} key={index} />
             )
         })
 	}
@@ -62,23 +62,18 @@ function Profile(props) {
 		)
 	}
 
-	if (loadData) {
-		return <Spinner />
-	} else {
-		if(props.username) {
-			return renderProfile()
-		} else if (props.username === '') {
-			return(
-				<div className="container">
-					<div>Пользователь не найден</div>
-				</div>
-			)
-		}
+	if(loadData) return <Spinner />
+	if(props.username) return renderProfile()
+	if(props.username === '') {
+		return (
+			<div className="container">
+				<div>Пользователь не найден</div>
+			</div>
+		)
 	}
 }
 
 function mapStateToProps(state) {
-	console.log(state.notes.userPosts)
 	return {
 		notes: state.notes.userPosts,
 		username: state.profile.username,
@@ -95,7 +90,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 	return {
 		loadProfile: (username) => dispatch(loadProfile(username)),
-		getUserPosts: (username, first) => dispatch(getUserPosts(username, first))
+		getUserPosts: (username, first) => dispatch(getUserPosts(username, first)),
+		getUserLikePosts: (username, first) => dispatch(getUserLikePosts(username, first))
 	}
 }
 

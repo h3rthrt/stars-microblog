@@ -14,7 +14,7 @@ export function upload(files, username, uid, forFirestore = false, post, blognam
 			post.username = username
 			post.blogname = blogname
 			post.userPhotoURL = userPhotoURL
-			post.data = firestore.Timestamp.now()
+			post.createdAt = firestore.Timestamp.now()
 			if(files.length === 0)
 				firestore.collection('posts').add(post)
 				.then(() => {

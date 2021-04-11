@@ -17,7 +17,9 @@ function Main(props) {
 
 	return (
 		<div className="container container__main">
-			<div className="container__left">{renderPosts()}</div>
+			<div className="container__left">
+				{/* { renderPosts() } */}
+			</div>
 			<div className="container__right">
 				<Tags />
 			</div>
@@ -27,7 +29,7 @@ function Main(props) {
 
 function mapStateToProps(state) {
 	return {
-		postsList: state.posts.postsList
+		// postsList: state.posts.postsList
 	}
 }
 

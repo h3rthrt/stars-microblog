@@ -6,27 +6,27 @@ function Post(props) {
 	return (
 		<div className="post">
 			<div className="post__left">
-				<img src={ props.list.userPhotoURL || '/img/defaultPhoto.svg' } alt="" className="ava" />
+				<img src={ props.post.userPhotoURL || '/img/defaultPhoto.svg' } alt="" className="ava" />
 			</div>
 			<div className="post__right">
 				<div className="nickname">
 					<a href='/' className="nickname__list">
-						{ props.list.blogname }
+						{ props.post.blogname }
 					</a>
-					{ props.list.author === props.list.username 
+					{ props.post.author === props.post.username 
 						? null 
 						: (
 							<div className="author-post">
 								<FontAwesomeIcon icon="reply" className="reply" />
-								<a href="/">{props.list.author}</a>
+								<a href="/">{props.post.author}</a>
 							</div>
 						) 
 					}
 				</div>
-				{ <h2>{props.list.header}</h2> || null }
+				{ props.post.header ? (<h2>{ props.post.header }</h2>) : null  }
 				<div className="post__images">
 					{
-						props.list.photoURL.map((image, index) => {
+						props.post.photoURL.map((image, index) => {
 							return (
 								<div className="img-box" key={index}>
 									<img alt="" src={image} />
@@ -35,13 +35,14 @@ function Post(props) {
 						}) || null
 					}
 				</div>
-				{ <p>{props.list.text}</p> || null}
+				{ props.post.text ? (<p>{props.post.text}</p>) : null}
 				<div className="footer-post">
 					<div className="footer-post__left">
-						заметки {props.list.likes}
+						заметки {props.post.likes}
+						{ props.post.createdAt }
 						<div className="footer-post__tags">
-							{props.list.tags ? (
-								props.list.tags.map((tag, index) => {
+							{props.post.tags ? (
+								props.post.tags.map((tag, index) => {
 									return (
 										<a href="/" key={index}>
 											{'#' + tag}

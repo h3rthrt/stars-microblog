@@ -7,9 +7,10 @@
 .post
     @include fadeInAnimation(.2s)
     display: flex
-    color: var(--primary-color)
+    color: var(--text-color)
     &__left
         width: 11.4%
+        max-width: 70px
         min-width: 70px
         max-height: 70px
         display: flex
@@ -33,11 +34,12 @@
     &__right
         width: calc(88.6% - 20px)
         margin-left: 20px
-        margin-top: 2px
         box-shadow: 0px 0px 32px 4px var(--shadow)
         border-radius: 4px
+        border: 2px solid var(--border)
         background: var(--white)
         .nickname
+            font-weight: 600
             display: flex
             padding: 12px 14px
             font-size: 14px
@@ -45,7 +47,7 @@
             letter-spacing: -0.03em
             &__list
                 text-decoration: none
-                color: var(--primary-color)
+                color: var(--text-color)
             .author-post
                 display: flex
                 align-items: center
@@ -61,6 +63,8 @@
     &__create
         background: none
         box-shadow: none
+        border: none
+        margin-top: 2px
     .footer-post
         justify-content: space-between
         display: flex
@@ -80,19 +84,19 @@
             display: flex
         &__repost
             cursor: pointer
-            stroke: var(--primary-color)
+            stroke: var(--text-color)
             svg
                 width: 24px
                 height: 24px
         &__heart
             cursor: pointer
             margin-left: 14px
-            stroke: var(--primary-color)
+            stroke: var(--text-color)
             svg
                 width: 24px
                 height: 24px
     h2
-        padding: 0 12px
+        padding: 4px 12px
     p
         padding: 8px 12px 0 12px
 
