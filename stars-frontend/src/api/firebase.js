@@ -2,13 +2,13 @@ import firebase from 'firebase/app'
 import 'firebase/firestore'
 
 const fbConfig = {
-    apiKey: "AIzaSyC-N3bpwnzf61N1QQzCto-G9V3PA0B-TLs",
-    authDomain: "stars-microblog.firebaseapp.com",
-    databaseURL: "https://stars-microblog-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "stars-microblog",
-    storageBucket: "stars-microblog.appspot.com",
-    messagingSenderId: "384816582843",
-    appId: "1:384816582843:web:2efd132c1f6567755c199e",
+    apiKey: process.env.REACT_APP_API_KEY,
+    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    databaseURL: process.env.REACT_APP_DATABASE_URL,
+    projectId: process.env.REACT_APP_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_APP_ID,
     userProfile: "users"
 }
 
