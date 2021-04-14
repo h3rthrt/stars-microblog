@@ -1,15 +1,15 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Post.sass'
 
-function Post(props) {
+const Post = forwardRef((props, ref) => {
 	return (
-		<div className="post">
+		<div ref={ref} className="post">
 			<div className="post__left">
 				<img src={ props.post.userPhotoURL || '/img/defaultPhoto.svg' } alt="" className="ava" />
 			</div>
 			<div className="post__right">
-				<div className="nickname">
+				<div id={props.post.uid} className="nickname">
 					<a href='/' className="nickname__list">
 						{ props.post.blogname }
 					</a>
@@ -69,6 +69,5 @@ function Post(props) {
 			</div>
 		</div>
 	);
-}
-
+})
 export default Post

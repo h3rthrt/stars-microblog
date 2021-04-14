@@ -1,6 +1,7 @@
 import { 
 	LOAD_USER_ADDED_POSTS_SUCCESS, 
 	LOAD_USER_LIKE_POSTS_SUCCESS, 
+	LOAD_USER_POSTS_COMPLETE, 
 	LOAD_USER_POSTS_SUCCESS,
 	SET_IS_FETCHING
 } from "./actionsTypes"
@@ -16,7 +17,6 @@ export function getUserPosts(username) {
 			.limit(5)
 			.onSnapshot((querySnapshot) => {
 				var notes = []
-				var query = []
 				if (loaded) {
 					querySnapshot.docChanges().forEach((change) => {
 						if (change.type === 'added') {
@@ -28,8 +28,7 @@ export function getUserPosts(username) {
 							notes.push(dataPost)
 							dispatch({userPosts: notes, type: LOAD_USER_ADDED_POSTS_SUCCESS})
 						}
-					})
-				} else if (!loaded) {
+				})} else if (!loaded) {
 					querySnapshot.forEach((doc) => {
 						var dataPost = doc.data()
 						dataPost.uid = doc.id
@@ -37,11 +36,10 @@ export function getUserPosts(username) {
 										' at ' + 
 										dataPost.createdAt.toDate().toLocaleTimeString('ru-RU')
 						notes.push(dataPost)
-						query.push(doc.data())
 					})
-					var lastNote = query[query.length - 1]
 					loaded = true
-					dispatch(addNotesUser(notes, lastNote, LOAD_USER_POSTS_SUCCESS))
+					var lastPost = querySnapshot.docs[querySnapshot.docs.length - 1]
+					dispatch(addNotesUser(notes, lastPost, LOAD_USER_POSTS_SUCCESS))
 					dispatch({isFetching: false, type: SET_IS_FETCHING})
 				}
 			})
@@ -70,10 +68,14 @@ export function getMoreUserPosts(username, lastPost) {
 					notes.push(dataPost)
 					query.push(doc.data())
 				})
-				var lastNote = query[query.length - 1]
-				console.log(notes, lastNote)
-				dispatch(addNotesUser(notes, lastNote, LOAD_USER_POSTS_SUCCESS))
-				dispatch({isFetching: false, type: SET_IS_FETCHING})
+				var lastNote = querySnapshot.docs[querySnapshot.docs.length - 1]
+				notes.shift()
+				if (notes.length === 0) {
+					dispatch({type: LOAD_USER_POSTS_COMPLETE})
+				} else {
+					dispatch(addNotesUser(notes, lastNote, LOAD_USER_POSTS_SUCCESS))
+					dispatch({isFetching: false, type: SET_IS_FETCHING})
+				}
 			})
 	}
 }

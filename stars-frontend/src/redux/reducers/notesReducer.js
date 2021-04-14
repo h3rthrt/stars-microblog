@@ -2,12 +2,14 @@ import {
 	LOAD_USER_LIKE_POSTS_SUCCESS,
 	LOAD_USER_POSTS_SUCCESS,
 	LOAD_USER_ADDED_POSTS_SUCCESS,
-	SET_IS_FETCHING
+	SET_IS_FETCHING,
+	LOAD_USER_POSTS_COMPLETE
 } from '../actions/actionsTypes'
 
 const initialState = {
 	userPosts: [],
 	userLastPost: null,
+	userPostsComplete: false,
 	userLikePosts: [],
 	userLikeLastPost: null,
 	isFetching: true
@@ -36,6 +38,11 @@ export default function notesReducer(state = initialState, action) {
 			return {
 				...state,
 				isFetching: action.isFetching
+			}
+		case LOAD_USER_POSTS_COMPLETE:
+			return {
+				...state,
+				userPostsComplete: true
 			}
 		default:
 			return state

@@ -6,31 +6,31 @@ import { getUserPosts, getMoreUserPosts, getUserLikePosts } from '../../redux/ac
 import Post from '../../components/Post'
 import User from './User'
 import Spinner from '../../components/UI/Spinner'
+import useInfiniteScroll from '../../useInfiniteScroll'
 import './Profile.sass'
 
 const Profile = (props) => {
+
+	const [lastElementRef] = useInfiniteScroll(
+		!!props.notes.length ? props.getMoreUserPosts : () => {},
+		props.isFetching,
+		props.username,
+		props.userLastNote,
+		props.userNotesComplete
+	);
 	const [ loadData, setLoadData ] = useState(true)
 	const [ active, setActive ] = useState('posts')
 
 	useEffect(() => {
-			props.loadProfile(props.location.pathname.slice(9))
-			if (props.isLoaded && loadData && props.username) {
-				if (props.notes.length === 0) props.getUserPosts(props.username)
-				setLoadData(false)
-			}
-		},
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[ props.username, props.isLoaded, props.photoURL ]
-	)
-
-	window.onscroll = function () {
-		if (
-			window.innerHeight + document.documentElement.scrollTop 
-			=== document.documentElement.offsetHeight
-		) {
-			props.getMoreUserPosts(props.username, props.userLastNote)
+		// first data load profile
+		if (!loadData) return
+		props.loadProfile(props.location.pathname.slice(9))
+		if (props.isLoaded && loadData && props.username) {
+			if (props.notes.length === 0) props.getUserPosts(props.username)
+			setLoadData(false)
 		}
-	}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	},[props.isLoaded, props.username])
 
 	function renderPosts() {
 		return (
@@ -58,14 +58,14 @@ const Profile = (props) => {
 					</div>
 					{ 
 						props.notes.map((post, index) => {
-							if(props.notes.length === index + 1)  {
-								return <Post post={post} key={index} />
+							if (props.notes.length === index + 1)  {
+								return <Post ref={lastElementRef} post={post} key={index} />
 							} else {
 								return <Post post={post} key={index} />
 							}
 						})
 					}
-					{ props.isFetching && <p>Загрузка...</p> }
+					{ props.isFetching && !props.userNotesComplete && <p>Загрузка...</p> }
 				</div>
 				<div className="container__right">
 					<User username={props.username} blogname={props.blogname} photoURL={props.photoURL} />
@@ -75,11 +75,8 @@ const Profile = (props) => {
 	}
 
 	function activeBtn(id) {
-		if (id === 'posts') {
-			setActive('posts')
-		} else {
-			setActive('likes')
-		}
+		if (id === 'posts') return setActive('posts')
+		if (id === 'likes') return setActive('likes')
 	}
 	
 	if (loadData) return <Spinner />
@@ -90,15 +87,14 @@ const Profile = (props) => {
 			</div>
 		)
 	}
-	if (props.username && !loadData) {
-		return renderPosts()
-	}
+	if (props.username && !loadData) return renderPosts()
 }
 
 function mapStateToProps(state) {
 	return {
 		notes: state.notes.userPosts,
 		userLastNote: state.notes.userLastPost,
+		userNotesComplete: state.notes.userPostsComplete,
 		isFetching: state.notes.isFetching,
 		username: state.profile.username,
 		blogname: state.profile.blogname,
