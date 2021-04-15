@@ -71,8 +71,9 @@ export function getMoreUserPosts(username, lastPost) {
 				})
 				var lastNote = querySnapshot.docs[querySnapshot.docs.length - 1]
 				notes.shift()
-				if (notes.length === 0) {
+				if (!!!notes.length) {
 					dispatch({type: LOAD_POSTS_COMPLETE})
+					dispatch({isFetching: false, type: SET_IS_FETCHING})
 				} else {
 					dispatch(addPosts(notes, lastNote, LOAD_POSTS_SUCCESS))
 					dispatch({isFetching: false, type: SET_IS_FETCHING})

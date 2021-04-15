@@ -20,9 +20,9 @@ const Profile = (props) => {
 			setLoadData(false)
 		}
 
-		// return () => {
-		// 	props.clearPosts()
-		// }
+		return () => {
+			props.clearPosts()
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	},[props.isLoaded, props.username])
 
