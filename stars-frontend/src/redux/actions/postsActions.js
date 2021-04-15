@@ -1,13 +1,14 @@
 import { 
-	LOAD_USER_ADDED_POSTS_SUCCESS, 
-	LOAD_USER_LIKE_POSTS_SUCCESS, 
-	LOAD_USER_POSTS_COMPLETE, 
-	LOAD_USER_POSTS_SUCCESS,
-	SET_IS_FETCHING
+	LOAD_POSTS_COMPLETE, 
+	LOAD_POSTS_SUCCESS,
+	LOAD_ADDED_POSTS_SUCCESS, 
+	SET_IS_FETCHING,
+	CLEAR_POSTS
 } from "./actionsTypes"
 
 export function getUserPosts(username) {
 	return (dispatch, getState, {getFirebase, getFirestore}) => {
+		dispatch({type: CLEAR_POSTS})
 		dispatch({isFetching: true, type: SET_IS_FETCHING})
 		var loaded = false
 		const firestore = getFirestore()
@@ -26,7 +27,7 @@ export function getUserPosts(username) {
 											' at ' + 
 											dataPost.createdAt.toDate().toLocaleTimeString('ru-RU')
 							notes.push(dataPost)
-							dispatch({userPosts: notes, type: LOAD_USER_ADDED_POSTS_SUCCESS})
+							dispatch({posts: notes, type: LOAD_ADDED_POSTS_SUCCESS})
 						}
 				})} else if (!loaded) {
 					querySnapshot.forEach((doc) => {
@@ -39,7 +40,7 @@ export function getUserPosts(username) {
 					})
 					loaded = true
 					var lastPost = querySnapshot.docs[querySnapshot.docs.length - 1]
-					dispatch(addNotesUser(notes, lastPost, LOAD_USER_POSTS_SUCCESS))
+					dispatch(addPosts(notes, lastPost, LOAD_POSTS_SUCCESS))
 					dispatch({isFetching: false, type: SET_IS_FETCHING})
 				}
 			})
@@ -71,9 +72,9 @@ export function getMoreUserPosts(username, lastPost) {
 				var lastNote = querySnapshot.docs[querySnapshot.docs.length - 1]
 				notes.shift()
 				if (notes.length === 0) {
-					dispatch({type: LOAD_USER_POSTS_COMPLETE})
+					dispatch({type: LOAD_POSTS_COMPLETE})
 				} else {
-					dispatch(addNotesUser(notes, lastNote, LOAD_USER_POSTS_SUCCESS))
+					dispatch(addPosts(notes, lastNote, LOAD_POSTS_SUCCESS))
 					dispatch({isFetching: false, type: SET_IS_FETCHING})
 				}
 			})
@@ -82,6 +83,8 @@ export function getMoreUserPosts(username, lastPost) {
 
 export function getUserLikePosts(username, length) {
 	return (dispatch, getState, {getFirebase, getFirestore}) => {
+		dispatch({type: CLEAR_POSTS})
+		dispatch({isFetching: true, type: SET_IS_FETCHING})
 		const firestore = getFirestore()
 		firestore.collection("likes")
 		.where("username", "==", `${username}`)
@@ -94,14 +97,14 @@ export function getUserLikePosts(username, length) {
 			querySnapshot.forEach((doc) => {
 				notes.push(doc.data())
 			})
-			dispatch(addNotesUser(notes, length, LOAD_USER_LIKE_POSTS_SUCCESS))
+			dispatch(addPosts(notes, length, LOAD_POSTS_SUCCESS))
 		})	
 	}
 }
 
-function addNotesUser(notes, lastNote, type) {
+function addPosts(notes, lastNote, type) {
 	return {
-		userPosts: notes,
+		posts: notes,
 		lastPost: lastNote,
 		type: type
 	}

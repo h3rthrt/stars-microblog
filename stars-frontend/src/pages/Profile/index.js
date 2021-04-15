@@ -2,22 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { loadProfile } from '../../redux/actions/profileActions'
-import { getUserPosts, getMoreUserPosts, getUserLikePosts } from '../../redux/actions/notesActions'
-import Post from '../../components/Post'
 import User from './User'
 import Spinner from '../../components/UI/Spinner'
-import useInfiniteScroll from '../../useInfiniteScroll'
+import FetchingPosts from '../../components/FetchingPosts'
 import './Profile.sass'
+import { CLEAR_POSTS } from '../../redux/actions/actionsTypes'
 
 const Profile = (props) => {
-
-	const [lastElementRef] = useInfiniteScroll(
-		!!props.notes.length ? props.getMoreUserPosts : () => {},
-		props.isFetching,
-		props.username,
-		props.userLastNote,
-		props.userNotesComplete
-	);
 	const [ loadData, setLoadData ] = useState(true)
 	const [ active, setActive ] = useState('posts')
 
@@ -25,10 +16,13 @@ const Profile = (props) => {
 		// first data load profile
 		if (!loadData) return
 		props.loadProfile(props.location.pathname.slice(9))
-		if (props.isLoaded && loadData && props.username) {
-			if (props.notes.length === 0) props.getUserPosts(props.username)
+		if (props.isLoaded && loadData && props.username && props.posts.length === 0) {
 			setLoadData(false)
 		}
+
+		// return () => {
+		// 	props.clearPosts()
+		// }
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	},[props.isLoaded, props.username])
 
@@ -56,16 +50,11 @@ const Profile = (props) => {
 							нравится
 						</button>
 					</div>
-					{ 
-						props.notes.map((post, index) => {
-							if (props.notes.length === index + 1)  {
-								return <Post ref={lastElementRef} post={post} key={index} />
-							} else {
-								return <Post post={post} key={index} />
-							}
-						})
-					}
-					{ props.isFetching && !props.userNotesComplete && <p>Загрузка...</p> }
+					<FetchingPosts 
+						username={props.username} 
+						reference='getUserPosts' 
+						referenceMore='getMoreUserPosts' 
+					/>
 				</div>
 				<div className="container__right">
 					<User username={props.username} blogname={props.blogname} photoURL={props.photoURL} />
@@ -92,12 +81,10 @@ const Profile = (props) => {
 
 function mapStateToProps(state) {
 	return {
-		notes: state.notes.userPosts,
-		userLastNote: state.notes.userLastPost,
-		userNotesComplete: state.notes.userPostsComplete,
-		isFetching: state.notes.isFetching,
+		posts: state.posts.posts,
 		username: state.profile.username,
 		blogname: state.profile.blogname,
+		displayName: state.firebase.auth.displayName,
 		photoURL: state.profile.photoURL,
 		desc: state.profile.desc,
 		followers: state.profile.followers,
@@ -110,9 +97,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 	return {
 		loadProfile: (username) => dispatch(loadProfile(username)),
-		getUserPosts: (username) => dispatch(getUserPosts(username)),
-		getMoreUserPosts: (username, lastPost) => dispatch(getMoreUserPosts(username, lastPost)),
-		getUserLikePosts: (username, first) => dispatch(getUserLikePosts(username, first))
+		clearPosts: () => dispatch({type: CLEAR_POSTS})
 	}
 }
 
