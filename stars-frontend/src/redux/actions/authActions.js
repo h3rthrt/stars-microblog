@@ -6,32 +6,62 @@ const title = "Ошибка авторизации"
 export function signIn(email, password, isLogin, name, blogname) {
 	return (dispatch, getState, {getFirebase, getFirestore}) => {
 		const firebase = getFirebase()
+		const firestore = getFirestore()
+
+		const data = {
+			username: name,
+			blogname: blogname,
+			email: email,
+			photoURL: null,
+			desc: null,
+			followers: [],
+			following: [],
+			media: [],
+			theme: false
+		}
+
 		if (isLogin) {
 			firebase.auth().createUserWithEmailAndPassword(email, password)
 				.then(() => {
 					const user = firebase.auth().currentUser
 					user.updateProfile({
-					displayName: `${name}`
-					}).then(function() {
-						firebase.ref('users/' + user.uid).set({
-							username: name,
-							blogname: blogname,
-							email: email,
-							photoURL: null,
-							desc: null,
-							followers: [],
-							following: [],
-							media: []
-						}, () => {
+						displayName: `${name}`
+					})
+					.then(() => {
+						firestore.collection('users').doc(user.uid).set(data)
+						.then(() => {
 							firebase.updateAuth({
 								'displayName': name
 							})
 							dispatch(loginSuccess())
 						})
-					}).catch(function(error) {
-						dispatch(notification('Danger', title, error.message))
-						dispatch({ type: LOGIN_CLEAR })
+						.catch((err) => {
+							dispatch(notification('Danger', title, err.message))
+							dispatch({ type: LOGIN_CLEAR })
+						})
 					})
+					// .then(function() {
+					// 	firebase.ref('users/' + user.uid).set({
+					// 		username: name,
+					// 		blogname: blogname,
+					// 		email: email,
+					// 		photoURL: null,
+					// 		desc: null,
+					// 		followers: [],
+					// 		following: [],
+					// 		media: [],
+					//		theme: false
+					// 	}, () => {
+					// 		firebase.updateAuth({
+					// 			'displayName': name
+					// 		})
+					// 		dispatch(loginSuccess())
+					// 	})
+					
+					// }).catch(function(error) {
+					// 	dispatch(notification('Danger', title, error.message))
+					// 	dispatch({ type: LOGIN_CLEAR })
+					// })
 				})
 				.catch((error) => {
 					dispatch(notification('Danger', title, error.message))

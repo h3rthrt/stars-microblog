@@ -2,16 +2,20 @@ import React, { useState, useEffect, useRef } from 'react'
 import './PhotoUser.sass'
 import { connect } from 'react-redux'
 import { clearPhoto } from '../../../../redux/actions/profileActions'
-import { useFirebase } from 'react-redux-firebase'
+import { useFirebase, useFirestore } from 'react-redux-firebase'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import ViewPhoto from '../../../../components/Modal/ViewPhoto'
+import ViewPhoto from '../../../../components/Modal/UploadPhoto'
 import WarningMsg from '../../../../components/Modal/WarningMsg'
 
 function Photo(props) {
 	const firebase = useFirebase()
-	const [ showMenu, setShowMenu ] = useState(false) //for show menu with buttons
-	const [ showModal, setShowModal ] = useState(false) //for update img
-	const [ showWarning, setShowWarning ] = useState(false) //warning modal for remove img
+	const firestore = useFirestore()
+	//for show menu with buttons
+	const [ showMenu, setShowMenu ] = useState(false) 
+	//for update img
+	const [ showModal, setShowModal ] = useState(false) 
+	//warning modal
+	const [ showWarning, setShowWarning ] = useState(false) 
 	const [ image, setImage ] = useState({
 		base64: '',
 		alt: '',
@@ -22,8 +26,7 @@ function Photo(props) {
 
 	const buttonUpdateNode = buttonUpdateRef.current
 
-	useEffect(
-		() => {
+	useEffect(() => {
 			function beforeComponentClick(event) {
 				if (event.target.className !== 'photo-user__update show') {
 					setShowMenu(false)
@@ -37,9 +40,7 @@ function Photo(props) {
 					document.removeEventListener('click', beforeComponentClick)
 				}
 			}
-		},
-		[ showMenu, buttonUpdateNode ]
-	)
+	}, [ showMenu, buttonUpdateNode ])
 
 	function changeHandler(event) {
 		if (!event.target.files.length) {
@@ -102,7 +103,9 @@ function Photo(props) {
 	}
 
 	function removePhoto() {
-		firebase.ref(`users/${props.uid}/photoURL`).remove()
+		firestore.collection('users').doc(props.uid).update({
+			'photoURL': null 
+		})
 		const photoName = firebase.storage().refFromURL(props.photoURL).name
 		firebase.deleteFile(`${props.authUser}/profilePhoto/${photoName}`)
 		const user = firebase.auth().currentUser
@@ -167,7 +170,7 @@ function Photo(props) {
 
 function mapStateToProps(state) {
 	return {
-		authUser: state.firebase.profile.username,
+		authUser: state.firebase.auth.displayName,
 		blogname: state.profile.blogname,
 		uid: state.firebase.auth.uid
 	}

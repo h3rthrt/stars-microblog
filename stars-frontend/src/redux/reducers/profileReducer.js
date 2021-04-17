@@ -2,7 +2,8 @@ import {
 	LOAD_PROFILE_ERROR,
 	LOAD_PROFILE_SUCCESS,
 	LOAD_PROFILE_PHOTO,
-	CLEAR_PROFILE_DATA
+	CLEAR_PROFILE_DATA,
+	PROFILE_NOT_FOUND
 } from '../actions/actionsTypes'
 
 const initialState = {
@@ -13,7 +14,7 @@ const initialState = {
 	followers: [],
 	following: [],
 	media: [],
-	error: ''
+	isFound: false
 }
 
 export default function profileReducer(state = initialState, action) {
@@ -27,7 +28,8 @@ export default function profileReducer(state = initialState, action) {
 				desc: action.desc,
 				followers: action.followers,
 				following: action.following,
-				media: action.media
+				media: action.media,
+				isFound: true
 			}
 		case LOAD_PROFILE_ERROR:
 			return {
@@ -47,6 +49,10 @@ export default function profileReducer(state = initialState, action) {
 			return {
 				...state,
 				photoURL: ''
+			}
+		case PROFILE_NOT_FOUND:
+			return {
+				isFound: false
 			}
 		default:
 			return state

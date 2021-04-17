@@ -6,25 +6,26 @@ import User from './User'
 import Spinner from '../../components/UI/Spinner'
 import FetchingPosts from '../../components/FetchingPosts'
 import './Profile.sass'
-import { CLEAR_POSTS } from '../../redux/actions/actionsTypes'
 
 const Profile = (props) => {
 	const [ loadData, setLoadData ] = useState(true)
 	const [ active, setActive ] = useState('posts')
 
 	useEffect(() => {
+		return () => {
+			setLoadData(true)
+		}
+	}, [props.location])
+
+	useEffect(() => {
 		// first data load profile
 		if (!loadData) return
 		props.loadProfile(props.location.pathname.slice(9))
-		if (props.isLoaded && loadData && props.username && props.posts.length === 0) {
+		if (props.isLoaded && loadData) {
 			setLoadData(false)
 		}
-
-		return () => {
-			props.clearPosts()
-		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	},[props.isLoaded, props.username])
+	},[props.isLoaded, props.username, props.location, loadData, props.photoURL])
 
 	function renderPosts() {
 		return (
@@ -69,14 +70,14 @@ const Profile = (props) => {
 	}
 	
 	if (loadData) return <Spinner />
-	if (props.username === '') {
+	if (!!props.username && !loadData) return renderPosts()
+	if (props.username === '' && !props.isFound && !loadData) {
 		return (
 			<div className="container">
 				<div>Пользователь не найден</div>
 			</div>
 		)
 	}
-	if (props.username && !loadData) return renderPosts()
 }
 
 function mapStateToProps(state) {
@@ -90,14 +91,14 @@ function mapStateToProps(state) {
 		followers: state.profile.followers,
 		following: state.profile.following,
 		media: state.profile.media,
-		isLoaded: state.firebase.profile.isLoaded
+		isLoaded: state.firebase.profile.isLoaded,
+		isFound: state.profile.isFound
 	}
 }
 
 function mapDispatchToProps(dispatch) {
 	return {
-		loadProfile: (username) => dispatch(loadProfile(username)),
-		clearPosts: () => dispatch({type: CLEAR_POSTS})
+		loadProfile: (username) => dispatch(loadProfile(username))
 	}
 }
 

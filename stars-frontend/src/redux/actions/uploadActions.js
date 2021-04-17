@@ -4,13 +4,13 @@ import notification from './notificationActions'
 const titleSuccess = 'Запись успешно опубликована'
 const titleDanger = 'Ошибка публикации записи'
 
-export function upload(files, username, uid, forFirestore = false, post, blogname, userPhotoURL) {
+export function upload(files, username, uid, forPosts = false, post, blogname, userPhotoURL) {
 	return (dispatch, getState, {getFirebase, getFirestore}) => {
 		dispatch(uploadOnProgress(true))
 		const firebase = getFirebase()
 		const firestore = getFirestore()
 		var totalEach = 0
-		if(forFirestore) {
+		if(forPosts) {
 			post.username = username
 			post.blogname = blogname
 			post.userPhotoURL = userPhotoURL
@@ -27,14 +27,14 @@ export function upload(files, username, uid, forFirestore = false, post, blognam
 				})
 		}
 		files.forEach((file) => {
-			const storagePath = `${username}/${!forFirestore ? 'profilePhoto' : 'media'}`
-			const dbPath = `users/${uid}/${!forFirestore ? 'photoURL' : 'media'}`
-			if (forFirestore)
+			const user = firebase.auth().currentUser
+			const storagePath = `${username}/${!forPosts ? 'profilePhoto' : 'media'}`
+			const dbPath = forPosts ? 'media' : `users`
+			if (forPosts)
 				file = file.file
 			firebase.uploadFile(storagePath, file, dbPath, {
 				metadataFactory: (uploadRes, firebase, metadata, downloadURL) => {
-					if(!forFirestore) { 
-						const user = firebase.auth().currentUser
+					if(!forPosts) { 
 						user.updateProfile({
 							'photoURL': downloadURL
 						})
@@ -42,15 +42,16 @@ export function upload(files, username, uid, forFirestore = false, post, blognam
 							'photoURL': downloadURL
 						})
 						dispatch(loadProfilePhoto(downloadURL))
+						return { photoURL: downloadURL }
 					} else {
 						post.photoURL.push(downloadURL)
+						return { media: [downloadURL] }
 					}
-					return { fileUrl: downloadURL }
-				}
+				}, documentId: user.uid
 			})
 			.then(() => {
 				totalEach++
-				if(forFirestore && totalEach === files.length) {
+				if(forPosts && totalEach === files.length) {
 					firestore.collection('posts').add(post)
 						.then(() => {
 							dispatch(notification('Success', titleSuccess, 'Ура!'))
@@ -60,14 +61,15 @@ export function upload(files, username, uid, forFirestore = false, post, blognam
 						.catch((error) => {
 							dispatch(notification('Danger', titleDanger, error.message))
 						})
-				} else if (!forFirestore) {
-					dispatch(notification('Success', 'Изображение профиля успешно изменено', 'Ура!'))
+				} else if (!forPosts) {
+					dispatch(notification('Success', 'Успешно!', 'Изображение профиля успешно изменено.'))
 					dispatch(uploadComplete(true))
 					dispatch(uploadOnProgress(false))
 				}
 			})
-			.catch(() => {
-				dispatch(notification('Danger', titleDanger, 'Ошибка загрузки медиа на сервер'))
+			.catch((err) => {
+				console.log(err)
+				dispatch(notification('Danger', titleDanger, `Ошибка загрузки медиа на сервер. ${err}`))
 			})
 		})
 	}
@@ -96,6 +98,6 @@ export function uploadComplete(complete) {
 export function loadProfilePhoto(data) {
 	return {
 		type: LOAD_PROFILE_PHOTO,
-		photoURL: data.photoURL
+		photoURL: data
 	}
 }

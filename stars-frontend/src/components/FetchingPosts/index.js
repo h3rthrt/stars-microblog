@@ -39,9 +39,9 @@ function FetchingPosts(props) {
 
 	const [seconds, setSeconds] = useState(0)
 	const increment = useRef(null)
-	const wordForm = (num, word) => {  
-		let cases = [2, 0, 1, 1, 1, 2];  
-		return word[( num % 100 > 4 && num % 100 < 20 ) ? 2 : cases[( num % 10 < 5 ) ? num % 10 : 5]];  
+	const wordForm = (num, word) => { 
+		let cases = [2, 0, 1, 1, 1, 2]
+		return word[( num % 100 > 4 && num % 100 < 20 ) ? 2 : cases[( num % 10 < 5 ) ? num % 10 : 5]]
 	}
 
 	useEffect(() => {
@@ -54,6 +54,9 @@ function FetchingPosts(props) {
 
 	useEffect(() => {
 		if (props.complete) clearInterval(increment.current)
+		return () => {
+			clearInterval(increment.current)
+		}
 	}, [props.complete])
 	
 	return (
@@ -78,6 +81,9 @@ function FetchingPosts(props) {
 						seconds <= 5 ? 'Спидран выполнен..' : 'Неплохо.'
 					}
 				</p> 
+			}
+			{ !!!props.posts.length && !props.isFetching &&
+				<center><h3>Тут пусто, но это пока временно...</h3></center> 
 			}
 		</div>
 	)

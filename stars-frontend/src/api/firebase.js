@@ -9,10 +9,15 @@ const fbConfig = {
     storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
     messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
     appId: process.env.REACT_APP_APP_ID,
-    userProfile: "users"
+}
+
+const rrfConfig = {
+    userProfile: 'users',
+    useFirestoreForProfile: true,
+    useFirestoreForStorageMeta: true
 }
 
 firebase.initializeApp(fbConfig)
 firebase.firestore().settings({ timestampsInSnapshots: true })
 
-export { fbConfig, firebase } 
+export { fbConfig, rrfConfig, firebase } 

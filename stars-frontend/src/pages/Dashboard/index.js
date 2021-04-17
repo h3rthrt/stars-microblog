@@ -57,8 +57,8 @@ function Dashboard(props) {
 }
 
 function mapStateToProps(state) {
-	
 	return {
+		
 		// postsList: state.posts.postsList,
 		blogname: state.firebase.profile.blogname,
 		username: state.firebase.auth.displayName,
