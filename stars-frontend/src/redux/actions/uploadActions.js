@@ -13,6 +13,7 @@ export function upload(files, username, uid, forPosts = false, post) {
 		if(forPosts) {
 			post.user = firestore.doc('users/' + uid)
 			post.createdAt = firestore.Timestamp.now()
+			// if post without images
 			if(files.length === 0)
 				firestore.collection('posts').add(post)
 				.then(() => {
@@ -27,9 +28,8 @@ export function upload(files, username, uid, forPosts = false, post) {
 		files.forEach((file) => {
 			const user = firebase.auth().currentUser
 			const storagePath = `${username}/${!forPosts ? 'profilePhoto' : 'media'}`
-			const dbPath = forPosts ? 'media' : 'users'
-			if (forPosts)
-				file = file.file
+			const dbPath = 'users'
+			if (forPosts) file = file.file
 			firebase.uploadFile(storagePath, file, dbPath, {
 				metadataFactory: (uploadRes, firebase, metadata, downloadURL) => {
 					if(!forPosts) { 
@@ -43,7 +43,7 @@ export function upload(files, username, uid, forPosts = false, post) {
 						return { photoURL: downloadURL }
 					} else {
 						post.photoURL.push(downloadURL)
-						return { media: [downloadURL] }
+						return { media: firestore.FieldValue.arrayUnion(downloadURL) }
 					}
 				}, documentId: user.uid
 			})
