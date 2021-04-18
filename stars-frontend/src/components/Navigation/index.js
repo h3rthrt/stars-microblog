@@ -76,11 +76,17 @@ function Nav(props) {
 			</Link>
 			<div className="search">
 				<FontAwesomeIcon icon="search" size="lg" />
-				{props.location.pathname === `/profile/${props.username}` ? (
-					<input type="text" placeholder={`Поиск ${props.blogname}`} />
-				) : (
-					<input type="text" placeholder="Поиск" />
-				)}
+				{
+					props.location.pathname === `/profile/${props.authName}` ? 
+					<input 
+						type="text" 
+						placeholder={ `Поиск ${props.blogname}` } 
+					/> :
+					<input 
+						type="text" 
+						placeholder='Поиск' 
+					/> 
+				}
 			</div>
 			<nav>
 				<ul>{renderLinks()}</ul>
@@ -93,7 +99,6 @@ function mapStateToProps(state) {
 	return {
 		isAuthenticated: state.firebase.auth.isEmpty,
 		authName: state.firebase.auth.displayName,
-		username: state.profile.username,
 		blogname: state.profile.blogname
 	}
 }

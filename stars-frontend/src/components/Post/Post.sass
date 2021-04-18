@@ -13,6 +13,7 @@
         max-width: 70px
         min-width: 70px
         height: 70px
+        min-height: 70px
         display: flex
         align-items: center
         justify-content: center
@@ -21,11 +22,8 @@
         border-radius: 4px
         border: 2px solid var(--border)
         img
-            width: auto
-            height: auto
-            max-height: 150%
+            min-width: 100%
             min-height: 100%
-            position: absolute
     &__images
         display: flex
         justify-content: space-between
@@ -37,8 +35,7 @@
             justify-content: center
             align-items: center
         img
-            width: 100%
-            height: max-content
+            height: 100%
     &__right
         width: calc(88.6% - 20px)
         margin-left: 20px

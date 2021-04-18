@@ -4,16 +4,14 @@ import notification from './notificationActions'
 const titleSuccess = 'Запись успешно опубликована'
 const titleDanger = 'Ошибка публикации записи'
 
-export function upload(files, username, uid, forPosts = false, post, blogname, userPhotoURL) {
+export function upload(files, username, uid, forPosts = false, post) {
 	return (dispatch, getState, {getFirebase, getFirestore}) => {
 		dispatch(uploadOnProgress(true))
 		const firebase = getFirebase()
 		const firestore = getFirestore()
 		var totalEach = 0
 		if(forPosts) {
-			post.username = username
-			post.blogname = blogname
-			post.userPhotoURL = userPhotoURL
+			post.user = firestore.doc('users/' + uid)
 			post.createdAt = firestore.Timestamp.now()
 			if(files.length === 0)
 				firestore.collection('posts').add(post)
@@ -29,7 +27,7 @@ export function upload(files, username, uid, forPosts = false, post, blogname, u
 		files.forEach((file) => {
 			const user = firebase.auth().currentUser
 			const storagePath = `${username}/${!forPosts ? 'profilePhoto' : 'media'}`
-			const dbPath = forPosts ? 'media' : `users`
+			const dbPath = forPosts ? 'media' : 'users'
 			if (forPosts)
 				file = file.file
 			firebase.uploadFile(storagePath, file, dbPath, {

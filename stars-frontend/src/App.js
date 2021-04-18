@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import './App.sass'
 import { connect } from 'react-redux'
@@ -12,12 +12,8 @@ import Auth from './pages/Auth'
 import Loading from './components/UI/Loading'
 
 function App(props) {
-  const [loader, setLoader] = useState(true)
-  useEffect(() => {
-    if(props.isLoaded) {
-      setLoader(false)
-    }
-  }, [props])
+
+  useEffect(() => {}, [props.isAuthenticated, props.isLoaded])
 
   var routers = (
     <Switch>
@@ -45,24 +41,18 @@ function App(props) {
     )
   }
 
-  if (loader) {
-    return <Loading />
-  } else if (!loader && !props.isAuthenticated && !props.username) {
-    return <Loading />
-  } else {
+    if (!props.isLoaded) return <Loading />
     return (
       <Layout>
         { routers }
       </Layout>
     )
-  }
 }
 
 function mapStateToProps(state) {
   return {
     isAuthenticated: state.firebase.auth.isEmpty,
-    isLoaded: state.firebase.auth.isLoaded,
-    username: state.firebase.auth.displayName
+    isLoaded: state.firebase.auth.isLoaded
   }
 }
 

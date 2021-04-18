@@ -12,7 +12,9 @@ export function loadProfile(username) {
 				if (querySnapshot.exists) return dispatch({ type: PROFILE_NOT_FOUND })
 				querySnapshot.forEach((user) => {
 					if (user.exists) {
-						dispatch(loadProfileDataSuccess(user.data()))
+						let data = user.data()
+						data.uid = user.id
+						dispatch(loadProfileDataSuccess(data))
 					} else {
 						dispatch({ type: PROFILE_NOT_FOUND })
 					}
@@ -53,6 +55,7 @@ export function clearPhoto() {
 export function loadProfileDataSuccess(data) {
 	return {
 		type: LOAD_PROFILE_SUCCESS,
+		uid: data.uid,
 		username: data.username,
 		blogname: data.blogname,
 		photoURL: data.photoURL || null,

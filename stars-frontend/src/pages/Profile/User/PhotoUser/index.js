@@ -130,19 +130,19 @@ function Photo(props) {
 			) : null}
 			<ViewPhoto blogname={props.blogname} image={image} view={showModal} onClose={() => closeModalHandler()} />
 			<div className="photo-user__img-block">
-				{!props.photoURL ? (
+				{ !props.photoURL ? (
 					<img alt="" src="/img/defaultPhoto.svg" />
 				) : (
 					<img className="photo-user__img" alt="" src={props.photoURL} onClick={() => clickImageHandler()} />
-				)}
+				) }
 			</div>
-			{props.username === props.authUser ? (
+			{ props.username === props.authUser ? (
 				<button ref={buttonUpdateRef} className="photo-user__update" onClick={() => updatePhotoHandler()}>
 					<FontAwesomeIcon icon="camera" />
 					Обновить фото
 				</button>
-			) : null}
-			{showMenu ? (
+			) : null }
+			{ showMenu ? (
 				<ul className="photo-user__menu">
 					<li>
 						<button className="photo-user__replace" onClick={() => clickInputHandler()}>
@@ -155,13 +155,13 @@ function Photo(props) {
 							ref={inputImageRef}
 						/>
 					</li>
-					{props.photoURL ? (
+					{ props.photoURL ? (
 						<li>
 							<button className="photo-user__remove" onClick={() => setShowWarning(!showWarning)}>
 								Удалить фото
 							</button>
 						</li>
-					) : null}
+					) : null }
 				</ul>
 			) : null}
 		</div>

@@ -8,24 +8,12 @@ import FetchingPosts from '../../components/FetchingPosts'
 import './Profile.sass'
 
 const Profile = (props) => {
-	const [ loadData, setLoadData ] = useState(true)
 	const [ active, setActive ] = useState('posts')
 
 	useEffect(() => {
-		return () => {
-			setLoadData(true)
-		}
-	}, [props.location])
-
-	useEffect(() => {
-		// first data load profile
-		if (!loadData) return
 		props.loadProfile(props.location.pathname.slice(9))
-		if (props.isLoaded && loadData) {
-			setLoadData(false)
-		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	},[props.isLoaded, props.username, props.location, loadData, props.photoURL])
+	},[props.location])
 
 	function renderPosts() {
 		return (
@@ -52,7 +40,7 @@ const Profile = (props) => {
 						</button>
 					</div>
 					<FetchingPosts 
-						username={props.username} 
+						uid={props.uid} 
 						reference='getUserPosts' 
 						referenceMore='getMoreUserPosts' 
 					/>
@@ -69,19 +57,21 @@ const Profile = (props) => {
 		if (id === 'likes') return setActive('likes')
 	}
 	
-	if (loadData) return <Spinner />
-	if (!!props.username && !loadData) return renderPosts()
-	if (props.username === '' && !props.isFound && !loadData) {
+
+	if (!!props.username && props.isLoaded && props.isFound) return renderPosts()
+	if (!props.isFound && props.isLoaded && !!!props.username) {
 		return (
 			<div className="container">
 				<div>Пользователь не найден</div>
 			</div>
 		)
 	}
+	return <Spinner />
 }
 
 function mapStateToProps(state) {
 	return {
+		uid: state.profile.uid,
 		posts: state.posts.posts,
 		username: state.profile.username,
 		blogname: state.profile.blogname,

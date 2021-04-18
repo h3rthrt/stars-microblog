@@ -1,32 +1,38 @@
-import React, { forwardRef } from 'react'
+import React, { forwardRef, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Post.sass'
 
 const Post = forwardRef((props, ref) => {
+	const { post } = props
+	// post.user.get().then(res => {
+	// 	const userData = res.data()
+	// 	post.blogname = userData.blogname
+	// 	post.authorPhoto = userData.photoURL
+	// })
 	return (
 		<div ref={ref} className="post">
 			<div className="post__left">
-				<img src={ props.post.userPhotoURL || '/img/defaultPhoto.svg' } alt="" className="ava" />
+				<img src={ post.authorPhoto || '/img/defaultPhoto.svg' } alt="" className="ava" />
 			</div>
 			<div className="post__right">
-				<div id={props.post.uid} className="nickname">
+				<div id={ post.uid } className="nickname">
 					<a href='/' className="nickname__list">
-						{ props.post.blogname }
+						{ post.blogname }
 					</a>
-					{ props.post.author === props.post.username 
+					{ post.author === post.username 
 						? null 
 						: (
 							<div className="author-post">
 								<FontAwesomeIcon icon="reply" className="reply" />
-								<a href="/">{props.post.author}</a>
+								<a href="/">{ post.author }</a>
 							</div>
 						) 
 					}
 				</div>
-				{ props.post.header ? (<h2>{ props.post.header }</h2>) : null  }
+				{ post.header ? (<h2>{ post.header }</h2>) : null  }
 				<div className="post__images">
 					{
-						props.post.photoURL.map((image, index) => {
+						post.photoURL?.map((image, index) => {
 							return (
 								<div className="img-box" key={index}>
 									<img alt="" src={image} />
@@ -35,14 +41,14 @@ const Post = forwardRef((props, ref) => {
 						}) || null
 					}
 				</div>
-				{ props.post.text ? (<p>{props.post.text}</p>) : null}
+				{ post.text ? (<p>{ post.text }</p>) : null}
 				<div className="footer-post">
 					<div className="footer-post__left">
-						заметки {props.post.likes}
-						{ props.post.createdAt }
+						заметки { post.likes }
+						{ post.createdAt }
 						<div className="footer-post__tags">
-							{props.post.tags ? (
-								props.post.tags.map((tag, index) => {
+							{ post.tags ? (
+								post.tags.map((tag, index) => {
 									return (
 										<a href="/" key={index}>
 											{'#' + tag}
@@ -68,6 +74,6 @@ const Post = forwardRef((props, ref) => {
 				</div>
 			</div>
 		</div>
-	);
+	)
 })
 export default Post

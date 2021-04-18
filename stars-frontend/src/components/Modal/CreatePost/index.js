@@ -11,36 +11,27 @@ function CreateNote(props) {
 	const [ validate, setValidate] = useState(false)
 	const [ image, setImage ] = useState({ images: [] })
     const [ post, setPost ] = useState({
-		author: props.username,
-		username: null,
-		userPhotoURL: null,
-		blogname: null,
         header: null,
         text: null,
 		photoURL: [],
-        tags: [],
-		data: ''
+        tags: []
     })
 
 	const closeModal = useCallback(() => {
 		props.onClose()
 		setPost(() => {
 			return {
-				author: props.username,
-				username: null,
-				userPhotoURL: null,
-				blogname: null,
 				header: null,
 				text: null,
 				photoURL: [],
-				tags: [],
-				data: ''
+				tags: []
 			}
 		})
 		setImage(() => {
 			return { images: [] }
 		})
 		props.uploadReset()
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [props]) 
 
 	useEffect(() => {
@@ -51,22 +42,16 @@ function CreateNote(props) {
 		} else {
 			setValidate(false)
 		}
-	}, [closeModal, 
-		post.header, 
-		post.text, 
-		image.images, 
-		props.blogname, 
-		props.complete
-	])
+	}, [closeModal, post.header, post.text, image.images, props.complete])
 
 	function addPostHandler() {
-		props.uploadPost(image.images, 
-						props.username, 
-						props.uid, 
-						true, 
-						post, 
-						props.blogname,
-						props.photoURL)
+		props.uploadPost(
+			image.images,
+			props.user,
+			props.uid,
+			true,
+			post
+		)
 	}
 
 	function changeHeaderHandler(ev) {
@@ -249,20 +234,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		uploadPost: (files, 
-					username, 
-					uid, 
-					forFirestore, 
-					post, 
-					blogname, 
-					userPhotoURL) => 
-						dispatch(upload(files, 
-										username, 
-										uid, 
-										forFirestore, 
-										post, 
-										blogname, 
-										userPhotoURL)),
+		uploadPost: (files, username, uid, forPosts, post) => dispatch(upload(files, username, uid, forPosts, post)),
 		uploadReset: () => dispatch(uploadReset())
 	}
 }

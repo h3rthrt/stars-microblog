@@ -7,6 +7,7 @@ import {
 } from '../actions/actionsTypes'
 
 const initialState = {
+	uid: '',
 	username: '',
 	blogname: '',
 	photoURL: '',
@@ -22,6 +23,7 @@ export default function profileReducer(state = initialState, action) {
 		case LOAD_PROFILE_SUCCESS:
 			return {
 				...state,
+				uid: action.uid,
 				username: action.username,
 				blogname: action.blogname,
 				photoURL: action.photoURL,
