@@ -40,10 +40,10 @@ function FetchingPosts(props) {
 
 	// const [seconds, setSeconds] = useState(0)
 	// const increment = useRef(null)
-	const wordForm = (num, word) => { 
-		let cases = [2, 0, 1, 1, 1, 2]
-		return word[( num % 100 > 4 && num % 100 < 20 ) ? 2 : cases[( num % 10 < 5 ) ? num % 10 : 5]]
-	}
+	// const wordForm = (num, word) => { 
+	// 	let cases = [2, 0, 1, 1, 1, 2]
+	// 	return word[( num % 100 > 4 && num % 100 < 20 ) ? 2 : cases[( num % 10 < 5 ) ? num % 10 : 5]]
+	// }
 
 	useEffect(() => {
 		if (props.location.pathname === props.pathname) return

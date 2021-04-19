@@ -25,10 +25,11 @@ export function upload(files, username, uid, forPosts = false, post) {
 					dispatch(notification('Danger', titleDanger, error.message))
 				})
 		}
+		// if post with images
 		files.forEach((file) => {
 			const user = firebase.auth().currentUser
 			const storagePath = `${username}/${!forPosts ? 'profilePhoto' : 'media'}`
-			const dbPath = 'users'
+			const dbPath = !forPosts ? 'users' : `users/${uid}/media`
 			if (forPosts) file = file.file
 			firebase.uploadFile(storagePath, file, dbPath, {
 				metadataFactory: (uploadRes, firebase, metadata, downloadURL) => {
@@ -43,9 +44,9 @@ export function upload(files, username, uid, forPosts = false, post) {
 						return { photoURL: downloadURL }
 					} else {
 						post.photoURL.push(downloadURL)
-						return { media: firestore.FieldValue.arrayUnion(downloadURL) }
+						return { photoURL: downloadURL }
 					}
-				}, documentId: user.uid
+				}, documentId: !forPosts && user.uid
 			})
 			.then(() => {
 				totalEach++

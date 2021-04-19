@@ -134,16 +134,10 @@ function Auth(props) {
     )
 }
 
-function mapStateToProps(state) {
-    return {
-
-    }
-}
-
 function mapDispatchToProps(dispatch) {
     return {
         signIn: (email, password, isLogin) => dispatch(signIn(email, password, isLogin))
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Auth)
+export default connect(null, mapDispatchToProps)(Auth)

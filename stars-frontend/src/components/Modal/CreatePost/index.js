@@ -24,7 +24,8 @@ function CreateNote(props) {
 				header: null,
 				text: null,
 				photoURL: [],
-				tags: []
+				tags: [],
+				notes: 0
 			}
 		})
 		setImage(() => {

@@ -103,15 +103,15 @@ function CreateAcc(props) {
             const control = formControls[controlName]
             return (
                 <Input 
-                key={index}
-                type={control.type}
-                value={control.value}
-                valid={control.valid}
-                touched={control.touched}
-                placeholder={control.placeholder} 
-                shouldValidate={!!control.validation}
-                errorMessage={control.errorMessage}
-                onChange={event => onChangeHandler(event, controlName)}
+                    key={index}
+                    type={control.type}
+                    value={control.value}
+                    valid={control.valid}
+                    touched={control.touched}
+                    placeholder={control.placeholder} 
+                    shouldValidate={!!control.validation}
+                    errorMessage={control.errorMessage}
+                    onChange={event => onChangeHandler(event, controlName)}
                 />
             )
         })

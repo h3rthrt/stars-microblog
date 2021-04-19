@@ -14,9 +14,6 @@ export function signIn(email, password, isLogin, name, blogname) {
 			email: email,
 			photoURL: null,
 			desc: null,
-			followers: [],
-			following: [],
-			media: [],
 			theme: false
 		}
 
@@ -40,28 +37,6 @@ export function signIn(email, password, isLogin, name, blogname) {
 							dispatch({ type: LOGIN_CLEAR })
 						})
 					})
-					// .then(function() {
-					// 	firebase.ref('users/' + user.uid).set({
-					// 		username: name,
-					// 		blogname: blogname,
-					// 		email: email,
-					// 		photoURL: null,
-					// 		desc: null,
-					// 		followers: [],
-					// 		following: [],
-					// 		media: [],
-					//		theme: false
-					// 	}, () => {
-					// 		firebase.updateAuth({
-					// 			'displayName': name
-					// 		})
-					// 		dispatch(loginSuccess())
-					// 	})
-					
-					// }).catch(function(error) {
-					// 	dispatch(notification('Danger', title, error.message))
-					// 	dispatch({ type: LOGIN_CLEAR })
-					// })
 				})
 				.catch((error) => {
 					dispatch(notification('Danger', title, error.message))

@@ -1,34 +1,27 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Settings.sass'
 import { connect } from 'react-redux'
 import { signOut } from '../../redux/actions/authActions'
-import { loadProfile, clearPhoto } from '../../redux/actions/profileActions'
+import { clearPhoto } from '../../redux/actions/profileActions'
+import { setTheme } from '../../redux/actions/settingsAction'
 import Spinner from '../../components/UI/Spinner'
 import PhotoUser from '../Profile/User/PhotoUser'
 
 function Settings(props) {
 
-    function setDataTheme() {
-        const html = document.documentElement
-        if(html.getAttribute('data-theme') !== 'white') {
-            html.setAttribute('data-theme', 'white')
-        } else {
-            html.removeAttribute('data-theme', 'white')
-        }
-    }
-
     const buttons = [
-        {icon: 'palette', text: 'Сменить цветовую тему', onClick: () => setDataTheme()},
+        {icon: 'palette', text: 'Сменить цветовую тему', onClick: () => props.setTheme(props.uid, props.theme)},
         {icon: 'user', text: 'Сведения об учетной записи'},
         {icon: 'key', text: 'Изменение пароля'},
         {icon: 'heart-broken', text: 'Отключить свою учетную запись'},
         {icon: 'sign-out-alt', text: 'Выйти с аккаунта', onClick: () => props.signOut()}
     ]
 
-    useEffect(() => {
-        props.loadProfile(props.username)
-    })
+    // useEffect(() => {
+    //     props.loadProfile(props.username)
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [])
     
     function renderButtons() {
         return buttons.map((item, index) => {
@@ -67,7 +60,8 @@ function mapStateToProps(state) {
         uid: state.firebase.auth.uid,
         blogname: state.firebase.profile.blogname,
         username: state.firebase.auth.displayName,
-        isLoaded: state.firebase.profile.isLoaded
+        isLoaded: state.firebase.profile.isLoaded,
+        theme: state.firebase.profile.theme
     }
     
 }
@@ -75,8 +69,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return{
         signOut: () => dispatch(signOut()),
-        loadProfile: (username) => dispatch(loadProfile(username)),
-        clearPhoto: () => dispatch(clearPhoto())
+        clearPhoto: () => dispatch(clearPhoto()),
+        setTheme: (uid, theme) => dispatch(setTheme(uid, theme))
     }
 }
 

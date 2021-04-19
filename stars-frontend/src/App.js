@@ -13,7 +13,19 @@ import Loading from './components/UI/Loading'
 
 function App(props) {
 
-  useEffect(() => {}, [props.isAuthenticated, props.isLoaded])
+  useEffect(() => {
+    defineTheme()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.isAuthenticated, props.isLoaded, props.isLoadedProfile, props.theme])
+
+  function defineTheme() {
+    const html = document.documentElement
+    if (props.theme) {
+      html.setAttribute('data-theme', 'white')
+    } else {
+      html.removeAttribute('data-theme', 'white')
+    }
+  }
 
   var routers = (
     <Switch>
@@ -52,8 +64,10 @@ function App(props) {
 function mapStateToProps(state) {
   return {
     isAuthenticated: state.firebase.auth.isEmpty,
-    isLoaded: state.firebase.auth.isLoaded
+    isLoaded: state.firebase.auth.isLoaded,
+    isLoadedProfile: state.firebase.profile.isLoaded,
+    theme: state.firebase.profile.theme
   }
 }
 
-export default connect(mapStateToProps, null)(withRouter(App))
+export default connect(mapStateToProps)(withRouter(App))
