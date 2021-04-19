@@ -11,9 +11,9 @@ import notification from './notificationActions'
 async function getPostData(doc, collection) {
 	let dataPost = doc.data()
 	dataPost.uid = doc.id
-	dataPost.createdAt = dataPost.createdAt.toDate().toDateString() + 
-					' at ' + 
-					dataPost.createdAt.toDate().toLocaleTimeString('ru-RU')
+	dataPost.createdAt = dataPost.createdAt.toDate().toLocaleDateString('ru-RU') + 
+						' ' + 
+						dataPost.createdAt.toDate().toLocaleTimeString('ru-RU')
 	await collection.doc(dataPost.user.id).get().then(async doc => {
 		let docData = await doc.data()
 		dataPost.blogname = docData.blogname

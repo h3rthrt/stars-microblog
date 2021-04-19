@@ -10,8 +10,8 @@ const Post = forwardRef((props, ref) => {
 				<img src={ post.authorPhoto || '/img/defaultPhoto.svg' } alt="" className="ava" />
 			</div>
 			<div className="post__right">
-				<div id={ post.uid } className="nickname">
-					<a href='/' className="nickname__list">
+				<div id={ post.uid } className="blogname">
+					<a href='/' className="blogname__list">
 						{ post.blogname }
 					</a>
 					{ post.author === post.username 
@@ -23,6 +23,7 @@ const Post = forwardRef((props, ref) => {
 							</div>
 						) 
 					}
+					<span>{ post.createdAt }</span>
 				</div>
 				{ post.header ? (<h2>{ post.header }</h2>) : null  }
 				<div className="post__images">
@@ -39,8 +40,7 @@ const Post = forwardRef((props, ref) => {
 				{ post.text ? (<p>{ post.text }</p>) : null}
 				<div className="footer-post">
 					<div className="footer-post__left">
-						заметки { post.likes }
-						{ post.createdAt }
+						заметки { post.notes || 0 }
 						<div className="footer-post__tags">
 							{ post.tags ? (
 								post.tags.map((tag, index) => {
