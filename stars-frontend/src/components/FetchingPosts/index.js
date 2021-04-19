@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
+import { CLEAR_POSTS } from '../../redux/actions/actionsTypes'
 import 
 	{	getUserPosts, 
 		getMoreUserPosts, 
@@ -45,7 +47,8 @@ function FetchingPosts(props) {
 	}
 
 	useEffect(() => {
-		getRefFunction(props.uid)
+		if (props.location.pathname === props.pathname) return
+		getRefFunction(props.uid, props.location.pathname)
 		// increment.current = setInterval(() => {
 		// 	setSeconds((prev) => prev + 1)
 		// }, 1000)
@@ -96,16 +99,18 @@ function mapStateToProps(state) {
 		lastPost: state.posts.lastPost,
 		complete: state.posts.complete,
 		isFetching: state.posts.isFetching,
-		displayName: state.firebase.auth.displayName
+		displayName: state.firebase.auth.displayName,
+		pathname: state.posts.pathname
 	}
 }
 
 function mapDispatchToProps(dispatch) {
 	return {
-		getUserPosts: (uid) => dispatch(getUserPosts(uid)),
+		clearPosts: () => dispatch({ type: CLEAR_POSTS }),
+		getUserPosts: (uid, pathname) => dispatch(getUserPosts(uid, pathname)),
 		getMoreUserPosts: (uid, lastPost) => dispatch(getMoreUserPosts(uid, lastPost)),
 		getUserLikePosts: (username) => dispatch(getUserLikePosts(username))
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(FetchingPosts)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(FetchingPosts))

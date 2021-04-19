@@ -43,6 +43,7 @@ const Profile = (props) => {
 						uid={props.uid} 
 						reference='getUserPosts' 
 						referenceMore='getMoreUserPosts' 
+						pathname={ props.location.pathname }
 					/>
 				</div>
 				<div className="container__right">

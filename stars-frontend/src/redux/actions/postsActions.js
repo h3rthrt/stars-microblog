@@ -1,10 +1,12 @@
 import { 
 	LOAD_POSTS_COMPLETE, 
 	LOAD_POSTS_SUCCESS,
+	LOAD_MORE_POSTS_SUCCESS,
 	LOAD_ADDED_POSTS_SUCCESS, 
 	SET_IS_FETCHING,
 	CLEAR_POSTS
 } from "./actionsTypes"
+import notification from './notificationActions'
 
 async function getPostData(doc, collection) {
 	let dataPost = doc.data()
@@ -20,37 +22,39 @@ async function getPostData(doc, collection) {
 	return dataPost
 }
 
-export function getUserPosts(uid) {
+export function getUserPosts(uid, pathname) {
 	return async (dispatch, getState, {getFirebase, getFirestore}) => {
-		dispatch({type: CLEAR_POSTS})
+		dispatch({ type: CLEAR_POSTS })
 		dispatch({isFetching: true, type: SET_IS_FETCHING})
 		let loaded = false
 		const firestore = getFirestore()
-		const reference = firestore.collection('users').doc(uid)
+		const collection = firestore.collection('users')
 		let lastPost
 		firestore.collection("posts")
-			.where('user', '==', reference)
+			.where('user', '==', collection.doc(uid))
 			.orderBy("createdAt", "desc")
 			.limit(5)
 			.onSnapshot(async (querySnapshot) => {
 				if (loaded) {
-					Promise.all(querySnapshot.docChanges().docs.map(async (change) => {
-						if (change.type === 'added') {
-							let userRef = firestore.collection('users')
-							return await getPostData(change.doc, userRef)
-						}
+					// view changes
+					Promise.all(querySnapshot.docChanges().map((change) => {
+						if (change.type === 'added') return getPostData(change.doc, collection)
 					})).then((notes) => {
 						dispatch({posts: notes, type: LOAD_ADDED_POSTS_SUCCESS})
+					}).catch((err) => {
+						dispatch(notification('Danger', 'Ошибка загрузки постов пользователя.', `${err}`))
 					})
 				} else if (!loaded) {
-					Promise.all(querySnapshot.docs.map(async (doc) => {
-						let userRef = firestore.collection('users')
-						return await getPostData(doc, userRef)
+					// first fetching posts
+					Promise.all(querySnapshot.docs.map((doc) => {
+						return getPostData(doc, collection)
 					})).then((notes) => {
 						loaded = true
 						lastPost = querySnapshot.docs[querySnapshot.docs.length - 1]
-						dispatch(addPosts(notes, lastPost, LOAD_POSTS_SUCCESS))
+						dispatch(addPosts(notes, lastPost, pathname))
 						dispatch({isFetching: false, type: SET_IS_FETCHING})
+					}).catch((err) => {
+						dispatch(notification('Danger', 'Ошибка загрузки постов пользователя.', `${err}`))
 					})
 				}
 			})
@@ -79,7 +83,7 @@ export function getMoreUserPosts(uid, lastPost) {
 						dispatch({type: LOAD_POSTS_COMPLETE})
 						dispatch({isFetching: false, type: SET_IS_FETCHING})
 					} else {
-						dispatch(addPosts(notes, lastNote, LOAD_POSTS_SUCCESS))
+						dispatch(addMorePosts(notes, lastNote))
 						dispatch({isFetching: false, type: SET_IS_FETCHING})
 					}
 				})
@@ -108,11 +112,19 @@ export function getUserLikePosts(username, length) {
 	}
 }
 
-function addPosts(notes, lastNote, type) {
+function addPosts(notes, lastNote, pathname) {
 	return {
 		posts: notes,
 		lastPost: lastNote,
-		type: type
+		pathname: pathname,
+		type: LOAD_POSTS_SUCCESS
 	}
 }
 
+function addMorePosts(notes, lastNote) {
+	return {
+		posts: notes,
+		lastPost: lastNote,
+		type: LOAD_MORE_POSTS_SUCCESS
+	}
+}
