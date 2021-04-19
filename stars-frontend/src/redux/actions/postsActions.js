@@ -37,10 +37,15 @@ export function getUserPosts(uid, pathname) {
 			.onSnapshot(async (querySnapshot) => {
 				if (loaded) {
 					// view changes
-					Promise.all(querySnapshot.docChanges().map((change) => {
-						if (change.type === 'added') return getPostData(change.doc, collection)
+					Promise.all(querySnapshot.docChanges().map(async (change) => {
+						if (change.type === 'added') {
+							return await getPostData(change.doc, collection)
+						} 
 					})).then((notes) => {
-						dispatch({posts: notes, type: LOAD_ADDED_POSTS_SUCCESS})
+						notes.shift()
+						if (!!notes) {
+							dispatch({posts: notes, type: LOAD_ADDED_POSTS_SUCCESS})
+						}
 					}).catch((err) => {
 						dispatch(notification('Danger', 'Ошибка загрузки постов пользователя.', `${err}`))
 					})
@@ -78,7 +83,6 @@ export function getMoreUserPosts(uid, lastPost) {
 				})).then((notes) => {
 					const lastNote = querySnapshot.docs[querySnapshot.docs.length - 1]
 					notes.shift()
-
 					if (!!!notes.length) {
 						dispatch({type: LOAD_POSTS_COMPLETE})
 						dispatch({isFetching: false, type: SET_IS_FETCHING})

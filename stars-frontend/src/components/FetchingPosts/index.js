@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { CLEAR_POSTS } from '../../redux/actions/actionsTypes'
 import 
 	{	getUserPosts, 
 		getMoreUserPosts, 
@@ -106,7 +105,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		clearPosts: () => dispatch({ type: CLEAR_POSTS }),
 		getUserPosts: (uid, pathname) => dispatch(getUserPosts(uid, pathname)),
 		getMoreUserPosts: (uid, lastPost) => dispatch(getMoreUserPosts(uid, lastPost)),
 		getUserLikePosts: (username) => dispatch(getUserLikePosts(username))
