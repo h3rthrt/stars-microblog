@@ -47,7 +47,7 @@ function CreateNote(props) {
 	function addPostHandler() {
 		props.uploadPost(
 			image.images,
-			props.user,
+			props.username,
 			props.uid,
 			true,
 			post

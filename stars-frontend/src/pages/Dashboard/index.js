@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import Post from '../../components/Post'
 import Tags from '../../components/PopularTags'
 import CreateNote from '../../components/Modal/CreatePost'
 import './Dashboard.sass'
@@ -12,12 +11,6 @@ function Dashboard(props) {
 	useEffect(() => {
 
 	}, [props.blogname])
-
-	function renderPosts() {
-		return props.postsList.map((post, index) => {
-			return <Post key={index} list={post} />
-		})
-	}
 
 	return (
 		<div className="container container__main">
@@ -58,8 +51,6 @@ function Dashboard(props) {
 
 function mapStateToProps(state) {
 	return {
-		
-		// postsList: state.posts.postsList,
 		blogname: state.firebase.profile.blogname,
 		username: state.firebase.auth.displayName,
 		uid: state.firebase.auth.uid,
