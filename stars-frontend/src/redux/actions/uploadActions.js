@@ -66,7 +66,6 @@ export function upload(files, username, uid, forPosts = false, post) {
 				}
 			})
 			.catch((err) => {
-				console.log(err)
 				dispatch(notification('Danger', titleDanger, `Ошибка загрузки медиа на сервер. ${err}`))
 			})
 		})

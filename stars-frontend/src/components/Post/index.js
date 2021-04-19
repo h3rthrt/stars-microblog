@@ -1,9 +1,16 @@
 import React, { forwardRef, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { getFirestore } from 'redux-firestore'
 import './Post.sass'
 
 const Post = forwardRef((props, ref) => {
 	const { post } = props
+	// const firestore = getFirestore()
+	// firestore.collection('users').doc(post.user.id).get().then(doc => {
+	// 	let docData = doc.data()
+	// 	post.blogname = docData.blogname
+	// 	post.authorPhoto = docData.photoURL
+	// })
 	// post.user.get().then(res => {
 	// 	const userData = res.data()
 	// 	post.blogname = userData.blogname
