@@ -13,6 +13,7 @@ export function upload(files, username, uid, forPosts = false, post) {
 		if(forPosts) {
 			post.user = firestore.doc('users/' + uid)
 			post.createdAt = firestore.Timestamp.now()
+			post.notes = 0
 			// if post without images
 			if(files.length === 0)
 				firestore.collection('posts').add(post)
@@ -53,7 +54,7 @@ export function upload(files, username, uid, forPosts = false, post) {
 				if(forPosts && totalEach === files.length) {
 					firestore.collection('posts').add(post)
 						.then(() => {
-							dispatch(notification('Success', titleSuccess, 'Ура!'))
+							dispatch(notification('Success', 'Успешно', titleSuccess))
 							dispatch(uploadComplete(true))
 							dispatch(uploadOnProgress(false))
 						})
@@ -61,7 +62,7 @@ export function upload(files, username, uid, forPosts = false, post) {
 							dispatch(notification('Danger', titleDanger, error.message))
 						})
 				} else if (!forPosts) {
-					dispatch(notification('Success', 'Успешно!', 'Изображение профиля успешно изменено.'))
+					dispatch(notification('Success', 'Успешно', 'Изображение профиля успешно изменено'))
 					dispatch(uploadComplete(true))
 					dispatch(uploadOnProgress(false))
 				}

@@ -65,7 +65,7 @@
                 a
                     text-decoration: none
                     color: var(--gray)
-            > span 
+            > span
                 margin-left: auto
     &__create
         background: none
@@ -102,6 +102,16 @@
             svg
                 width: 24px
                 height: 24px
+            &--active
+                animation: 0.3s ease-in-out backwards liked
+                cursor: pointer
+                stroke: var(--text-color)
+                margin-left: 14px
+                svg
+                    width: 24px
+                    height: 24px
+                    path
+                        fill: var(--red)
     h2
         padding: 4px 12px
     p
@@ -109,3 +119,12 @@
 
 @keyframes fadeIn
     @include fadeInKeyframes
+
+@keyframes liked
+    0%
+        transform: scale(1)
+    50%
+        transform: scale(1.1)
+    100%
+        transform: scale(1)
+        

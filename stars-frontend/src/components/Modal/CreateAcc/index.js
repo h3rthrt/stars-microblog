@@ -112,6 +112,7 @@ function CreateAcc(props) {
                     shouldValidate={!!control.validation}
                     errorMessage={control.errorMessage}
                     onChange={event => onChangeHandler(event, controlName)}
+                    spanClassName={'modal-input'}
                 />
             )
         })

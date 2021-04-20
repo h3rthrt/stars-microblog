@@ -15,6 +15,11 @@ const Profile = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	},[props.location])
 
+	function activeBtn(id) {
+		if (id === 'posts') return setActive('posts')
+		if (id === 'likes') return setActive('likes')
+	}
+
 	function renderPosts() {
 		return (
 			<div className="container container__main">
@@ -22,7 +27,7 @@ const Profile = (props) => {
 					<div className="select-type">
 						<button
 							id="posts"
-							className={active === 'posts' ? 'active' : ''}
+							className={ active === 'posts' ? 'active' : '' }
 							onClick={() => {
 								activeBtn('posts')
 							}}
@@ -31,7 +36,7 @@ const Profile = (props) => {
 						</button>
 						<button
 							id="likes"
-							className={active === 'likes' ? 'active' : ''}
+							className={ active === 'likes' ? 'active' : '' }
 							onClick={() => {
 								activeBtn('likes')
 							}}
@@ -41,9 +46,8 @@ const Profile = (props) => {
 					</div>
 					<FetchingPosts 
 						uid={props.uid} 
-						reference='getUserPosts' 
-						referenceMore='getMoreUserPosts' 
-						pathname={ props.location.pathname }
+						reference={ active === 'posts' ? 'getUserPosts' : 'getUserLikePosts' } 
+						referenceMore={ active === 'posts' ? 'getMoreUserPosts' : 'getMoreUserLikePosts' }  
 					/>
 				</div>
 				<div className="container__right">
@@ -52,13 +56,7 @@ const Profile = (props) => {
 			</div>
 		)
 	}
-
-	function activeBtn(id) {
-		if (id === 'posts') return setActive('posts')
-		if (id === 'likes') return setActive('likes')
-	}
 	
-
 	if (!!props.username && props.isLoaded && props.isFound) return renderPosts()
 	if (!props.isFound && props.isLoaded && !!!props.username) {
 		return (

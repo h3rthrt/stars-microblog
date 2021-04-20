@@ -15,9 +15,9 @@ function FetchingPosts(props) {
 
 	const references = [
 		//get posts 
-		[ props.getUserPosts ], 
+		[ props.getUserPosts, props.getUserLikePosts ], 
 		//get more posts 
-		[ props.getMoreUserPosts ] 
+		[ props.getMoreUserPosts, props.getMoreUserLikePosts ] 
 	]
 
 	let getRefFunction = () => {}
@@ -37,29 +37,12 @@ function FetchingPosts(props) {
 		props.lastPost,
 		props.complete
 	)
-
-	// const [seconds, setSeconds] = useState(0)
-	// const increment = useRef(null)
-	// const wordForm = (num, word) => { 
-	// 	let cases = [2, 0, 1, 1, 1, 2]
-	// 	return word[( num % 100 > 4 && num % 100 < 20 ) ? 2 : cases[( num % 10 < 5 ) ? num % 10 : 5]]
-	// }
-
+	
 	useEffect(() => {
-		if (props.location.pathname === props.pathname) return
-		getRefFunction(props.uid, props.location.pathname)
-		// increment.current = setInterval(() => {
-		// 	setSeconds((prev) => prev + 1)
-		// }, 1000)
+		getRefFunction(props.uid)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
+	}, [props.reference])
 
-	// useEffect(() => {
-	// 	if (props.complete) clearInterval(increment.current)
-	// 	return () => {
-	// 		clearInterval(increment.current)
-	// 	}
-	// }, [props.complete])
 	return (
 		<div className="fetch-posts" style={{marginTop: 28}}>
 			{ 
@@ -73,17 +56,6 @@ function FetchingPosts(props) {
 				})
 			}
 			{ props.isFetching && !props.complete && <p>Загрузка...</p> }
-			{/* { 
-				props.complete && !!props.posts.length && !props.isFetching &&
-				<p>Ты просмотрел весь контент за 
-					{ 
-						` ${seconds} ${wordForm(seconds, ['секунда', 'секунды', 'секунд'])}. ` 
-					} 
-					{ 
-						seconds <= 5 ? 'Спидран выполнен..' : 'Неплохо.'
-					}
-				</p> 
-			} */}
 			{ 
 				!!!props.posts.length && !props.isFetching &&
 					<center><h3>Тут пусто, но это пока временно...</h3></center> 
@@ -98,16 +70,16 @@ function mapStateToProps(state) {
 		lastPost: state.posts.lastPost,
 		complete: state.posts.complete,
 		isFetching: state.posts.isFetching,
-		displayName: state.firebase.auth.displayName,
-		pathname: state.posts.pathname
+		displayName: state.firebase.auth.displayName
 	}
 }
 
 function mapDispatchToProps(dispatch) {
 	return {
-		getUserPosts: (uid, pathname) => dispatch(getUserPosts(uid, pathname)),
+		getUserPosts: (uid) => dispatch(getUserPosts(uid)),
 		getMoreUserPosts: (uid, lastPost) => dispatch(getMoreUserPosts(uid, lastPost)),
-		getUserLikePosts: (username) => dispatch(getUserLikePosts(username))
+		getUserLikePosts: (uid) => dispatch(getUserLikePosts(uid)),
+		getMoreUserLikePosts: (uid, lastPost) => dispatch(getMoreUserLikePosts(uid, lastPost))
 	}
 }
 

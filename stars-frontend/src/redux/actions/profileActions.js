@@ -23,26 +23,6 @@ export function loadProfile(username) {
 			.catch((err) => {
 				dispatch(notification('Danger', err.code, err.message))
 			})
-
-		// firebase.ref().child('users')
-		// .orderByChild('username').equalTo(username)
-		// 	.on('child_added', (snapshot) => {
-		// 		const data = snapshot.val()
-		// 		let photoURL = null
-		// 		snapshot.ref
-		// 		.child('photoURL')
-		// 		.on('child_added', (snapshot) => {
-		// 			photoURL = Object.values(snapshot.val()).toString()	
-		// 		})
-		// 		const newData = JSON.parse(
-		// 			JSON.stringify(data),
-		// 			(key, value) => key === 'photoURL' ? photoURL : value
-		// 		)
-		// 		dispatch(loadProfileDataSuccess(newData))
-		// 	}, (error) => {
-		// 		dispatch(notification('Danger', error.code, error.message))
-		// 		dispatch(loadProfileDataError(error))
-		// 	})
 	}
 }
 
