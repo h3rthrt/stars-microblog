@@ -51,7 +51,7 @@ const Profile = (props) => {
 					/>
 				</div>
 				<div className="container__right">
-					<User username={props.username} blogname={props.blogname} photoURL={props.photoURL} />
+					<User username={props.username} blogname={props.blogname} photoURL={props.photoURL} media={props.media} />
 				</div>
 			</div>
 		)

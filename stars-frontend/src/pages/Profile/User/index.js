@@ -21,23 +21,23 @@ function User(props) {
                     <h2>Блоги</h2>
                     <hr/>
                     <div className="subs-block">
-                        {/* <a href="/">{props.subscriptions.length} в читаемых</a>
-                        <a href="/">{props.followers.length} читателя</a> */}
+                        <a href="/">{ props.following || 0 } в читаемых</a>
+                        <a href="/">{ props.followers || 0 } читателя</a>
                     </div>
                 </div>
                 <div className="right-block__media">
                     <h2>Медиа</h2>
                     <hr/>
                     <div className="media-list">
-                    {/* { 
-                        item.media.map((media, index) => {
+                    { 
+                        props.media.map((media, index) => {
                             return (
-                                <a alt="" href="/" key={index}>
-                                    <img alt="" src={media} key={index} />
+                                <a alt="" href="/" key={ index }>
+                                    <img alt="" src={ media.photoURL } key={ index } />
                                 </a>
                             )
                         }) 
-                    } */}
+                    }
                     </div>
                 </div>
             </div>
