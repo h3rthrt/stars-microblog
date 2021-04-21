@@ -19,6 +19,7 @@ async function getPostData(doc, usersCollection, postsCollection, likesCollectio
 		let docData = await doc.data()
 		dataPost.blogname = docData.blogname
 		dataPost.authorPhoto = docData.photoURL
+		dataPost.username = docData.username
 	})
 	await likesCollection.where('userRef', '==', usersCollection.doc(userId)).where('postRef', '==', postsCollection.doc(doc.id)).get().then(async (doc) => {
 		doc.forEach((snapshot) => {
@@ -30,8 +31,8 @@ async function getPostData(doc, usersCollection, postsCollection, likesCollectio
 
 export function getUserPosts(uid, userId) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
-		dispatch({ type: CLEAR_POSTS })
 		dispatch({ isFetching: true, type: SET_IS_FETCHING })
+		dispatch(clear())
 		let loaded = false
 		const firestore = getFirestore()
 		let usersCollection = firestore.collection('users')
@@ -42,7 +43,7 @@ export function getUserPosts(uid, userId) {
 			.collection('posts')
 			.where('user', '==', usersCollection.doc(uid))
 			.orderBy('createdAt', 'desc')
-			.limit(15)
+			.limit(10)
 			.onSnapshot(async (querySnapshot) => {
 				if (loaded) {
 					// view changes
@@ -95,7 +96,7 @@ export function getMoreUserPosts(uid, lastPost, userId) {
 			.where('user', '==', usersCollection.doc(uid))
 			.orderBy('createdAt', 'desc')
 			.startAt(lastPost)
-			.limit(15)
+			.limit(10)
 			.get()
 			.then((querySnapshot) => {
 				Promise.all(
@@ -119,8 +120,8 @@ export function getMoreUserPosts(uid, lastPost, userId) {
 
 export function getUserLikePosts(uid, userId) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
-		dispatch({ type: CLEAR_POSTS })
 		dispatch({ isFetching: true, type: SET_IS_FETCHING })
+		dispatch(clear())
 		const firestore = getFirestore()
 		let usersCollection = firestore.collection('users')
 		let postsCollection = firestore.collection('posts')
@@ -128,7 +129,7 @@ export function getUserLikePosts(uid, userId) {
 		let lastPost
 		likesCollection.where('userRef', '==', usersCollection.doc(uid))
 			.orderBy('likedAt', 'desc')
-			.limit(15)
+			.limit(10)
 			.get()
 			.then((querySnapshot) => {
 			Promise.all(querySnapshot.docs.map(async (doc) => {
@@ -167,7 +168,7 @@ export function getMoreUserLikePosts(uid, lastPost, userId) {
 		likesCollection.where('userRef', '==', usersCollection.doc(uid))
 			.orderBy('likedAt', 'desc')
 			.startAt(lastPost)
-			.limit(15)
+			.limit(10)
 			.get()
 			.then((querySnapshot) => {
 			Promise.all(querySnapshot.docs.map(async (doc) => {
@@ -195,8 +196,8 @@ export function getMoreUserLikePosts(uid, lastPost, userId) {
 
 export function getAllPosts(uid = null, userId) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
-		dispatch({ type: CLEAR_POSTS })
 		dispatch({ isFetching: true, type: SET_IS_FETCHING })
+		dispatch(clear())
 		let loaded = false
 		const firestore = getFirestore()
 		let usersCollection = firestore.collection('users')
@@ -206,7 +207,7 @@ export function getAllPosts(uid = null, userId) {
 		firestore
 			.collection('posts')
 			.orderBy('createdAt', 'desc')
-			.limit(15)
+			.limit(10)
 			.onSnapshot(async (querySnapshot) => {
 				if (loaded) {
 					// view changes
@@ -258,7 +259,7 @@ export function getMoreAllPosts(uid = null, lastPost, userId) {
 			.collection('posts')
 			.orderBy('createdAt', 'desc')
 			.startAt(lastPost)
-			.limit(15)
+			.limit(10)
 			.get()
 			.then((querySnapshot) => {
 				Promise.all(
@@ -293,5 +294,11 @@ function addMorePosts(notes, lastNote) {
 		posts: notes,
 		lastPost: lastNote,
 		type: LOAD_MORE_POSTS_SUCCESS
+	}
+}
+
+function clear() {
+	return {
+		type: CLEAR_POSTS
 	}
 }

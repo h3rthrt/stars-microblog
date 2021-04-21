@@ -1,4 +1,5 @@
 import React, { useState, forwardRef } from 'react'
+import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PostButtons from './PostButtons'
 import './Post.sass'
@@ -9,7 +10,7 @@ const Post = forwardRef((props, ref) => {
 		let cases = [2, 0, 1, 1, 1, 2]
 		return word[( num % 100 > 4 && num % 100 < 20 ) ? 2 : cases[( num % 10 < 5 ) ? num % 10 : 5]]
 	}
-	const [ notes, setNotes ] = useState(post.notes)
+	const [ notes, setNotes ] = useState(post.notes || 0)
 
 	return (
 		<div ref={ref} className="post">
@@ -18,17 +19,17 @@ const Post = forwardRef((props, ref) => {
 			</div>
 			<div className="post__right">
 				<div id={ post.userId } className="blogname">
-					<a href='/' className="blogname__list">
+					<Link to={`/profile/${post.username}`} className="blogname__list">
 						{ post.blogname }
-					</a>
-					{ post.author === post.username 
-						? null 
-						: (
+					</Link>
+					{ post.author 
+						?  (
 							<div className="author-post">
 								<FontAwesomeIcon icon="reply" className="reply" />
 								<a href="/">{ post.author }</a>
 							</div>
 						) 
+						: null
 					}
 					<span>{ post.createdAt }</span>
 				</div>

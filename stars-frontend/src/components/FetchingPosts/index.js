@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import { CLEAR_POSTS } from '../../redux/actions/actionsTypes'
 import 
 	{	getUserPosts, 
 		getMoreUserPosts, 
@@ -42,9 +43,10 @@ function FetchingPosts(props) {
 	)
 	
 	useEffect(() => {
+		props.clearPosts()
 		getRefFunction(props.uid, props.userId)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [props.reference])
+	}, [props.location.pathname, props.reference, props.uid])
 
 	return (
 		<div className="fetch-posts" style={{ marginTop: 28 }}>
@@ -80,6 +82,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
 	return {
+		clearPosts: () => dispatch({ type: CLEAR_POSTS }),
 		getUserPosts: (uid, userId) => dispatch(getUserPosts(uid, userId)),
 		getMoreUserPosts: (uid, lastPost, userId) => dispatch(getMoreUserPosts(uid, lastPost, userId)),
 		getUserLikePosts: (uid, userId) => dispatch(getUserLikePosts(uid, userId)),

@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS, LOGIN_SIGNOUT, LOGIN_CLEAR } from "./actionsTypes"
+import { LOGIN_SUCCESS, LOGIN_SIGNOUT, LOGIN_CLEAR, CLEAR_POSTS } from "./actionsTypes"
 import notification from "./notificationActions"
 
 const title = "Ошибка авторизации"
@@ -45,7 +45,7 @@ export function signIn(email, password, isLogin, name, blogname) {
 		} else {
 			firebase.auth().signInWithEmailAndPassword(email, password)
 				.then(() => {
-					dispatch(notification('Success', 'Вы успешно авторизованы', 'Ура!'))
+					dispatch(notification('Success', 'Добро пожаловать в сити 17', 'Вы успешно авторизованы'))
 					dispatch(loginSuccess())
 				})
 				.catch((error) => {
@@ -60,7 +60,7 @@ export function signOut() {
 	return (dispatch, getState, {getFirebase, getFirestore}) => {
 		const firebase = getFirebase()
 		firebase.auth().signOut().then(() => {
-			dispatch(notification('Warning', 'Вы вышли с аккаунта', 'Еще увидимся?'))
+			dispatch({ type: CLEAR_POSTS })
 			dispatch({ type: LOGIN_SIGNOUT })
 		})
 	}

@@ -11,8 +11,7 @@ const initialState = {
 	posts: [],
 	lastPost: null,
 	complete: false,
-	isFetching: true,
-	pathname: ''
+	isFetching: true
 }
 
 export default function postsReducer(state = initialState, action) {

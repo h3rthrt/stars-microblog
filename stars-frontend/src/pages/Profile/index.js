@@ -13,7 +13,7 @@ const Profile = (props) => {
 	useEffect(() => {
 		props.loadProfile(props.location.pathname.slice(9))
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	},[props.location])
+	},[props.location.pathname])
 
 	function activeBtn(id) {
 		if (id === 'posts') return setActive('posts')
@@ -51,14 +51,19 @@ const Profile = (props) => {
 					/>
 				</div>
 				<div className="container__right">
-					<User username={props.username} blogname={props.blogname} photoURL={props.photoURL} media={props.media} />
+					<User 
+						username={props.username}
+						blogname={props.blogname} 
+						photoURL={props.photoURL} 
+						media={props.media} 
+					/>
 				</div>
 			</div>
 		)
 	}
 	
 	if (!!props.username && props.isLoaded && props.isFound) return renderPosts()
-	if (!props.isFound && props.isLoaded && !!!props.username) {
+	if (!props.isFound && props.found !== undefined && props.isLoaded && !!!props.username) {
 		return (
 			<div className="container">
 				<div>Пользователь не найден</div>
@@ -80,7 +85,7 @@ function mapStateToProps(state) {
 		followers: state.profile.followers,
 		following: state.profile.following,
 		media: state.profile.media,
-		isLoaded: state.firebase.profile.isLoaded,
+		isLoaded: state.profile.isLoaded,
 		isFound: state.profile.isFound
 	}
 }

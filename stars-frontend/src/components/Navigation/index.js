@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Navigation.sass'
 import { Link, NavLink, withRouter } from 'react-router-dom'
@@ -77,10 +77,10 @@ function Nav(props) {
 			<div className="search">
 				<FontAwesomeIcon icon="search" size="lg" />
 				{
-					props.location.pathname === `/profile/${props.authName}` ? 
+					props.location.pathname === `/profile/${props.username}` ? 
 					<input 
 						type="text" 
-						placeholder={ `Поиск ${props.blogname}` } 
+						placeholder={ `Поиск ${props.username}` } 
 					/> :
 					<input 
 						type="text" 
@@ -99,7 +99,8 @@ function mapStateToProps(state) {
 	return {
 		isAuthenticated: state.firebase.auth.isEmpty,
 		authName: state.firebase.auth.displayName,
-		blogname: state.profile.blogname
+		username: state.profile.username,
+		isLoaded: state.profile.isLoaded
 	}
 }
 

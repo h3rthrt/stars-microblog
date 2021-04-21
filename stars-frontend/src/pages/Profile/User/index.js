@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import Spinner from '../../../components/UI/Spinner'
 import './User.sass'
 import PhotoUser from './PhotoUser'
 
 function User(props) {
+
+    useEffect(() => {},[props.media])
+
     function renderProfileData() {
         return (
             <div className="right-block">
@@ -30,13 +34,14 @@ function User(props) {
                     <hr/>
                     <div className="media-list">
                     { 
+                        !!props.media ?
                         props.media.map((media, index) => {
                             return (
                                 <a alt="" href="/" key={ index }>
                                     <img alt="" src={ media.photoURL } key={ index } />
                                 </a>
                             )
-                        }) 
+                        }) : <Spinner />
                     }
                     </div>
                 </div>
