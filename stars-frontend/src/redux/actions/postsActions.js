@@ -28,7 +28,7 @@ async function getPostData(doc, usersCollection, postsCollection, likesCollectio
 	return dataPost
 }
 
-export function getUserPosts(uid) {
+export function getUserPosts(uid, userId) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
 		dispatch({ type: CLEAR_POSTS })
 		dispatch({ isFetching: true, type: SET_IS_FETCHING })
@@ -49,7 +49,7 @@ export function getUserPosts(uid) {
 					Promise.all(
 						querySnapshot.docChanges().map(async (change) => {
 							if (change.type === 'added') {
-								return await getPostData(change.doc, usersCollection, postsCollection, likesCollection, uid)
+								return await getPostData(change.doc, usersCollection, postsCollection, likesCollection, userId)
 							}
 						})
 					)
@@ -66,7 +66,7 @@ export function getUserPosts(uid) {
 					// first fetching posts
 					Promise.all(
 						querySnapshot.docs.map((doc) => {
-							return getPostData(doc, usersCollection, postsCollection, likesCollection, uid)
+							return getPostData(doc, usersCollection, postsCollection, likesCollection, userId)
 						})
 					)
 						.then((notes) => {
@@ -83,7 +83,7 @@ export function getUserPosts(uid) {
 	}
 }
 
-export function getMoreUserPosts(uid, lastPost) {
+export function getMoreUserPosts(uid, lastPost, userId) {
 	return (dispatch, getState, { getFirebase, getFirestore }) => {
 		dispatch({ isFetching: true, type: SET_IS_FETCHING })
 		const firestore = getFirestore()
@@ -100,7 +100,7 @@ export function getMoreUserPosts(uid, lastPost) {
 			.then((querySnapshot) => {
 				Promise.all(
 					querySnapshot.docs.map((doc) => {
-						return getPostData(doc, usersCollection, postsCollection, likesCollection, uid)
+						return getPostData(doc, usersCollection, postsCollection, likesCollection, userId)
 					})
 				).then((notes) => {
 					const lastNote = querySnapshot.docs[querySnapshot.docs.length - 1]
@@ -117,7 +117,7 @@ export function getMoreUserPosts(uid, lastPost) {
 	}
 }
 
-export function getUserLikePosts(uid) {
+export function getUserLikePosts(uid, userId) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
 		dispatch({ type: CLEAR_POSTS })
 		dispatch({ isFetching: true, type: SET_IS_FETCHING })
@@ -136,7 +136,7 @@ export function getUserLikePosts(uid) {
 				let notes
 				await postsCollection.doc(docData.postRef.id).get().then(async (querySnapshot) => {
 					if (querySnapshot.exists) {
-						return await getPostData(querySnapshot, usersCollection, postsCollection, likesCollection, uid)
+						return await getPostData(querySnapshot, usersCollection, postsCollection, likesCollection, userId)
 					}
 				})
 				.then((data) => {
@@ -157,7 +157,7 @@ export function getUserLikePosts(uid) {
 	}
 }
 
-export function getMoreUserLikePosts(uid, lastPost) {
+export function getMoreUserLikePosts(uid, lastPost, userId) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
 		dispatch({ isFetching: true, type: SET_IS_FETCHING })
 		const firestore = getFirestore()
@@ -174,7 +174,7 @@ export function getMoreUserLikePosts(uid, lastPost) {
 				let docData = doc.data()
 				await postsCollection.doc(docData.postRef.id).get().then(async (querySnapshot) => {
 					if (querySnapshot.exists) {
-						return await getPostData(querySnapshot, usersCollection, postsCollection, likesCollection, uid)
+						return await getPostData(querySnapshot, usersCollection, postsCollection, likesCollection, userId)
 					}
 				})
 				.then((notes) => {
@@ -190,6 +190,93 @@ export function getMoreUserLikePosts(uid, lastPost) {
 				})
 			}))
 		})
+	}
+}
+
+export function getAllPosts(uid = null, userId) {
+	return async (dispatch, getState, { getFirebase, getFirestore }) => {
+		dispatch({ type: CLEAR_POSTS })
+		dispatch({ isFetching: true, type: SET_IS_FETCHING })
+		let loaded = false
+		const firestore = getFirestore()
+		let usersCollection = firestore.collection('users')
+		let postsCollection = firestore.collection('posts')
+		let likesCollection = firestore.collection('likes')
+		let lastPost
+		firestore
+			.collection('posts')
+			.orderBy('createdAt', 'desc')
+			.limit(15)
+			.onSnapshot(async (querySnapshot) => {
+				if (loaded) {
+					// view changes
+					Promise.all(
+						querySnapshot.docChanges().map(async (change) => {
+							if (change.type === 'added') {
+								return await getPostData(change.doc, usersCollection, postsCollection, likesCollection, userId)
+							}
+						})
+					)
+						.then((notes) => {
+							notes.shift()
+							if (!!notes) {
+								dispatch({ posts: notes, type: LOAD_ADDED_POSTS_SUCCESS })
+							}
+						})
+						.catch((err) => {
+							dispatch(notification('Danger', 'Ошибка загрузки постов пользователя.', `${err}`))
+						})
+				} else if (!loaded) {
+					// first fetching posts
+					Promise.all(
+						querySnapshot.docs.map((doc) => {
+							return getPostData(doc, usersCollection, postsCollection, likesCollection, userId)
+						})
+					)
+						.then((notes) => {
+							loaded = true
+							lastPost = querySnapshot.docs[querySnapshot.docs.length - 1]
+							dispatch(addPosts(notes, lastPost))
+							dispatch({ isFetching: false, type: SET_IS_FETCHING })
+						})
+						.catch((err) => {
+							dispatch(notification('Danger', 'Ошибка загрузки постов пользователя.', `${err}`))
+						})
+				}
+			})
+	}
+}
+
+export function getMoreAllPosts(uid = null, lastPost, userId) {
+	return (dispatch, getState, { getFirebase, getFirestore }) => {
+		dispatch({ isFetching: true, type: SET_IS_FETCHING })
+		const firestore = getFirestore()
+		let usersCollection = firestore.collection('users')
+		let postsCollection = firestore.collection('posts')
+		let likesCollection = firestore.collection('likes')
+		firestore
+			.collection('posts')
+			.orderBy('createdAt', 'desc')
+			.startAt(lastPost)
+			.limit(15)
+			.get()
+			.then((querySnapshot) => {
+				Promise.all(
+					querySnapshot.docs.map((doc) => {
+						return getPostData(doc, usersCollection, postsCollection, likesCollection, userId)
+					})
+				).then((notes) => {
+					const lastNote = querySnapshot.docs[querySnapshot.docs.length - 1]
+					if (!!notes.length) notes.shift()
+					if (!!!notes.length) {
+						dispatch({ type: LOAD_POSTS_COMPLETE })
+						dispatch({ isFetching: false, type: SET_IS_FETCHING })
+					} else {
+						dispatch(addMorePosts(notes, lastNote))
+						dispatch({ isFetching: false, type: SET_IS_FETCHING })
+					}
+				})
+			})
 	}
 }
 

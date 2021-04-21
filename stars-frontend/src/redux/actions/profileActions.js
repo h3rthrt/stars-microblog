@@ -2,32 +2,39 @@ import { LOAD_PROFILE_SUCCESS, LOAD_PROFILE_ERROR, PROFILE_NOT_FOUND, LOAD_MEDIA
 import notification from './notificationActions'
 
 export function loadProfile(username) {
-	return (dispatch, getState, {getFirebase, getFirestore}) => { 
+	return (dispatch, getState, { getFirebase, getFirestore }) => {
 		const firestore = getFirestore()
-
 		let userCollection = firestore.collection('users')
 
 		userCollection.where('username', '==', username).get().then((querySnapshot) => {
-			querySnapshot.forEach((user) => {
-				if (user.exists) {
-					let data = user.data()
-					data.uid = user.id
+			Promise.all(
+				querySnapshot.docs.map((user) => {
+					return user
+				})
+			)
+				.then(async (user) => {
+					if (!!!user.length) return dispatch({ type: PROFILE_NOT_FOUND })
+					let userData = user[0]
+					let data = userData.data()
+					data.uid = userData.id
 					dispatch(loadProfileDataSuccess(data))
-					firestore.collection(`users/${user.id}/media`).limit(6).get().then((querySnapshot) => {
-						Promise.all(querySnapshot.docs.map((media) => {
-							return media.data()
-						}))
-						.then((media) => {
-							dispatch({ type: LOAD_MEDIA_SUCCESS, media: media })
-						})
+					firestore.collection(`users/${data.uid}/media`).limit(6).get().then((querySnapshot) => {
+						Promise.all(
+							querySnapshot.docs.map(async (media) => {
+								return media.data()
+							})
+						)
+							.then((media) => {
+								dispatch({ type: LOAD_MEDIA_SUCCESS, media: media })
+							})
+							.catch((err) => {
+								dispatch(notification('Danger', err.code, err.message))
+							})
 					})
-				} else {
-					dispatch({ type: PROFILE_NOT_FOUND })
-				}
-			})
-		})
-		.catch((err) => {
-			dispatch(notification('Danger', err.code, err.message))
+				})
+				.catch((err) => {
+					dispatch(notification('Danger', err.code, err.message))
+				})
 		})
 	}
 }

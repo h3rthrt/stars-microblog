@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import Tags from '../../components/PopularTags'
+import FetchingPosts from '../../components/FetchingPosts'
 import './Main.sass'
 
 function Main(props) {
@@ -12,7 +13,11 @@ function Main(props) {
 	return (
 		<div className="container container__main">
 			<div className="container__left">
-				{/* { renderPosts() } */}
+				<FetchingPosts 
+					uid={null}
+					reference='getAllPosts'
+					referenceMore='getMoreAllPosts'
+				/>
 			</div>
 			<div className="container__right">
 				<Tags />

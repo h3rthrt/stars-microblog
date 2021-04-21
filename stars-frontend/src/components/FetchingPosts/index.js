@@ -5,7 +5,9 @@ import
 	{	getUserPosts, 
 		getMoreUserPosts, 
 		getUserLikePosts, 
-		getMoreUserLikePosts
+		getMoreUserLikePosts,
+		getAllPosts,
+		getMoreAllPosts
 	} 
 	from '../../redux/actions/postsActions'
 import useInfiniteScroll from '../../useInfiniteScroll'
@@ -15,9 +17,9 @@ function FetchingPosts(props) {
 
 	const references = [
 		//get posts 
-		[ props.getUserPosts, props.getUserLikePosts ], 
+		[ props.getUserPosts, props.getUserLikePosts, props.getAllPosts ], 
 		//get more posts 
-		[ props.getMoreUserPosts, props.getMoreUserLikePosts ] 
+		[ props.getMoreUserPosts, props.getMoreUserLikePosts, props.getMoreAllPosts ] 
 	]
 
 	let getRefFunction = () => {}
@@ -35,16 +37,17 @@ function FetchingPosts(props) {
 		props.isFetching,
 		props.uid,
 		props.lastPost,
-		props.complete
+		props.complete,
+		props.userId,
 	)
 	
 	useEffect(() => {
-		getRefFunction(props.uid)
+		getRefFunction(props.uid, props.userId)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [props.reference])
 
 	return (
-		<div className="fetch-posts" style={{marginTop: 28}}>
+		<div className="fetch-posts" style={{ marginTop: 28 }}>
 			{ 
 				!!props.posts.length &&
 				props.posts.map((post, index) => {
@@ -70,16 +73,19 @@ function mapStateToProps(state) {
 		lastPost: state.posts.lastPost,
 		complete: state.posts.complete,
 		isFetching: state.posts.isFetching,
-		displayName: state.firebase.auth.displayName
+		displayName: state.firebase.auth.displayName,
+		userId: state.firebase.auth.uid
 	}
 }
 
 function mapDispatchToProps(dispatch) {
 	return {
-		getUserPosts: (uid) => dispatch(getUserPosts(uid)),
-		getMoreUserPosts: (uid, lastPost) => dispatch(getMoreUserPosts(uid, lastPost)),
-		getUserLikePosts: (uid) => dispatch(getUserLikePosts(uid)),
-		getMoreUserLikePosts: (uid, lastPost) => dispatch(getMoreUserLikePosts(uid, lastPost))
+		getUserPosts: (uid, userId) => dispatch(getUserPosts(uid, userId)),
+		getMoreUserPosts: (uid, lastPost, userId) => dispatch(getMoreUserPosts(uid, lastPost, userId)),
+		getUserLikePosts: (uid, userId) => dispatch(getUserLikePosts(uid, userId)),
+		getMoreUserLikePosts: (uid, lastPost, userId) => dispatch(getMoreUserLikePosts(uid, lastPost, userId)),
+		getAllPosts: (uid, userId) => dispatch(getAllPosts(uid, userId)),
+		getMoreAllPosts: (uid, lastPost, userId) => dispatch(getMoreAllPosts(uid, lastPost, userId)),
 	}
 }
 

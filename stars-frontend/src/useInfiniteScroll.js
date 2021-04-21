@@ -1,6 +1,6 @@
 import { useRef, useCallback } from 'react'
 
-const useInfiniteScroll = (callback, isFetching, uid, lastNote, complete) => {
+const useInfiniteScroll = (callback, isFetching, uid, lastNote, complete, userId) => {
   //here we use useRef to store a DOM node and the returned object will persist regardless of re-renders
   const observer = useRef()
 
@@ -16,13 +16,13 @@ const useInfiniteScroll = (callback, isFetching, uid, lastNote, complete) => {
     //create a new intersection observer and execute the callback incase of an intersecting event
     observer.current = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
-        callback(uid, lastNote)
+        callback(uid, lastNote, userId)
       }
     }, { threshold: 1 });
 
       //if there is a node, let the intersection observer watch that node
     if (node) observer.current.observe(node)
-  }, [callback, isFetching, uid, lastNote, complete])
+  }, [callback, isFetching, uid, lastNote, complete, userId])
 
   //return reference to the last element
   return [lastElementRef]

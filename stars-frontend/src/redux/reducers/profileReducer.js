@@ -16,7 +16,7 @@ const initialState = {
 	followers: [],
 	following: [],
 	media: [],
-	isFound: false
+	isFound: true
 }
 
 export default function profileReducer(state = initialState, action) {
