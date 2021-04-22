@@ -8,17 +8,13 @@ import FetchingPosts from '../../components/FetchingPosts'
 import './Profile.sass'
 
 const Profile = (props) => {
-	const [ active, setActive ] = useState('posts')
+	const [ likes, setLikes ] = useState(false)
 
 	useEffect(() => {
+		setLikes(false)
 		props.loadProfile(props.location.pathname.slice(9))
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	},[props.location.pathname])
-
-	function activeBtn(id) {
-		if (id === 'posts') return setActive('posts')
-		if (id === 'likes') return setActive('likes')
-	}
 
 	function renderPosts() {
 		return (
@@ -27,18 +23,18 @@ const Profile = (props) => {
 					<div className="select-type">
 						<button
 							id="posts"
-							className={ active === 'posts' ? 'active' : '' }
+							className={ likes ? '' : 'active' }
 							onClick={() => {
-								activeBtn('posts')
+								setLikes(prev => {return !prev})
 							}}
 						>
 							записи
 						</button>
 						<button
 							id="likes"
-							className={ active === 'likes' ? 'active' : '' }
+							className={ likes ? 'active' : '' }
 							onClick={() => {
-								activeBtn('likes')
+								setLikes(prev => {return !prev})
 							}}
 						>
 							нравится
@@ -46,17 +42,12 @@ const Profile = (props) => {
 					</div>
 					<FetchingPosts 
 						uid={props.uid} 
-						reference={ active === 'posts' ? 'getUserPosts' : 'getUserLikePosts' } 
-						referenceMore={ active === 'posts' ? 'getMoreUserPosts' : 'getMoreUserLikePosts' }  
+						reference={ !likes ? 'getUserPosts' : 'getUserLikePosts' } 
+						referenceMore={ !likes ? 'getMoreUserPosts' : 'getMoreUserLikePosts' }  
 					/>
 				</div>
 				<div className="container__right">
-					<User 
-						username={props.username}
-						blogname={props.blogname} 
-						photoURL={props.photoURL} 
-						media={props.media} 
-					/>
+					<User />
 				</div>
 			</div>
 		)

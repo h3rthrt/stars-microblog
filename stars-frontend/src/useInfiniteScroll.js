@@ -15,6 +15,7 @@ const useInfiniteScroll = (callback, isFetching, uid, lastNote, complete, userId
 
     //create a new intersection observer and execute the callback incase of an intersecting event
     observer.current = new IntersectionObserver((entries) => {
+      console.log(callback)
       if (entries[0].isIntersecting) {
         callback(uid, lastNote, userId)
       }

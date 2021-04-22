@@ -1,1 +1,0 @@
-//* User posts constans *// 

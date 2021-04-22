@@ -49,12 +49,6 @@ export function loadProfile(username) {
 	}
 }
 
-export function clearPhoto() {
-	return {
-		type: 'CLEAR_PHOTO'
-	}
-}
-
 export function loadProfileDataSuccess(data) {
 	return {
 		type: LOAD_PROFILE_SUCCESS,
@@ -73,5 +67,11 @@ export function loadProfileDataError(e) {
 	return {
 		type: LOAD_PROFILE_ERROR,
 		error: e
+	}
+}
+
+export function clearPhoto() {
+	return {
+		type: 'CLEAR_PHOTO'
 	}
 }

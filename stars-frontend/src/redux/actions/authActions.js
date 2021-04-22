@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS, LOGIN_SIGNOUT, LOGIN_CLEAR, CLEAR_POSTS } from "./actionsTypes"
+import { LOGIN_SUCCESS, LOGIN_SIGNOUT, LOGIN_CLEAR } from "./actionsTypes"
 import notification from "./notificationActions"
 
 const title = "Ошибка авторизации"
@@ -60,7 +60,6 @@ export function signOut() {
 	return (dispatch, getState, {getFirebase, getFirestore}) => {
 		const firebase = getFirebase()
 		firebase.auth().signOut().then(() => {
-			dispatch({ type: CLEAR_POSTS })
 			dispatch({ type: LOGIN_SIGNOUT })
 		})
 	}

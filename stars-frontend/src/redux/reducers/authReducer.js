@@ -17,7 +17,7 @@ export default function authReducer(state = initialState, action) {
 				authError: action.error.message
 			}
 		case LOGIN_SIGNOUT:
-			return state
+			return initialState
 		case LOGIN_CLEAR:
 			return {
 				...state,

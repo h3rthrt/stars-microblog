@@ -7,8 +7,9 @@ import uploadReducer from './uploadReducer'
 import notificationReducer from './notificationReducer'
 import { firebaseReducer } from 'react-redux-firebase'
 import { firestoreReducer } from 'redux-firestore'
+import { LOGIN_SIGNOUT } from '../actions/actionsTypes'
 
-export default combineReducers({
+const appReducer = combineReducers({
     tag: popularTags,
     posts: postsReducer,
     progress: uploadReducer,
@@ -18,3 +19,10 @@ export default combineReducers({
     firebase: firebaseReducer,
     firestore: firestoreReducer
 })
+
+export const rootReducer = (state, action) => {
+    if (action.type === LOGIN_SIGNOUT) {
+        state = undefined
+    }
+    return appReducer(state, action)
+}

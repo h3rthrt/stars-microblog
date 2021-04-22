@@ -2,9 +2,7 @@ import {
 	LOAD_POSTS_COMPLETE,
 	LOAD_POSTS_SUCCESS,
 	LOAD_MORE_POSTS_SUCCESS,
-	LOAD_ADDED_POSTS_SUCCESS,
-	SET_IS_FETCHING,
-	CLEAR_POSTS
+	SET_IS_FETCHING
 } from './actionsTypes'
 import notification from './notificationActions'
 
@@ -21,19 +19,20 @@ async function getPostData(doc, usersCollection, postsCollection, likesCollectio
 		dataPost.authorPhoto = docData.photoURL
 		dataPost.username = docData.username
 	})
-	await likesCollection.where('userRef', '==', usersCollection.doc(userId)).where('postRef', '==', postsCollection.doc(doc.id)).get().then(async (doc) => {
-		doc.forEach((snapshot) => {
-			dataPost.liked = snapshot.exists
-		})
-	})
+	await likesCollection
+			.where('userRef', '==', usersCollection.doc(userId))
+			.where('postRef', '==', postsCollection.doc(doc.id))
+			.get().then(async (doc) => {
+				doc.forEach((snapshot) => {
+					dataPost.liked = snapshot.exists
+				})
+			})
 	return dataPost
 }
 
 export function getUserPosts(uid, userId) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
 		dispatch({ isFetching: true, type: SET_IS_FETCHING })
-		dispatch(clear())
-		let loaded = false
 		const firestore = getFirestore()
 		let usersCollection = firestore.collection('users')
 		let postsCollection = firestore.collection('posts')
@@ -44,43 +43,23 @@ export function getUserPosts(uid, userId) {
 			.where('user', '==', usersCollection.doc(uid))
 			.orderBy('createdAt', 'desc')
 			.limit(10)
-			.onSnapshot(async (querySnapshot) => {
-				if (loaded) {
-					// view changes
-					Promise.all(
-						querySnapshot.docChanges().map(async (change) => {
-							if (change.type === 'added') {
-								return await getPostData(change.doc, usersCollection, postsCollection, likesCollection, userId)
-							}
-						})
-					)
-						.then((notes) => {
-							notes.shift()
-							if (!!notes) {
-								dispatch({ posts: notes, type: LOAD_ADDED_POSTS_SUCCESS })
-							}
-						})
-						.catch((err) => {
-							dispatch(notification('Danger', 'Ошибка загрузки постов пользователя.', `${err}`))
-						})
-				} else if (!loaded) {
-					// first fetching posts
-					Promise.all(
-						querySnapshot.docs.map((doc) => {
-							return getPostData(doc, usersCollection, postsCollection, likesCollection, userId)
-						})
-					)
-						.then((notes) => {
-							loaded = true
-							lastPost = querySnapshot.docs[querySnapshot.docs.length - 1]
-							dispatch(addPosts(notes, lastPost))
-							dispatch({ isFetching: false, type: SET_IS_FETCHING })
-						})
-						.catch((err) => {
-							dispatch(notification('Danger', 'Ошибка загрузки постов пользователя.', `${err}`))
-						})
-				}
-			})
+			.get()
+			.then(async (querySnapshot) => {
+				Promise.all(
+					querySnapshot.docs.map((doc) => {
+						return getPostData(doc, usersCollection, postsCollection, likesCollection, userId)
+					})
+				)
+					.then((notes) => {
+						lastPost = querySnapshot.docs[querySnapshot.docs.length - 1]
+						console.log('user posts')
+						dispatch(addPosts(notes, lastPost))
+						dispatch({ isFetching: false, type: SET_IS_FETCHING })
+					})
+					.catch((err) => {
+						dispatch(notification('Danger', 'Ошибка загрузки постов пользователя.', `${err}`))
+					})
+		})
 	}
 }
 
@@ -121,7 +100,6 @@ export function getMoreUserPosts(uid, lastPost, userId) {
 export function getUserLikePosts(uid, userId) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
 		dispatch({ isFetching: true, type: SET_IS_FETCHING })
-		dispatch(clear())
 		const firestore = getFirestore()
 		let usersCollection = firestore.collection('users')
 		let postsCollection = firestore.collection('posts')
@@ -197,8 +175,6 @@ export function getMoreUserLikePosts(uid, lastPost, userId) {
 export function getAllPosts(uid = null, userId) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
 		dispatch({ isFetching: true, type: SET_IS_FETCHING })
-		dispatch(clear())
-		let loaded = false
 		const firestore = getFirestore()
 		let usersCollection = firestore.collection('users')
 		let postsCollection = firestore.collection('posts')
@@ -208,42 +184,22 @@ export function getAllPosts(uid = null, userId) {
 			.collection('posts')
 			.orderBy('createdAt', 'desc')
 			.limit(10)
-			.onSnapshot(async (querySnapshot) => {
-				if (loaded) {
-					// view changes
-					Promise.all(
-						querySnapshot.docChanges().map(async (change) => {
-							if (change.type === 'added') {
-								return await getPostData(change.doc, usersCollection, postsCollection, likesCollection, userId)
-							}
-						})
-					)
-						.then((notes) => {
-							notes.shift()
-							if (!!notes) {
-								dispatch({ posts: notes, type: LOAD_ADDED_POSTS_SUCCESS })
-							}
-						})
-						.catch((err) => {
-							dispatch(notification('Danger', 'Ошибка загрузки постов пользователя.', `${err}`))
-						})
-				} else if (!loaded) {
-					// first fetching posts
-					Promise.all(
-						querySnapshot.docs.map((doc) => {
-							return getPostData(doc, usersCollection, postsCollection, likesCollection, userId)
-						})
-					)
-						.then((notes) => {
-							loaded = true
-							lastPost = querySnapshot.docs[querySnapshot.docs.length - 1]
-							dispatch(addPosts(notes, lastPost))
-							dispatch({ isFetching: false, type: SET_IS_FETCHING })
-						})
-						.catch((err) => {
-							dispatch(notification('Danger', 'Ошибка загрузки постов пользователя.', `${err}`))
-						})
-				}
+			.get()
+			.then(async (querySnapshot) => {
+				// first fetching posts
+				Promise.all(
+					querySnapshot.docs.map((doc) => {
+						return getPostData(doc, usersCollection, postsCollection, likesCollection, userId)
+					})
+				)
+					.then((notes) => {
+						lastPost = querySnapshot.docs[querySnapshot.docs.length - 1]
+						dispatch(addPosts(notes, lastPost))
+						dispatch({ isFetching: false, type: SET_IS_FETCHING })
+					})
+					.catch((err) => {
+						dispatch(notification('Danger', 'Ошибка загрузки постов пользователя.', `${err}`))
+					})
 			})
 	}
 }
@@ -294,11 +250,5 @@ function addMorePosts(notes, lastNote) {
 		posts: notes,
 		lastPost: lastNote,
 		type: LOAD_MORE_POSTS_SUCCESS
-	}
-}
-
-function clear() {
-	return {
-		type: CLEAR_POSTS
 	}
 }

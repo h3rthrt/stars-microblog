@@ -62,10 +62,13 @@ export default function profileReducer(state = initialState, action) {
 			}
 		case PROFILE_NOT_FOUND:
 			return {
+				...initialState,
+				isLoaded: true,
 				isFound: false
 			}
 		case SET_IS_LOADED_PROFILE:
 			return {
+				...state,
 				isLoaded: false
 			}
 		default:
