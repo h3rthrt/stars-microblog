@@ -47,7 +47,7 @@ function FetchingPosts(props) {
 	}, [props.location.pathname, props.reference, props.uid])
 
 	return (
-		<div className="fetch-posts" style={{ marginTop: 28 }}>
+		<div className={ 'fetch-posts' } style={{ marginTop: 28 }}>
 			{ 
 				!!!props.posts.length && !props.isFetching &&
 					<center><h3>Тут пусто, но это пока временно...</h3></center> 

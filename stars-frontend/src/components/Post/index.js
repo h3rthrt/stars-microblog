@@ -13,7 +13,7 @@ const Post = forwardRef((props, ref) => {
 	const [ notes, setNotes ] = useState(post.notes || 0)
 
 	return (
-		<div ref={ref} className="post">
+		<div ref={ref} className="post loadAnimation">
 			<div className="post__left">
 				<img src={ post.authorPhoto || '/img/defaultPhoto.svg' } alt="" className="ava" />
 			</div>
