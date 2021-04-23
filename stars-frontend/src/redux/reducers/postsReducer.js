@@ -2,6 +2,7 @@ import {
 	LOAD_POSTS_SUCCESS,
 	LOAD_ADDED_POSTS_SUCCESS,
 	SET_IS_FETCHING,
+	SET_IS_MORE_FETCHING,
 	LOAD_POSTS_COMPLETE,
 	CLEAR_POSTS,
 	LOAD_MORE_POSTS_SUCCESS
@@ -12,7 +13,8 @@ const initialState = {
 	cachePosts: [],
 	lastPost: null,
 	complete: false,
-	isFetching: true
+	isFetching: true,
+	isMoreFetching: false
 }
 
 export default function postsReducer(state = initialState, action) {
@@ -32,13 +34,15 @@ export default function postsReducer(state = initialState, action) {
 				lastPost: action.lastPost,
 				pathname: action.pathname, 
 				complete: false,
-				cachePosts: !!state.posts.length ? state.cachePosts.concat(state.posts) : []
+				cachePosts: !!state.posts.length ? state.cachePosts.concat(state.posts) : [],
+				isFetching: false
 			}
 		case  LOAD_MORE_POSTS_SUCCESS:
 			return {
 				...state,
 				posts: state.posts.concat(cachePosts(action.posts)),
-				lastPost: action.lastPost
+				lastPost: action.lastPost, 
+				isMoreFetching: false
 			}
 		case LOAD_ADDED_POSTS_SUCCESS:
 			return {
@@ -48,12 +52,18 @@ export default function postsReducer(state = initialState, action) {
 		case SET_IS_FETCHING:
 			return {
 				...state,
-				isFetching: action.isFetching
+				isFetching: true
+			}
+		case SET_IS_MORE_FETCHING:
+			return {
+				...state,
+				isMoreFetching: true
 			}
 		case LOAD_POSTS_COMPLETE:
 			return {
 				...state,
-				complete: true
+				complete: true,
+				isMoreFetching: false
 			}
 		case CLEAR_POSTS:
 			state.cachePosts.concat(state.posts)

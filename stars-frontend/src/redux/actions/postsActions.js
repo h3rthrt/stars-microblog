@@ -2,7 +2,8 @@ import {
 	LOAD_POSTS_COMPLETE,
 	LOAD_POSTS_SUCCESS,
 	LOAD_MORE_POSTS_SUCCESS,
-	SET_IS_FETCHING
+	SET_IS_FETCHING,
+	SET_IS_MORE_FETCHING
 } from './actionsTypes'
 import notification from './notificationActions'
 
@@ -32,7 +33,7 @@ async function getPostData(doc, usersCollection, postsCollection, likesCollectio
 
 export function getUserPosts(uid, userId) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
-		dispatch({ isFetching: true, type: SET_IS_FETCHING })
+		dispatch({ type: SET_IS_FETCHING })
 		const firestore = getFirestore()
 		let usersCollection = firestore.collection('users')
 		let postsCollection = firestore.collection('posts')
@@ -54,7 +55,6 @@ export function getUserPosts(uid, userId) {
 						lastPost = querySnapshot.docs[querySnapshot.docs.length - 1]
 						console.log('user posts')
 						dispatch(addPosts(notes, lastPost))
-						dispatch({ isFetching: false, type: SET_IS_FETCHING })
 					})
 					.catch((err) => {
 						dispatch(notification('Danger', 'Ошибка загрузки постов пользователя.', `${err}`))
@@ -65,7 +65,7 @@ export function getUserPosts(uid, userId) {
 
 export function getMoreUserPosts(uid, lastPost, userId) {
 	return (dispatch, getState, { getFirebase, getFirestore }) => {
-		dispatch({ isFetching: true, type: SET_IS_FETCHING })
+		dispatch({ type: SET_IS_MORE_FETCHING })
 		const firestore = getFirestore()
 		let usersCollection = firestore.collection('users')
 		let postsCollection = firestore.collection('posts')
@@ -87,10 +87,8 @@ export function getMoreUserPosts(uid, lastPost, userId) {
 					if (!!notes.length) notes.shift()
 					if (!!!notes.length) {
 						dispatch({ type: LOAD_POSTS_COMPLETE })
-						dispatch({ isFetching: false, type: SET_IS_FETCHING })
 					} else {
 						dispatch(addMorePosts(notes, lastNote))
-						dispatch({ isFetching: false, type: SET_IS_FETCHING })
 					}
 				})
 			})
@@ -99,7 +97,7 @@ export function getMoreUserPosts(uid, lastPost, userId) {
 
 export function getUserLikePosts(uid, userId) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
-		dispatch({ isFetching: true, type: SET_IS_FETCHING })
+		dispatch({ type: SET_IS_FETCHING })
 		const firestore = getFirestore()
 		let usersCollection = firestore.collection('users')
 		let postsCollection = firestore.collection('posts')
@@ -128,7 +126,6 @@ export function getUserLikePosts(uid, userId) {
 			})).then((notes) => {
 				lastPost = querySnapshot.docs[querySnapshot.docs.length - 1]
 				dispatch(addPosts(notes, lastPost))
-				dispatch({ isFetching: false, type: SET_IS_FETCHING })
 			}).catch((err) => {
 				dispatch(notification('Danger', 'Ошибка загрузки постов пользователя.', `${err}`))
 			})
@@ -138,7 +135,7 @@ export function getUserLikePosts(uid, userId) {
 
 export function getMoreUserLikePosts(uid, lastPost, userId) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
-		dispatch({ isFetching: true, type: SET_IS_FETCHING })
+		dispatch({ type: SET_IS_MORE_FETCHING })
 		const firestore = getFirestore()
 		let usersCollection = firestore.collection('users')
 		let postsCollection = firestore.collection('posts')
@@ -160,11 +157,9 @@ export function getMoreUserLikePosts(uid, lastPost, userId) {
 					if (!!notes.length) notes.shift()
 					if (!!!notes.length) {
 						dispatch({ type: LOAD_POSTS_COMPLETE })
-						dispatch({ isFetching: false, type: SET_IS_FETCHING })
 					} else {
 						const lastNote = querySnapshot.docs[querySnapshot.docs.length - 1]
 						dispatch(addMorePosts(notes, lastNote))
-						dispatch({ isFetching: false, type: SET_IS_FETCHING })
 					}
 				})
 			}))
@@ -174,7 +169,7 @@ export function getMoreUserLikePosts(uid, lastPost, userId) {
 
 export function getAllPosts(uid = null, userId) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
-		dispatch({ isFetching: true, type: SET_IS_FETCHING })
+		dispatch({ type: SET_IS_FETCHING })
 		const firestore = getFirestore()
 		let usersCollection = firestore.collection('users')
 		let postsCollection = firestore.collection('posts')
@@ -195,7 +190,6 @@ export function getAllPosts(uid = null, userId) {
 					.then((notes) => {
 						lastPost = querySnapshot.docs[querySnapshot.docs.length - 1]
 						dispatch(addPosts(notes, lastPost))
-						dispatch({ isFetching: false, type: SET_IS_FETCHING })
 					})
 					.catch((err) => {
 						dispatch(notification('Danger', 'Ошибка загрузки постов пользователя.', `${err}`))
@@ -206,7 +200,7 @@ export function getAllPosts(uid = null, userId) {
 
 export function getMoreAllPosts(uid = null, lastPost, userId) {
 	return (dispatch, getState, { getFirebase, getFirestore }) => {
-		dispatch({ isFetching: true, type: SET_IS_FETCHING })
+		dispatch({ type: SET_IS_MORE_FETCHING })
 		const firestore = getFirestore()
 		let usersCollection = firestore.collection('users')
 		let postsCollection = firestore.collection('posts')
@@ -227,10 +221,8 @@ export function getMoreAllPosts(uid = null, lastPost, userId) {
 					if (!!notes.length) notes.shift()
 					if (!!!notes.length) {
 						dispatch({ type: LOAD_POSTS_COMPLETE })
-						dispatch({ isFetching: false, type: SET_IS_FETCHING })
 					} else {
 						dispatch(addMorePosts(notes, lastNote))
-						dispatch({ isFetching: false, type: SET_IS_FETCHING })
 					}
 				})
 			})

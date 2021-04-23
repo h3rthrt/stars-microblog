@@ -34,7 +34,7 @@ function FetchingPosts(props) {
 
 	const [ lastElementRef ] = useInfiniteScroll(
 		!!props.posts.length ? getMoreRefFunction : () => {},
-		props.isFetching,
+		props.isMoreFetching,
 		props.uid,
 		props.lastPost,
 		props.complete,
@@ -42,7 +42,6 @@ function FetchingPosts(props) {
 	)
 	
 	useEffect(() => {
-		console.log(getRefFunction, getMoreRefFunction, + ' ' + props.uid)
 		getRefFunction(props.uid, props.userId)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [props.location.pathname, props.reference, props.uid])
@@ -54,7 +53,7 @@ function FetchingPosts(props) {
 					<center><h3>Тут пусто, но это пока временно...</h3></center> 
 			}
 			{ 
-				!props.isFetching || !!props.posts.length ?
+				!props.isFetching ?
 				props.posts.map((post, index) => {
 					if (props.posts.length === index + 1)  {
 						return <Post ref={lastElementRef} post={post} key={index} />
@@ -63,7 +62,7 @@ function FetchingPosts(props) {
 					}
 				}) : null
 			}
-			{ props.isFetching && <p>Загрузка...</p> }
+			{ props.isFetching || props.isMoreFetching ? <p>Загрузка...</p> : null }
 		</div>
 	)
 }
@@ -74,6 +73,7 @@ function mapStateToProps(state) {
 		lastPost: state.posts.lastPost,
 		complete: state.posts.complete,
 		isFetching: state.posts.isFetching,
+		isMoreFetching: state.posts.isMoreFetching,
 		displayName: state.firebase.auth.displayName,
 		userId: state.firebase.auth.uid
 	}
