@@ -19,7 +19,8 @@ import {
 	faCamera,
 	faSpinner,
 	faSyncAlt,
-	faPalette
+	faPalette,
+	faAngleDown
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(fab,
@@ -41,5 +42,6 @@ library.add(fab,
 	faCamera,
 	faSpinner,
 	faSyncAlt,
-	faPalette
+	faPalette,
+	faAngleDown
 )

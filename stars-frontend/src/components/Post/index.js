@@ -2,15 +2,18 @@ import React, { useState, forwardRef } from 'react'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PostButtons from './PostButtons'
+import Dropdown from './Dropdown'
 import './Post.sass'
 
 const Post = forwardRef((props, ref) => {
 	const { post } = props
+	const [ notes, setNotes ] = useState(post.notes || 0)
+	const [ dropdown, setDropdown ] = useState(false)
+
 	const wordForm = (num, word) => { 
 		let cases = [2, 0, 1, 1, 1, 2]
 		return word[( num % 100 > 4 && num % 100 < 20 ) ? 2 : cases[( num % 10 < 5 ) ? num % 10 : 5]]
 	}
-	const [ notes, setNotes ] = useState(post.notes || 0)
 
 	return (
 		<div ref={ref} className="post loadAnimation">
@@ -31,7 +34,17 @@ const Post = forwardRef((props, ref) => {
 						) 
 						: null
 					}
-					<span>{ post.createdAt }</span>
+					<button onClick={ () => setDropdown(prev => {return !prev}) }>
+						<FontAwesomeIcon icon="angle-down" />
+					</button>
+
+					<Dropdown 
+						onShow={ () => setDropdown(prev => {return !prev}) }
+						createdAt={ post.createdAt }
+						username={ post.username }
+						show={ dropdown }
+						postId={ post.postId }
+					/>
 				</div>
 				{ post.header ? (<h2>{ post.header }</h2>) : null  }
 				<div className="post__images">
@@ -65,6 +78,7 @@ const Post = forwardRef((props, ref) => {
 					<PostButtons
 						postId={ post.postId }
 						liked={ post.liked }
+						username={ post.username }
 						onChangeInc={ (value) => setNotes((prev) => {return prev + value}) }
 					/>
 				</div>

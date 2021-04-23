@@ -53,7 +53,6 @@ export function getUserPosts(uid, userId) {
 				)
 					.then((notes) => {
 						lastPost = querySnapshot.docs[querySnapshot.docs.length - 1]
-						console.log('user posts')
 						dispatch(addPosts(notes, lastPost))
 					})
 					.catch((err) => {
