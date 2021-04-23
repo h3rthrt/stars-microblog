@@ -10,8 +10,13 @@ import './Profile.sass'
 const Profile = (props) => {
 	const [ likes, setLikes ] = useState(false)
 
+	// благодаря данному костылю, при обновлении состояния props.location.pathname сначала выполняется
+	// хук useEffect и только потом ренрерится компонент FetchingPosts
+	const [ pathname, setPathname ] = useState(props.location.pathname)
+
 	useEffect(() => {
 		setLikes(false)
+		setPathname(props.location.pathname)
 		props.loadProfile(props.location.pathname.slice(9))
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	},[props.location.pathname])
@@ -40,11 +45,14 @@ const Profile = (props) => {
 							нравится
 						</button>
 					</div>
-					<FetchingPosts 
-						uid={props.uid} 
-						reference={ !likes ? 'getUserPosts' : 'getUserLikePosts' } 
-						referenceMore={ !likes ? 'getMoreUserPosts' : 'getMoreUserLikePosts' }  
-					/>
+					{ 
+						props.location.pathname === pathname ?
+						<FetchingPosts 
+							uid={props.uid} 
+							reference={ !likes ? 'getUserPosts' : 'getUserLikePosts' } 
+							referenceMore={ !likes ? 'getMoreUserPosts' : 'getMoreUserLikePosts' }  
+						/> : null
+					}
 				</div>
 				<div className="container__right">
 					<User />
