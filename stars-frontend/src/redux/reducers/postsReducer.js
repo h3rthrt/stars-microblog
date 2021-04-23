@@ -5,7 +5,8 @@ import {
 	SET_IS_MORE_FETCHING,
 	LOAD_POSTS_COMPLETE,
 	CLEAR_POSTS,
-	LOAD_MORE_POSTS_SUCCESS
+	LOAD_MORE_POSTS_SUCCESS,
+	REMOVE_POST
 } from '../actions/actionsTypes'
 
 const initialState = {
@@ -14,7 +15,8 @@ const initialState = {
 	lastPost: null,
 	complete: false,
 	isFetching: true,
-	isMoreFetching: false
+	isMoreFetching: false,
+	removePosts: []
 }
 
 export default function postsReducer(state = initialState, action) {
@@ -72,6 +74,11 @@ export default function postsReducer(state = initialState, action) {
 				posts: [],
 				complete: false,
 				lastPost: null
+			}
+		case REMOVE_POST:
+			return {
+				...state,
+				removePosts: state.removePosts.concat(action.post)
 			}
 		default:
 			return state

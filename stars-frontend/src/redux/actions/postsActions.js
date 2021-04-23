@@ -3,7 +3,8 @@ import {
 	LOAD_POSTS_SUCCESS,
 	LOAD_MORE_POSTS_SUCCESS,
 	SET_IS_FETCHING,
-	SET_IS_MORE_FETCHING
+	SET_IS_MORE_FETCHING,
+	REMOVE_POST
 } from './actionsTypes'
 import notification from './notificationActions'
 
@@ -228,6 +229,37 @@ export function getMoreAllPosts(uid = null, lastPost, userId) {
 	}
 }
 
+export function removePost(idPost) {
+	return (dispatch, getState, { getFirebase, getFirestore }) => {
+		const firestore = getFirestore()
+		let postRef = firestore.collection('posts').doc(idPost)
+		let post
+		postRef.forEach((doc) => {
+			post = doc.data()
+		})
+		postRef.delete()
+			.then(() => {
+				addRemovePost(post)
+			})
+			.catch((err) => {
+				dispatch(notification('Danger', 'Ошибка удаления поста.', `${err}`))
+			})
+	}
+}
+
+export function restorePost(post) {
+	return (dispatch, getState, { getFirebase, getFirestore }) => {
+		const firestore = getFirestore()
+		firestore.collection('posts').add(post)
+			.then(() => {
+
+			})
+			.catch((err) => {
+				dispatch(notification('Danger', 'Ошибка восстановления поста.', `${err}`))
+			})
+	}
+}
+
 function addPosts(notes, lastNote) {
 	return {
 		posts: notes,
@@ -241,5 +273,12 @@ function addMorePosts(notes, lastNote) {
 		posts: notes,
 		lastPost: lastNote,
 		type: LOAD_MORE_POSTS_SUCCESS
+	}
+}
+
+function addRemovePost(post) {
+	return {
+		post: post,
+		type: REMOVE_POST
 	}
 }

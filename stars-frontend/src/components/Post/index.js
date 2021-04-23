@@ -35,7 +35,7 @@ const Post = forwardRef((props, ref) => {
 						: null
 					}
 					<button onClick={ () => setDropdown(prev => {return !prev}) }>
-						<FontAwesomeIcon icon="angle-down" />
+						<FontAwesomeIcon icon="ellipsis-h" />
 					</button>
 
 					<Dropdown 

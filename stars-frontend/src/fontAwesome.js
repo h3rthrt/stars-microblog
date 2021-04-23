@@ -20,7 +20,7 @@ import {
 	faSpinner,
 	faSyncAlt,
 	faPalette,
-	faAngleDown
+	faEllipsisH
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(fab,
@@ -43,5 +43,5 @@ library.add(fab,
 	faSpinner,
 	faSyncAlt,
 	faPalette,
-	faAngleDown
+	faEllipsisH
 )
