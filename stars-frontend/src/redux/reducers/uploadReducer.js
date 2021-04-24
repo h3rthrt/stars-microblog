@@ -22,7 +22,6 @@ export default function uploadReducer(state = initialState, action) {
         case UPLOAD_RESET:
             return initialState
         case actionTypes.FILE_UPLOAD_PROGRESS:
-            console.log(state.tasks)
             return {
                 ...state,
                 tasks: state.tasks.map((obj) => {

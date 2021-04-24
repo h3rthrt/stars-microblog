@@ -9,10 +9,10 @@ function Button(props) {
 
 	return (
 		<button 
-        className={cls.join(' ')} 
-		disabled={props.loading ? true : props.disabled}
-		onClick={props.onClick}>
-			{props.children}
+        className={ cls.join(' ') } 
+		disabled={ props.loading ? true : props.disabled }
+		onClick={ props.onClick }>
+			{ props.children }
 			{
 				props.loading 
 					? <FontAwesomeIcon icon='spinner' pulse={true} /> 

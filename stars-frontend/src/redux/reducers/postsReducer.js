@@ -6,7 +6,8 @@ import {
 	LOAD_POSTS_COMPLETE,
 	CLEAR_POSTS,
 	LOAD_MORE_POSTS_SUCCESS,
-	REMOVE_POST
+	REMOVE_POST,
+	RESTORE_POST
 } from '../actions/actionsTypes'
 
 const initialState = {
@@ -78,7 +79,17 @@ export default function postsReducer(state = initialState, action) {
 		case REMOVE_POST:
 			return {
 				...state,
-				removePosts: state.removePosts.concat(action.post)
+				removePosts: state.removePosts.concat({
+					uid: action.uid,
+					post: action.post
+				})
+			}
+		case RESTORE_POST:
+			return {
+				...state,
+				removePosts: state.removePosts.filter((value) => {
+					return value.uid !== action.uid
+				})
 			}
 		default:
 			return state

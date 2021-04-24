@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react'
 import { connect } from 'react-redux'
+import { removePost } from '../../../redux/actions/postsActions'
 
 function Dropdown(props) {
 
@@ -8,6 +9,12 @@ function Dropdown(props) {
 		if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
 			props.onShow();
 		}
+	}
+
+	function removePostHandler() {
+		props.removePost(props.postId)
+		props.remove()
+		props.onShow()
 	}
 	
 	useEffect(() => {
@@ -26,7 +33,7 @@ function Dropdown(props) {
 			</span>
 			{
 				props.username === props.displayName &&
-				<button onClick={() => {}} >
+				<button onClick={ () => removePostHandler() } >
 					Удалить
 				</button>
 			}
@@ -43,4 +50,10 @@ function mapStateToProps(state) {
 	}
 }
 
-export default connect(mapStateToProps)(Dropdown)
+function mapDispatchToProps(dispatch) {
+	return {
+		removePost: (uid) => dispatch(removePost(uid))
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dropdown)

@@ -4,7 +4,8 @@ import {
 	LOAD_MORE_POSTS_SUCCESS,
 	SET_IS_FETCHING,
 	SET_IS_MORE_FETCHING,
-	REMOVE_POST
+	REMOVE_POST,
+	RESTORE_POST
 } from './actionsTypes'
 import notification from './notificationActions'
 
@@ -229,30 +230,41 @@ export function getMoreAllPosts(uid = null, lastPost, userId) {
 	}
 }
 
-export function removePost(idPost) {
-	return (dispatch, getState, { getFirebase, getFirestore }) => {
+export function removePost(uid) {
+	return async (dispatch, getState, { getFirebase, getFirestore }) => {
 		const firestore = getFirestore()
-		let postRef = firestore.collection('posts').doc(idPost)
+		let postRef = firestore.collection('posts').doc(uid)
 		let post
-		postRef.forEach((doc) => {
-			post = doc.data()
+		const getPost = new Promise(async (resolve, reject) => {
+			await postRef.get().then(async (query) => {
+				post = await query.data()
+				resolve(post)
+			}).catch((err) => {
+				reject(err)
+			})
 		})
-		postRef.delete()
-			.then(() => {
-				addRemovePost(post)
-			})
-			.catch((err) => {
-				dispatch(notification('Danger', 'Ошибка удаления поста.', `${err}`))
-			})
+		await getPost.then((post) => {
+			postRef.delete()
+				.then(() => {
+					dispatch(addRemovePost(uid, post))
+				})
+				.catch((err) => {
+					dispatch(notification('Danger', 'Ошибка удаления поста.', `${err}`))
+				})
+		}).catch((err) => {
+			dispatch(notification('Danger', 'Ошибка удаления поста.', `${err}`))
+		})
+		
 	}
 }
 
-export function restorePost(post) {
+export function restorePost(uid, post) {
 	return (dispatch, getState, { getFirebase, getFirestore }) => {
 		const firestore = getFirestore()
-		firestore.collection('posts').add(post)
+		firestore.collection('posts').doc(uid).set(post)
 			.then(() => {
-
+				dispatch(removeRestoredPost(uid))
+				dispatch(notification('Success', 'Успешно', 'Пост успешно восстановлен'))
 			})
 			.catch((err) => {
 				dispatch(notification('Danger', 'Ошибка восстановления поста.', `${err}`))
@@ -276,8 +288,16 @@ function addMorePosts(notes, lastNote) {
 	}
 }
 
-function addRemovePost(post) {
+function removeRestoredPost(uid) {
 	return {
+		uid: uid,
+		type: RESTORE_POST
+	}
+}
+
+function addRemovePost(uid, post) {
+	return {
+		uid: uid,
 		post: post,
 		type: REMOVE_POST
 	}
