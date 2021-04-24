@@ -146,13 +146,23 @@ function CreateNote(props) {
 							onChange={(ev) => changeHeaderHandler(ev)} />
 						<hr />
 						<div className="post__images">
-							{image.images.length ? (
+							{ image.images.length ? (
 								image.images.map((image, index) => {
 									return (
 										<div className="img-box" key={index}>
-											<div className="img-box__times" onClick={() => removeImageHandler(image)}>
-												&times;
-											</div>
+											{ 
+												!!props.tasks.length ?
+												<div className="img-box__upload-progress">
+													<div className="img-box__upload-progress--bar">
+														<span style={{'--progress': `${ props.tasks[index].percent }%`}} />
+													</div>
+												</div>
+												:
+												<div className="img-box__times" onClick={() => removeImageHandler(image)}>
+													&times;
+												</div>
+										
+											}
 											<img
 												className="img-box__img"
 												style={{ display: 'block' }}
@@ -165,7 +175,7 @@ function CreateNote(props) {
 										</div>
 									)
 								})
-							) : null}
+							) : null }
 						</div>
 						<textarea 
 							placeholder="Текст"
@@ -229,7 +239,7 @@ function mapStateToProps(state) {
 	return {
 		complete: state.progress.complete,
 		upload: state.progress.upload,
-		storagePost: state.post
+		tasks: state.progress.tasks
 	}
 }
 

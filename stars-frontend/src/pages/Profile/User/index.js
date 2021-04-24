@@ -1,15 +1,10 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import Spinner from '../../../components/UI/Spinner'
 import './User.sass'
 import PhotoUser from './PhotoUser'
 
 function User(props) {
-
-    useEffect(() => {
-
-    },[])
-
     return (
         <div className="right-block">
             <div className="right-block__user-info">
@@ -38,6 +33,7 @@ function User(props) {
                 { 
                     !!props.media ?
                     props.media.map((media, index) => {
+                        if (!media.photoURL) return null
                         return (
                             <a alt="" href="/" key={ index }>
                                 <img alt="" src={ media.photoURL } key={ index } />

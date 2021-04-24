@@ -33,6 +33,7 @@ export function upload(files, username, uid, forPosts = false, post) {
 			const dbPath = !forPosts ? 'users' : `users/${uid}/media`
 			if (forPosts) file = file.file
 			firebase.uploadFile(storagePath, file, dbPath, {
+				progress: true,
 				metadataFactory: (uploadRes, firebase, metadata, downloadURL) => {
 					if(!forPosts) { 
 						user.updateProfile({

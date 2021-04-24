@@ -140,6 +140,32 @@
     position: relative
     overflow: hidden
     color: var(--white)
+    &__upload-progress
+        width: 100%
+        height: 100%
+        background: #0404045e
+        position: absolute
+        display: flex
+        justify-content: center
+        align-items: center
+        &--bar
+            height: 6px
+            position: relative
+            background: #555
+            border-radius: 25px
+            width: 30%
+            overflow: hidden
+            > span
+                display: block
+                width: var(--progress)
+                height: 100%
+                border-top-right-radius: 8px
+                border-bottom-right-radius: 8px
+                border-top-left-radius: 20px
+                border-bottom-left-radius: 20px
+                background-color: var(--white)
+                position: relative
+                overflow: hidden
     &__times
         font-size: 21px
         position: absolute

@@ -22,7 +22,6 @@ export function loadProfile(username) {
 				})
 			)
 				.then(async (user) => {
-
 					if (!!!user.length) return dispatch({ type: PROFILE_NOT_FOUND })
 					let userData = user[0]
 					let data = userData.data()

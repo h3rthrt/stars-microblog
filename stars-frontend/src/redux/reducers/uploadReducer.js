@@ -1,7 +1,9 @@
 import { UPLOAD_ON_PROGRESS, UPLOAD_LOADED, UPLOAD_RESET } from '../actions/actionsTypes'
+import { actionTypes } from 'react-redux-firebase'
 const initialState = {
     upload: false,
-    complete: false
+    complete: false,
+    tasks: []
 }
 
 export default function uploadReducer(state = initialState, action) {
@@ -15,10 +17,29 @@ export default function uploadReducer(state = initialState, action) {
             return {
                 ...state,
                 upload: false,
-                complete: action.complete
+                complete: action.complete,
             }
         case UPLOAD_RESET:
             return initialState
+        case actionTypes.FILE_UPLOAD_PROGRESS:
+            console.log(state.tasks)
+            return {
+                ...state,
+                tasks: state.tasks.map((obj) => {
+                    if (obj.filename === action.meta.filename) {
+                        obj.percent = action.payload.percent
+                    }
+                    return obj
+                })
+            }
+        case actionTypes.FILE_UPLOAD_START:
+            return {
+                ...state,
+                tasks: state.tasks.concat({
+                    filename: action.payload.filename,
+                    percent: 0
+                })
+            }
         default:
             return state
     }
