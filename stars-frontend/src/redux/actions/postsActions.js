@@ -16,20 +16,50 @@ async function getPostData(doc, usersCollection, postsCollection, likesCollectio
 		dataPost.createdAt.toDate().toLocaleDateString('ru-RU') +
 		' ' +
 		dataPost.createdAt.toDate().toLocaleTimeString('ru-RU')
-	await usersCollection.doc(dataPost.user.id).get().then(async (doc) => {
-		let docData = await doc.data()
-		dataPost.blogname = docData.blogname
-		dataPost.authorPhoto = docData.photoURL
-		dataPost.username = docData.username
-	})
+	if (dataPost.repost) {
+		dataPost.repostId = doc.id
+		await postsCollection.doc(dataPost.postRef.id).get().then(async (doc) => {
+			let docData = await doc.data()
+			dataPost.postId = doc.id
+			dataPost.header = docData.header
+			dataPost.notes = docData.notes
+			dataPost.photoURL = docData.photoURL
+			dataPost.tags = docData.tags
+			dataPost.text = docData.text
+			dataPost.authorId = docData.user.id
+			await usersCollection.doc(docData.user.id).get().then(async (doc) => {
+				let docData = await doc.data()
+				dataPost.author = docData.blogname
+				dataPost.authorUsername = docData.username 
+			})
+		})
+	}
+	await usersCollection.doc(dataPost.user.id)
+		.get()
+		.then(async (doc) => {
+			let docData = await doc.data()
+			dataPost.blogname = docData.blogname
+			dataPost.authorPhoto = docData.photoURL
+			dataPost.username = docData.username
+		})
 	await likesCollection
 			.where('userRef', '==', usersCollection.doc(userId))
-			.where('postRef', '==', postsCollection.doc(doc.id))
+			.where('postRef', '==', postsCollection.doc(dataPost.postId))
 			.get().then(async (doc) => {
 				doc.forEach((snapshot) => {
 					dataPost.liked = snapshot.exists
 				})
 			})
+	await postsCollection
+			.where('user', '==', usersCollection.doc(userId))
+			.where('postRef', '==', postsCollection.doc(dataPost.postId))
+			.where('repost', '==', true)
+			.get().then(async (doc) => {
+				doc.forEach((snapshot) => {
+					dataPost.reposted = snapshot.exists
+				})
+			})
+			if (!!!dataPost.reposted) dataPost.reposted = false
 	return dataPost
 }
 
@@ -230,7 +260,7 @@ export function getMoreAllPosts(uid = null, lastPost, userId) {
 	}
 }
 
-export function removePost(uid) {
+export function removePost(uid, repost = false) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
 		const firestore = getFirestore()
 		let postRef = firestore.collection('posts').doc(uid)

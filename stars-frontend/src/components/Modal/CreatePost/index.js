@@ -14,7 +14,9 @@ function CreateNote(props) {
         header: null,
         text: null,
 		photoURL: [],
-        tags: []
+        tags: [],
+		notes: 0,
+		repost: false
     })
 
 	const closeModal = useCallback(() => {
@@ -25,7 +27,8 @@ function CreateNote(props) {
 				text: null,
 				photoURL: [],
 				tags: [],
-				notes: 0
+				notes: 0,
+				repost: false
 			}
 		})
 		setImage(() => {

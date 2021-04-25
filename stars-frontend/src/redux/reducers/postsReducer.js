@@ -7,7 +7,9 @@ import {
 	CLEAR_POSTS,
 	LOAD_MORE_POSTS_SUCCESS,
 	REMOVE_POST,
-	RESTORE_POST
+	RESTORE_POST,
+	SET_LIKE_ON_POST,
+	SET_REPOST_ON_POST
 } from '../actions/actionsTypes'
 
 const initialState = {
@@ -90,6 +92,28 @@ export default function postsReducer(state = initialState, action) {
 				removePosts: state.removePosts.filter((value) => {
 					return value.uid !== action.uid
 				})
+			}
+		case SET_LIKE_ON_POST:
+			const setLike = (posts) => posts.map((post, index) => {
+				if (post.postId === action.postId) {
+					post.liked = action.liked
+				}
+				return post
+			})
+			return {
+				...state,
+				posts: setLike(state.posts)
+			}
+		case SET_REPOST_ON_POST:
+			const setRepost = (posts) => posts.map((post, index) => {
+				if (post.postId === action.postId) {
+					post.reposted = action.reposted
+				}
+				return post
+			})
+			return {
+				...state,
+				posts: setRepost(state.posts)
 			}
 		default:
 			return state

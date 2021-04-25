@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
-import './App.sass'
 import { connect } from 'react-redux'
 import Layout from './Layout'
 import Dashboard from './pages/Dashboard'

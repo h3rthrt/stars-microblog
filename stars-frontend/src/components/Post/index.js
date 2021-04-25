@@ -1,4 +1,4 @@
-import React, { useState, forwardRef } from 'react'
+import React, { useState, forwardRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PostButtons from './PostButtons'
@@ -17,6 +17,9 @@ const Post = forwardRef((props, ref) => {
 		return word[( num % 100 > 4 && num % 100 < 20 ) ? 2 : cases[( num % 10 < 5 ) ? num % 10 : 5]]
 	}
 
+	useEffect(() => {}, [props.post.reposted])
+
+	if (post.repost && !post.reposted) return null
 	if (!remove) {
 		return (
 			<div ref={ref} className="post loadAnimation">
@@ -32,7 +35,9 @@ const Post = forwardRef((props, ref) => {
 							?  (
 								<div className="author-post">
 									<FontAwesomeIcon icon="reply" className="reply" />
-									<a href="/">{ post.author }</a>
+									<Link to={`/profile/${post.authorUsername}`}>
+										{ post.author }
+									</Link>
 								</div>
 							) 
 							: null
@@ -46,7 +51,7 @@ const Post = forwardRef((props, ref) => {
 							createdAt={ post.createdAt }
 							username={ post.username }
 							show={ dropdown }
-							postId={ post.postId }
+							postId={ post.repostId || post.postId }
 							remove={ () => setRemove(prev => {return !prev}) }
 						/>
 					</div>
@@ -81,9 +86,11 @@ const Post = forwardRef((props, ref) => {
 						</div>
 						<PostButtons
 							postId={ post.postId }
-							liked={ post.liked }
 							username={ post.username }
 							onChangeInc={ (value) => setNotes((prev) => {return prev + value}) }
+							liked={ post.liked }
+							repost={ post.repost }
+							reposted={ post.reposted }
 						/>
 					</div>
 				</div>

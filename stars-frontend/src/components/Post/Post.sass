@@ -23,8 +23,11 @@
         border: 2px solid var(--border)
         color: var(--text-color)
         font-weight: 500
-        >span
+        > span
             padding: 4px 8px
+            border-bottom: 1px solid var(--border)
+            > h4
+                font-size: 12px
         > button
             transition: .1s background ease-in-out
             cursor: pointer
@@ -143,6 +146,16 @@
             svg
                 width: 24px
                 height: 24px
+            &--active
+                animation: 0.3s ease-in-out backwards liked
+                cursor: pointer
+                stroke: var(--text-color)
+                margin-left: 14px
+                svg
+                    width: 24px
+                    height: 24px
+                    path
+                        fill: var(--text-color)
         &__heart
             cursor: pointer
             margin-left: 14px
