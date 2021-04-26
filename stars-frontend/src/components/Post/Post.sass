@@ -6,6 +6,7 @@
 
 .post
     @include fadeInAnimation(.2s)
+    transition: .22s ease-in-out
     display: flex
     color: var(--text-color)
     &__dropdown
@@ -193,6 +194,10 @@
     position: relative
     animation: .22s loadAnimation ease-in-out
 
+.removeAnimation
+    position: relative
+    animation: .22s removeAnimation ease-in-out
+
 @keyframes loadAnimation
     from
         opacity: 0
@@ -200,3 +205,11 @@
     to
         opacity: 1
         bottom: 0
+
+@keyframes removeAnimation
+    from
+        opacity: 1
+        bottom: 0px
+    to
+        opacity: 0
+        bottom: 30px

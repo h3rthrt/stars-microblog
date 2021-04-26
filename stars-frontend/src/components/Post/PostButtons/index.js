@@ -34,8 +34,8 @@ function PostButtons(props) {
 						notes: firestore.FieldValue.increment(-1)
 					})
 					props.onChangeInc(-1)
-					props.setLikeOnPosts(props.postId, false)
 					setLikeDisabled(false)
+					props.setLikeOnPosts(props.postId, false)
 				}).catch((err) => {
 					console.error('Не надо так много нажимать на кнопку.. Ошибки..... ' + err)
 				})
@@ -61,8 +61,8 @@ function PostButtons(props) {
 					notes: firestore.FieldValue.increment(1)
 				})
 				props.onChangeInc(1)
-				props.setLikeOnPosts(props.postId, true)
 				setLikeDisabled(false)
+				props.setLikeOnPosts(props.postId, true)
 			}).catch((err) => {
 				console.error('Не надо так много нажимать на кнопку.. Ошибки..... ' + err)
 			})
@@ -87,8 +87,8 @@ function PostButtons(props) {
 						notes: firestore.FieldValue.increment(-1)
 					})
 					props.onChangeInc(-1)
+					setRepostDisabled(false)
 					props.setRepostOnPosts(props.postId, false)
-					setLikeDisabled(false)
 				}).catch((err) => {
 					console.error('Не надо так много нажимать на кнопку.. Ошибки..... ' + err)
 				})
@@ -116,8 +116,8 @@ function PostButtons(props) {
 					notes: firestore.FieldValue.increment(1)
 				})
 				props.onChangeInc(1)
+				setRepostDisabled(false)
 				props.setRepostOnPosts(props.postId, true)
-				setLikeDisabled(false)
 			}).catch((err) => {
 				console.error('Не надо так много нажимать на кнопку.. Ошибки..... ' + err)
 			})

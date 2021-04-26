@@ -9,6 +9,7 @@ import {
 } from './actionsTypes'
 import notification from './notificationActions'
 
+//return post with correct object data
 async function getPostData(doc, usersCollection, postsCollection, likesCollection, userId) {
 	let dataPost = doc.data()
 	dataPost.postId = doc.id
@@ -16,6 +17,7 @@ async function getPostData(doc, usersCollection, postsCollection, likesCollectio
 		dataPost.createdAt.toDate().toLocaleDateString('ru-RU') +
 		' ' +
 		dataPost.createdAt.toDate().toLocaleTimeString('ru-RU')
+	//fetch ref post data
 	if (dataPost.repost) {
 		dataPost.repostId = doc.id
 		await postsCollection.doc(dataPost.postRef.id).get().then(async (doc) => {
@@ -34,6 +36,7 @@ async function getPostData(doc, usersCollection, postsCollection, likesCollectio
 			})
 		})
 	}
+	//fecth user info
 	await usersCollection.doc(dataPost.user.id)
 		.get()
 		.then(async (doc) => {
@@ -42,6 +45,7 @@ async function getPostData(doc, usersCollection, postsCollection, likesCollectio
 			dataPost.authorPhoto = docData.photoURL
 			dataPost.username = docData.username
 		})
+	//fecth likes
 	await likesCollection
 			.where('userRef', '==', usersCollection.doc(userId))
 			.where('postRef', '==', postsCollection.doc(dataPost.postId))
@@ -50,6 +54,7 @@ async function getPostData(doc, usersCollection, postsCollection, likesCollectio
 					dataPost.liked = snapshot.exists
 				})
 			})
+	//fecth reposts
 	await postsCollection
 			.where('user', '==', usersCollection.doc(userId))
 			.where('postRef', '==', postsCollection.doc(dataPost.postId))
@@ -209,6 +214,7 @@ export function getAllPosts(uid = null, userId) {
 		firestore
 			.collection('posts')
 			.orderBy('createdAt', 'desc')
+			.where('repost', '==', false)
 			.limit(10)
 			.get()
 			.then(async (querySnapshot) => {
@@ -239,6 +245,7 @@ export function getMoreAllPosts(uid = null, lastPost, userId) {
 		firestore
 			.collection('posts')
 			.orderBy('createdAt', 'desc')
+			.where('repost', '==', false)
 			.startAt(lastPost)
 			.limit(10)
 			.get()
