@@ -52,9 +52,7 @@ export default function profileReducer(state = initialState, action) {
 				photoURL: action.photoURL
 			}
 		case PROFILE_CLEAR_DATA:
-			return {
-				initialState
-			}
+			return initialState
 		case 'CLEAR_PHOTO':
 			return {
 				...state,

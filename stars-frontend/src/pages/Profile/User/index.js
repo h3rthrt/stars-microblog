@@ -3,8 +3,11 @@ import { connect } from 'react-redux'
 import Spinner from '../../../components/UI/Spinner'
 import './User.sass'
 import PhotoUser from './PhotoUser'
+import wordForm from '../../../wordForm'
 
 function User(props) {
+    let following = !!props.following ? props.following.length : 0
+    let followers = !!props.followers ? props.followers.length : 0
     return (
         <div className="right-block">
             <div className="right-block__user-info">
@@ -22,8 +25,8 @@ function User(props) {
                 <h2>Блоги</h2>
                 <hr/>
                 <div className="subs-block">
-                    <a href="/">{ props.following || 0 } в читаемых</a>
-                    <a href="/">{ props.followers || 0 } читателя</a>
+                    <a href="/">{ following } в читаемых</a>
+                    <a href="/">{ `${followers} ${wordForm( followers, ['читатель', 'читателя', 'читателей'])}` }</a>
                 </div>
             </div>
             <div className="right-block__media">

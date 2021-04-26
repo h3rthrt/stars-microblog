@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PostButtons from './PostButtons'
 import Dropdown from './Dropdown'
 import RestorePost from './RestorePost'
+import wordForm from '../../wordForm'
 import './Post.sass'
 
 const Post = forwardRef((props, ref) => {
@@ -13,11 +14,6 @@ const Post = forwardRef((props, ref) => {
 	const [ remove, setRemove ] = useState(false)
 	const [ endTimeout, setEndTimeout ] = useState(false)
 	let postCls = [ 'post', 'loadAnimation' ]
-
-	const wordForm = (num, word) => { 
-		let cases = [2, 0, 1, 1, 1, 2]
-		return word[( num % 100 > 4 && num % 100 < 20 ) ? 2 : cases[( num % 10 < 5 ) ? num % 10 : 5]]
-	}
 
 	if (post.repost && !post.reposted) {
 		postCls.push('removeAnimation')

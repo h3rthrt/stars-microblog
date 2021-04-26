@@ -26,7 +26,45 @@ export function loadProfile(username) {
 					let userData = user[0]
 					let data = userData.data()
 					data.uid = userData.id
+					await firestore.collection(`users/${data.uid}/followers`).get().then(async (querySnapshot) => {
+						Promise.all(
+							querySnapshot.docs.map(async (query) => {
+								return await query.data()
+							})
+						)
+							.then((doc) => {
+								Promise.all(doc.map((obj) => {
+									if (obj.userRef) return obj
+									return null
+								})).then((followers) => {
+									data.followers = followers
+								})
+							})
+							.catch((err) => {
+								dispatch(notification('Danger', err.code, err.message))
+							})
+					})
+
+					await firestore.collection(`users/${data.uid}/following`).get().then(async (querySnapshot) => {
+						Promise.all(
+							querySnapshot.docs.map(async (query) => {
+								return await query.data()
+							})
+						)
+							.then((doc) => {
+								Promise.all(doc.map((obj) => {
+									if (obj.userRef) return obj
+									return null
+								})).then((following) => {
+									data.following = following
+								})
+							})
+							.catch((err) => {
+								dispatch(notification('Danger', err.code, err.message))
+							})
+					})
 					dispatch(loadProfileDataSuccess(data))
+
 					await firestore.collection(`users/${data.uid}/media`).limit(6).get().then(async (querySnapshot) => {
 						Promise.all(
 							querySnapshot.docs.map(async (media) => {

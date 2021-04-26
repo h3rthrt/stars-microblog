@@ -62,7 +62,7 @@ const Profile = (props) => {
 	}
 	
 	if (!!props.username && props.isLoaded && props.isFound) return renderPosts()
-	if (!props.isFound && props.found !== undefined && props.isLoaded && !!!props.username) {
+	if (!props.isFound && props.isLoaded && !!!props.username) {
 		return (
 			<div className="container">
 				<div>Пользователь не найден</div>
