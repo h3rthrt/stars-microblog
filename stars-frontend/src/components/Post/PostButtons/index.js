@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { getFirestore } from 'redux-firestore'
 import { SET_LIKE_ON_POST, SET_REPOST_ON_POST } from '../../../redux/actions/actionsTypes'
+import notification from '../../../redux/actions/notificationActions'
 import '../Post.sass'
 
 function PostButtons(props) {
@@ -27,15 +28,25 @@ function PostButtons(props) {
 				.where('postRef', '==', postQuery)
 				.get()
 				.then((querySnapshot) => {
-					querySnapshot.forEach((doc) => {
-						doc.ref.delete()
+					const postUpdate = new Promise((resolve, reject) =>  {
+						postQuery.update({
+							notes: firestore.FieldValue.increment(-1)
+						}).then(() => {
+							querySnapshot.forEach((doc) => {
+								doc.ref.delete()
+							})
+							resolve()
+						}).catch((err) => {
+							reject(err)
+						})
 					})
-					postQuery.update({
-						notes: firestore.FieldValue.increment(-1)
+					postUpdate.then(() => {
+						props.onChangeInc(-1)
+						setLikeDisabled(false)
+						props.setLikeOnPosts(props.postId, false)
+					}).catch((err) => {
+						notification('Danger', 'Ошибка', `${err}`)
 					})
-					props.onChangeInc(-1)
-					setLikeDisabled(false)
-					props.setLikeOnPosts(props.postId, false)
 				}).catch((err) => {
 					console.error('Не надо так много нажимать на кнопку.. Ошибки..... ' + err)
 				})
@@ -52,19 +63,30 @@ function PostButtons(props) {
 					})
 				})
 			if (exists) return
-			firestore.collection('likes').add({
-				userRef: userQuery,
-				postRef: postQuery,
-				likedAt: firestore.Timestamp.now()
-			}).then(() => {
+
+			const postUpdate = new Promise((resolve, reject) =>  {
 				postQuery.update({
 					notes: firestore.FieldValue.increment(1)
+				}).then(() => {
+					firestore.collection('likes').add({
+						userRef: userQuery,
+						postRef: postQuery,
+						likedAt: firestore.Timestamp.now()
+					}).catch((err) => {
+						reject(err)
+					})
+					resolve()
+				}).catch((err) => {
+					reject(err)
 				})
+			})
+
+			postUpdate.then(() => {
 				props.onChangeInc(1)
 				setLikeDisabled(false)
 				props.setLikeOnPosts(props.postId, true)
 			}).catch((err) => {
-				console.error('Не надо так много нажимать на кнопку.. Ошибки..... ' + err)
+				notification('Danger', 'Ошибка', `${err}`)
 			})
 		}
 	}
@@ -80,17 +102,32 @@ function PostButtons(props) {
 				.where('repost', '==', true)
 				.get()
 				.then((querySnapshot) => {
-					querySnapshot.forEach((doc) => {
-						doc.ref.delete()
+					const repostDel = new Promise((resolve, reject) => {
+						postQuery.update({
+							notes: firestore.FieldValue.increment(-1)
+						}).then(() => {
+							querySnapshot.forEach((doc) => {
+								doc.ref.delete()
+									.catch((err) => {
+										reject(err)
+									})
+							})
+							resolve()
+						}).catch((err) => {
+							reject(err)
+						})
 					})
-					postQuery.update({
-						notes: firestore.FieldValue.increment(-1)
+
+					repostDel.then(() => {
+						props.onChangeInc(-1)
+						setRepostDisabled(false)
+						props.setRepostOnPosts(props.postId, false)
+					}).catch((err) => {
+						notification('Danger', 'Ошибка', `${err}`)
 					})
-					props.onChangeInc(-1)
-					setRepostDisabled(false)
-					props.setRepostOnPosts(props.postId, false)
+
 				}).catch((err) => {
-					console.error('Не надо так много нажимать на кнопку.. Ошибки..... ' + err)
+					notification('Warning', 'Ошибка', `Не надо так много нажимать на кнопку.. Ошибки.....${err}`)
 				})
 		} else {
 			// setRepostState(true)
@@ -106,20 +143,32 @@ function PostButtons(props) {
 					})
 				})
 			if (exists) return
-			firestore.collection('posts').add({
-				user: userQuery,
-				postRef: postQuery,
-				repost: true,
-				createdAt: firestore.Timestamp.now()
-			}).then(() => {
-				postQuery.update({
-					notes: firestore.FieldValue.increment(1)
+
+			const repostAdd = new Promise((resolve, reject) => {
+				firestore.collection('posts').add({
+					user: userQuery,
+					postRef: postQuery,
+					repost: true,
+					createdAt: firestore.Timestamp.now()
+				}).then(() => {
+					postQuery.update({
+						notes: firestore.FieldValue.increment(1)
+					}).then(() => {
+						resolve()
+					}).catch((err) => {
+						reject(err)
+					})
+				}).catch((err) => {
+					reject(err)
 				})
+			})
+
+			repostAdd.then(() => {
 				props.onChangeInc(1)
 				setRepostDisabled(false)
 				props.setRepostOnPosts(props.postId, true)
 			}).catch((err) => {
-				console.error('Не надо так много нажимать на кнопку.. Ошибки..... ' + err)
+				notification('Warning', 'Ошибка', `Не надо так много нажимать на кнопку.. Ошибки.....${err}`)
 			})
 		}
 	}

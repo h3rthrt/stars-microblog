@@ -56,9 +56,9 @@ function FetchingPosts(props) {
 				!props.isFetching ?
 				props.posts.map((post, index) => {
 					if (props.posts.length === index + 1)  {
-						return <Post ref={lastElementRef} post={post} key={index} />
+						return <Post ref={lastElementRef} post={post} key={index} displayName={ props.displayName } />
 					} else {
-						return <Post post={post} key={index} />
+						return <Post post={post} key={index} displayName={ props.displayName } />
 					}
 				}) : null
 			}

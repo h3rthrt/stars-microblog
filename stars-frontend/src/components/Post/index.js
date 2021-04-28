@@ -15,7 +15,7 @@ const Post = forwardRef((props, ref) => {
 	const [ endTimeout, setEndTimeout ] = useState(false)
 	let postCls = [ 'post', 'loadAnimation' ]
 
-	if (post.repost && !post.reposted) {
+	if (post.repost && !post.reposted && post.username === props.displayName) {
 		postCls.push('removeAnimation')
 		setTimeout(() => {
 			setEndTimeout(true)
