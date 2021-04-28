@@ -5,7 +5,8 @@ import {
 	PROFILE_CLEAR_DATA,
 	PROFILE_NOT_FOUND,
 	LOAD_MEDIA_SUCCESS,
-	SET_IS_LOADED_PROFILE
+	SET_IS_LOADED_PROFILE,
+	INC_FOLLOWERS
 } from '../actions/actionsTypes'
 
 const initialState = {
@@ -68,6 +69,23 @@ export default function profileReducer(state = initialState, action) {
 			return {
 				...state,
 				isLoaded: false
+			}
+		case INC_FOLLOWERS:
+			switch (action.follow) {
+				case 'follow':
+					return {
+						...state,
+						followers: state.followers.concat(action.uid)
+					}
+				case 'unfollow':
+					return {
+						...state,
+						followers: state.followers.filter((value) => {
+							return value !== action.uid
+						})
+					}
+				default:
+					return state
 			}
 		default:
 			return state

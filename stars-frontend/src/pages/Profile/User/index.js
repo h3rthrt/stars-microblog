@@ -4,6 +4,7 @@ import Spinner from '../../../components/UI/Spinner'
 import './User.sass'
 import PhotoUser from './PhotoUser'
 import wordForm from '../../../wordForm'
+import SubButton from './SubButton'
 
 function User(props) {
     let following = !!props.following ? props.following.length : 0
@@ -19,6 +20,7 @@ function User(props) {
                             : <span className="blogname s">{props.blogname}</span>
                     }
                     <p>{props.desc}</p>
+                    <SubButton />
                 </div>
             </div>
             <div className="right-block__subs">

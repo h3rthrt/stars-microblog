@@ -1,4 +1,4 @@
-import { LOGIN_SIGNOUT, LOGIN_SUCCESS, LOGIN_ERROR, LOGIN_CLEAR, SUBS_LOAD_SUCCESS } from '../actions/actionsTypes'
+import { LOGIN_SIGNOUT, LOGIN_SUCCESS, LOGIN_ERROR, LOGIN_CLEAR, SUBS_LOAD_SUCCESS, FOLLOW_SUCCESS, UNFOLLOW_SUCCESS } from '../actions/actionsTypes'
 
 const initialState = {
 	followers: null,
@@ -30,6 +30,18 @@ export default function authReducer(state = initialState, action) {
 				...state,
 				followers: action.followers,
 				following: action.following	
+			}
+		case FOLLOW_SUCCESS:
+			return {
+				...state,
+				following: state.following.concat(action.userId)
+			}
+		case UNFOLLOW_SUCCESS:
+			return {
+				...state,
+				following: state.following.filter((value) => {
+					return value !== action.userId
+				})
 			}
 		default:
 			return state

@@ -4,7 +4,9 @@ import {
 	PROFILE_NOT_FOUND,
 	LOAD_MEDIA_SUCCESS,
 	PROFILE_CLEAR_DATA,
-	SET_IS_LOADED_PROFILE
+	SET_IS_LOADED_PROFILE,
+	FOLLOW_SUCCESS,
+	UNFOLLOW_SUCCESS
 } from './actionsTypes'
 import notification from './notificationActions'
 
@@ -91,6 +93,62 @@ export function loadProfile(username) {
 		})
 	}
 }
+
+export function followOnBlog(uid, userId) {
+	return async (dispatch, getState, {getFirebase, getFirestore}) => {
+		const firestore = getFirestore()
+		let subscriber = await firestore.collection('users').doc(uid)
+		let blog = await firestore.collection('users').doc(userId)
+		firestore.collection(`users/${uid}/following`).add({
+			user: blog
+		}).then(() => {
+			firestore.collection(`users/${userId}/followers`).add({
+				user: subscriber
+			}).then(() => {
+				dispatch({ userId: userId, type: FOLLOW_SUCCESS })
+			}).catch((err) => {
+				dispatch(notification('Danger', err.code, err.message))
+			})
+		}).catch((err) => {
+			dispatch(notification('Danger', err.code, err.message))
+		})
+	}
+}
+
+export function unfollowOnBlog(uid, userId) {
+	return async (dispatch, getState, {getFirebase, getFirestore}) => {
+		const firestore = getFirestore()
+		let subscriber = await firestore.collection('users').doc(uid)
+		let blog = await firestore.collection('users').doc(userId)
+		let subscriberSnap = await firestore.collection(`users/${uid}/following`).where('user', '==', blog)
+		let blogSnap = await firestore.collection(`users/${userId}/followers`).where('user', '==', subscriber)
+
+		const unfollow = new Promise(async (resolve, reject) => {
+			await subscriberSnap.get().then((querySnapshot) => {
+				querySnapshot.forEach((doc) => {
+					doc.ref.delete()
+				})
+			}).catch((err) => {
+				reject(err)
+			})
+			await blogSnap.get().then((querySnapshot) => {
+				querySnapshot.forEach((doc) => {
+					doc.ref.delete()
+				})
+			}).catch((err) => {
+				reject(err)
+			})
+			resolve()
+		})
+
+		unfollow.then(() => {
+			dispatch({ userId: userId, type: UNFOLLOW_SUCCESS })
+		}).catch((err) => {
+			dispatch(notification('Danger', err.code, err.message))
+		})
+	}
+}
+
 
 export function loadProfileDataSuccess(data) {
 	return {

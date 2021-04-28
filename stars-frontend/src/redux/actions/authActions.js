@@ -63,7 +63,7 @@ export function loadSubs(uid) {
 			await firestore.collection(`users/${uid}/followers`).get().then(async (querySnapshot) => {
 				Promise.all(querySnapshot.docs.map(async (doc) => {
 					let data = await doc.data()
-					return data.user
+					return data.user.id
 				})).then((followers) => {
 					resolve(followers)
 				})
@@ -76,7 +76,7 @@ export function loadSubs(uid) {
 			await firestore.collection(`users/${uid}/following`).get().then(async (querySnapshot) => {
 				await Promise.all(querySnapshot.docs.map((doc) => {
 					let data = doc.data()
-					return data.user
+					return data.user.id
 				})).then((following) => {
 					dispatch({ followers: followers, following: following, type: SUBS_LOAD_SUCCESS })
 				}).catch((err) => {
