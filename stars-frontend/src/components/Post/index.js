@@ -44,7 +44,7 @@ const Post = forwardRef((props, ref) => {
 							) 
 							: null
 						}
-						<button onClick={ () => setDropdown(prev => {return !prev}) }>
+						<button onClick={ () => setDropdown(true) }>
 							<FontAwesomeIcon icon="ellipsis-h" />
 						</button>
 	

@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS, LOGIN_SIGNOUT, LOGIN_CLEAR } from "./actionsTypes"
+import { LOGIN_SUCCESS, LOGIN_SIGNOUT, LOGIN_CLEAR, SUBS_LOAD_SUCCESS } from "./actionsTypes"
 import notification from "./notificationActions"
 
 const title = "Ошибка авторизации"
@@ -45,7 +45,7 @@ export function signIn(email, password, isLogin, name, blogname) {
 		} else {
 			firebase.auth().signInWithEmailAndPassword(email, password)
 				.then(() => {
-					dispatch(notification('Success', 'Добро пожаловать в сити 17', 'Вы успешно авторизованы'))
+					dispatch(notification('Success', 'Добро пожаловать', 'Вы успешно авторизованы'))
 					dispatch(loginSuccess())
 				})
 				.catch((error) => {
@@ -53,6 +53,37 @@ export function signIn(email, password, isLogin, name, blogname) {
 					dispatch({ type: LOGIN_CLEAR })
 				})
 		}
+	}
+}
+
+export function loadSubs(uid) {
+	return async (dispatch, getState, {getFirebase, getFirestore}) => {
+		const firestore = getFirestore()
+		const loadFollowers = new Promise(async (resolve, reject) => {
+			await firestore.collection(`users/${uid}/followers`).get().then(async (querySnapshot) => {
+				Promise.all(querySnapshot.docs.map(async (doc) => {
+					let data = await doc.data()
+					return data.user
+				})).then((followers) => {
+					resolve(followers)
+				})
+			}).catch((err) => {
+				reject(err)
+			})
+		})
+
+		loadFollowers.then(async (followers) => {
+			await firestore.collection(`users/${uid}/following`).get().then(async (querySnapshot) => {
+				await Promise.all(querySnapshot.docs.map((doc) => {
+					let data = doc.data()
+					return data.user
+				})).then((following) => {
+					dispatch({ followers: followers, following: following, type: SUBS_LOAD_SUCCESS })
+				}).catch((err) => {
+					dispatch(notification('Danger', 'Ошибка', `${err}`))
+				})
+			})
+		})
 	}
 }
 

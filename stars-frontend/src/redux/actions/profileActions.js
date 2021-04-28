@@ -32,10 +32,13 @@ export function loadProfile(username) {
 								return await query.data()
 							})
 						)
-							.then((doc) => {
-								Promise.all(doc.map((obj) => {
-									if (obj.userRef) return obj
-									return null
+							.then((docs) => {
+								Promise.all(docs.map((doc) => {
+									if (doc.user) {
+										return doc.user
+									} else {
+										return null
+									}
 								})).then((followers) => {
 									data.followers = followers
 								})
@@ -46,15 +49,18 @@ export function loadProfile(username) {
 					})
 
 					await firestore.collection(`users/${data.uid}/following`).get().then(async (querySnapshot) => {
-						Promise.all(
+						await Promise.all(
 							querySnapshot.docs.map(async (query) => {
 								return await query.data()
 							})
 						)
-							.then((doc) => {
-								Promise.all(doc.map((obj) => {
-									if (obj.userRef) return obj
-									return null
+							.then((docs) => {
+								Promise.all(docs.map((doc) => {
+									if (doc.user) {
+										return doc.user
+									} else {
+										return null
+									}
 								})).then((following) => {
 									data.following = following
 								})

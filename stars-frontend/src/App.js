@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { loadSubs } from './redux/actions/authActions'
 import Layout from './Layout'
 import Dashboard from './pages/Dashboard'
 import Main from './pages/Main'
@@ -14,6 +15,7 @@ function App(props) {
 
   useEffect(() => {
     defineTheme()
+    props.loadSubs(props.uid)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.isAuthenticated, props.isLoaded, props.isLoadedProfile, props.theme])
 
@@ -62,6 +64,7 @@ function App(props) {
 
 function mapStateToProps(state) {
   return {
+    uid: state.firebase.auth.uid,
     isAuthenticated: state.firebase.auth.isEmpty,
     isLoaded: state.firebase.auth.isLoaded,
     isLoadedProfile: state.firebase.profile.isLoaded,
@@ -69,4 +72,10 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(withRouter(App))
+function mapDispatchToProps(dispatch) {
+  return {
+    loadSubs: (uid) => dispatch(loadSubs(uid))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App))
