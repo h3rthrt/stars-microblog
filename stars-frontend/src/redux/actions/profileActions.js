@@ -105,7 +105,7 @@ export function followOnBlog(uid, userId) {
 			firestore.collection(`users/${userId}/followers`).add({
 				user: subscriber
 			}).then(() => {
-				dispatch({ userId: userId, type: FOLLOW_SUCCESS })
+				dispatch({ userId: userId, userRef: blog, type: FOLLOW_SUCCESS })
 			}).catch((err) => {
 				dispatch(notification('Danger', err.code, err.message))
 			})

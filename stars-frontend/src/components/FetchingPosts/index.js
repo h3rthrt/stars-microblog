@@ -7,7 +7,8 @@ import
 		getUserLikePosts, 
 		getMoreUserLikePosts,
 		getAllPosts,
-		getMoreAllPosts
+		getMoreAllPosts,
+		getDashboardPosts
 	} 
 	from '../../redux/actions/postsActions'
 import useInfiniteScroll from '../../useInfiniteScroll'
@@ -17,7 +18,7 @@ function FetchingPosts(props) {
 
 	const references = [
 		//get posts 
-		[ props.getUserPosts, props.getUserLikePosts, props.getAllPosts ], 
+		[ props.getUserPosts, props.getUserLikePosts, props.getAllPosts, props.getDashboardPosts ], 
 		//get more posts 
 		[ props.getMoreUserPosts, props.getMoreUserLikePosts, props.getMoreAllPosts ] 
 	]
@@ -42,9 +43,13 @@ function FetchingPosts(props) {
 	)
 	
 	useEffect(() => {
-		getRefFunction(props.uid, props.userId)
+		if (getRefFunction.name === 'getDashboardPosts') {
+			getRefFunction(props.uid, props.userId, props.followingRefs)
+		} else {
+			getRefFunction(props.uid, props.userId)
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [props.location.pathname, props.reference, props.uid])
+	}, [props.location.pathname, props.reference, props.uid, props.followingRefs])
 
 	return (
 		<div className={ 'fetch-posts' } style={{ marginTop: 28 }}>
@@ -75,7 +80,8 @@ function mapStateToProps(state) {
 		isFetching: state.posts.isFetching,
 		isMoreFetching: state.posts.isMoreFetching,
 		displayName: state.firebase.auth.displayName,
-		userId: state.firebase.auth.uid
+		userId: state.firebase.auth.uid, 
+		followingRefs: state.auth.followingRefs
 	}
 }
 
@@ -87,6 +93,7 @@ function mapDispatchToProps(dispatch) {
 		getMoreUserLikePosts: (uid, lastPost, userId) => dispatch(getMoreUserLikePosts(uid, lastPost, userId)),
 		getAllPosts: (uid, userId) => dispatch(getAllPosts(uid, userId)),
 		getMoreAllPosts: (uid, lastPost, userId) => dispatch(getMoreAllPosts(uid, lastPost, userId)),
+		getDashboardPosts: (uid, userId, followingRefs) => dispatch(getDashboardPosts(uid, userId, followingRefs))
 	}
 }
 

@@ -74,11 +74,13 @@ export function loadSubs(uid) {
 
 		loadFollowers.then(async (followers) => {
 			await firestore.collection(`users/${uid}/following`).get().then(async (querySnapshot) => {
+				let followingRefs = []
 				await Promise.all(querySnapshot.docs.map((doc) => {
 					let data = doc.data()
+					followingRefs.push(data.user)
 					return data.user.id
 				})).then((following) => {
-					dispatch({ followers: followers, following: following, type: SUBS_LOAD_SUCCESS })
+					dispatch({ followers: followers, following: following, followingRefs: followingRefs, type: SUBS_LOAD_SUCCESS })
 				}).catch((err) => {
 					dispatch(notification('Danger', 'Ошибка', `${err}`))
 				})

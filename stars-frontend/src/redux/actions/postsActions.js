@@ -9,7 +9,7 @@ import {
 } from './actionsTypes'
 import notification from './notificationActions'
 
-//return post with correct object data
+// build post object data 
 async function getPostData(doc, usersCollection, postsCollection, likesCollection, userId) {
 	let dataPost = doc.data()
 	dataPost.postId = doc.id
@@ -17,7 +17,7 @@ async function getPostData(doc, usersCollection, postsCollection, likesCollectio
 		dataPost.createdAt.toDate().toLocaleDateString('ru-RU') +
 		' ' +
 		dataPost.createdAt.toDate().toLocaleTimeString('ru-RU')
-	//fetch ref post data
+	// fetch ref post data
 	if (dataPost.repost) {
 		dataPost.repostId = doc.id
 		await postsCollection.doc(dataPost.postRef.id).get().then(async (doc) => {
@@ -36,7 +36,7 @@ async function getPostData(doc, usersCollection, postsCollection, likesCollectio
 			})
 		})
 	}
-	//fecth user info
+	// fecth user info
 	await usersCollection.doc(dataPost.user.id)
 		.get()
 		.then(async (doc) => {
@@ -45,7 +45,7 @@ async function getPostData(doc, usersCollection, postsCollection, likesCollectio
 			dataPost.authorPhoto = docData.photoURL
 			dataPost.username = docData.username
 		})
-	//fecth likes
+	// fecth likes
 	await likesCollection
 			.where('userRef', '==', usersCollection.doc(userId))
 			.where('postRef', '==', postsCollection.doc(dataPost.postId))
@@ -54,7 +54,7 @@ async function getPostData(doc, usersCollection, postsCollection, likesCollectio
 					dataPost.liked = snapshot.exists
 				})
 			})
-	//fecth reposts
+	// fecth reposts
 	await postsCollection
 			.where('user', '==', usersCollection.doc(userId))
 			.where('postRef', '==', postsCollection.doc(dataPost.postId))
@@ -76,8 +76,7 @@ export function getUserPosts(uid, userId) {
 		let postsCollection = firestore.collection('posts')
 		let likesCollection = firestore.collection('likes')
 		let lastPost
-		firestore
-			.collection('posts')
+		postsCollection
 			.where('user', '==', usersCollection.doc(uid))
 			.orderBy('createdAt', 'desc')
 			.limit(10)
@@ -106,8 +105,7 @@ export function getMoreUserPosts(uid, lastPost, userId) {
 		let usersCollection = firestore.collection('users')
 		let postsCollection = firestore.collection('posts')
 		let likesCollection = firestore.collection('likes')
-		firestore
-			.collection('posts')
+		postsCollection
 			.where('user', '==', usersCollection.doc(uid))
 			.orderBy('createdAt', 'desc')
 			.startAt(lastPost)
@@ -139,33 +137,34 @@ export function getUserLikePosts(uid, userId) {
 		let postsCollection = firestore.collection('posts')
 		let likesCollection = firestore.collection('likes')
 		let lastPost
-		likesCollection.where('userRef', '==', usersCollection.doc(uid))
+		likesCollection
+			.where('userRef', '==', usersCollection.doc(uid))
 			.orderBy('likedAt', 'desc')
 			.limit(10)
 			.get()
 			.then((querySnapshot) => {
-			Promise.all(querySnapshot.docs.map(async (doc) => {
-				let docData = doc.data()
-				let notes
-				await postsCollection.doc(docData.postRef.id).get().then(async (querySnapshot) => {
-					if (querySnapshot.exists) {
-						return await getPostData(querySnapshot, usersCollection, postsCollection, likesCollection, userId)
-					}
-				})
-				.then((data) => {
-					notes = data
-				})
-				.catch((err) => {
+				Promise.all(querySnapshot.docs.map(async (doc) => {
+					let docData = doc.data()
+					let notes
+					await postsCollection.doc(docData.postRef.id).get().then(async (querySnapshot) => {
+						if (querySnapshot.exists) {
+							return await getPostData(querySnapshot, usersCollection, postsCollection, likesCollection, userId)
+						}
+					})
+					.then((data) => {
+						notes = data
+					})
+					.catch((err) => {
+						dispatch(notification('Danger', 'Ошибка загрузки постов пользователя.', `${err}`))
+					})
+					return notes
+				})).then((notes) => {
+					lastPost = querySnapshot.docs[querySnapshot.docs.length - 1]
+					dispatch(addPosts(notes, lastPost))
+				}).catch((err) => {
 					dispatch(notification('Danger', 'Ошибка загрузки постов пользователя.', `${err}`))
 				})
-				return notes
-			})).then((notes) => {
-				lastPost = querySnapshot.docs[querySnapshot.docs.length - 1]
-				dispatch(addPosts(notes, lastPost))
-			}).catch((err) => {
-				dispatch(notification('Danger', 'Ошибка загрузки постов пользователя.', `${err}`))
 			})
-		})
 	}
 }
 
@@ -211,8 +210,7 @@ export function getAllPosts(uid = null, userId) {
 		let postsCollection = firestore.collection('posts')
 		let likesCollection = firestore.collection('likes')
 		let lastPost
-		firestore
-			.collection('posts')
+		postsCollection
 			.orderBy('createdAt', 'desc')
 			.where('repost', '==', false)
 			.limit(10)
@@ -224,13 +222,13 @@ export function getAllPosts(uid = null, userId) {
 						return getPostData(doc, usersCollection, postsCollection, likesCollection, userId)
 					})
 				)
-					.then((notes) => {
-						lastPost = querySnapshot.docs[querySnapshot.docs.length - 1]
-						dispatch(addPosts(notes, lastPost))
-					})
-					.catch((err) => {
-						dispatch(notification('Danger', 'Ошибка загрузки постов пользователя.', `${err}`))
-					})
+				.then((notes) => {
+					lastPost = querySnapshot.docs[querySnapshot.docs.length - 1]
+					dispatch(addPosts(notes, lastPost))
+				})
+				.catch((err) => {
+					dispatch(notification('Danger', 'Ошибка загрузки постов пользователя.', `${err}`))
+				})
 			})
 	}
 }
@@ -242,8 +240,7 @@ export function getMoreAllPosts(uid = null, lastPost, userId) {
 		let usersCollection = firestore.collection('users')
 		let postsCollection = firestore.collection('posts')
 		let likesCollection = firestore.collection('likes')
-		firestore
-			.collection('posts')
+		postsCollection
 			.orderBy('createdAt', 'desc')
 			.where('repost', '==', false)
 			.startAt(lastPost)
@@ -264,6 +261,43 @@ export function getMoreAllPosts(uid = null, lastPost, userId) {
 					}
 				})
 			})
+	}
+}
+
+export function getDashboardPosts(uid = null, userId, followingRefs) {
+	return async (dispatch, getState, { getFirebase, getFirestore }) => {
+		dispatch({ type: SET_IS_FETCHING })
+		const firestore = getFirestore()
+		let usersCollection = firestore.collection('users')
+		let postsCollection = firestore.collection('posts')
+		let likesCollection = firestore.collection('likes')
+		let notesMass = []
+		let lastPostsMass
+		await Promise.all(followingRefs.map(async (userRef) => {
+			let notes = await postsCollection
+				.orderBy('createdAt', 'desc')
+				.where('user', '==', userRef)
+				.get()
+				.then(async (querySnapshot) => {
+					await Promise.all(
+						querySnapshot.docs.map(async (doc) => {
+							return await getPostData(doc, usersCollection, postsCollection, likesCollection, userId)
+						})
+					)
+					.then(async (notes) => {
+						lastPostsMass = await querySnapshot.docs[querySnapshot.docs.length - 1]
+						for (let note in notes) {
+							notesMass.push(notes[note])
+						}
+					})
+					.catch((err) => {
+						dispatch(notification('Danger', 'Ошибка загрузки постов', `${err}`))
+					})
+					return notesMass
+				})
+			return notes
+		}))
+		dispatch(addPosts(notesMass, lastPostsMass))
 	}
 }
 

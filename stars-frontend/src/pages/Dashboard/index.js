@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Tags from '../../components/PopularTags'
 import CreateNote from '../../components/Modal/CreatePost'
+import FetchingPosts from '../../components/FetchingPosts'
+import Spinner from '../../components/UI/Spinner'
 import './Dashboard.sass'
 
 function Dashboard(props) {
@@ -12,6 +14,7 @@ function Dashboard(props) {
 
 	}, [props.blogname])
 
+	if (!!!props.followingRefs) return <Spinner />
 	return (
 		<div className="container container__main">
 			{/* modal */}
@@ -40,7 +43,12 @@ function Dashboard(props) {
 					</div>
 					: <center><FontAwesomeIcon icon="sync-alt" size="1x" pulse={true} /></center>
 				}
-				{/* {renderPosts()} */}
+				{ !!props.followingRefs.length ? 
+					<FetchingPosts 
+						uid={props.uid} 
+						reference={ 'getDashboardPosts' } 
+					/> : <center><h3>Твои подписки пусты..</h3></center>
+				}
 			</div>
 			<div className="container__right">
 				<Tags />
@@ -55,7 +63,8 @@ function mapStateToProps(state) {
 		username: state.firebase.auth.displayName,
 		uid: state.firebase.auth.uid,
 		isLoaded: state.firebase.profile.isLoaded,
-		photoURL: state.firebase.auth.photoURL
+		photoURL: state.firebase.auth.photoURL,
+		followingRefs: state.auth.followingRefs
 	}
 }
 

@@ -16,10 +16,10 @@ function SubButton(props) {
 					setFollow(true)
 				}
 			})
-		}
-		if (disabled) {
+		} else if (disabled) {
 			if (follow) {
 				props.following.forEach((userId) => {
+					console.log(userId === props.profileId)
 					if (userId === props.profileId) return
 					setDisabled(false)
 					props.incFollowers(props.uid, 'unfollow')
