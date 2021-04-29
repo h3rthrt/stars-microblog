@@ -49,7 +49,7 @@ function FetchingPosts(props) {
 			getRefFunction(props.uid, props.userId)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [props.location.pathname, props.reference, props.uid, props.followingRefs])
+	}, [props.location.pathname, props.reference, props.uid])
 
 	return (
 		<div className={ 'fetch-posts' } style={{ marginTop: 28 }}>

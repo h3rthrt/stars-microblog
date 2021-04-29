@@ -273,6 +273,8 @@ export function getDashboardPosts(uid = null, userId, followingRefs) {
 		let likesCollection = firestore.collection('likes')
 		let notesMass = []
 		let lastPostsMass
+		let userRef = await usersCollection.doc(userId)
+		followingRefs.push(userRef)
 		await Promise.all(followingRefs.map(async (userRef) => {
 			let notes = await postsCollection
 				.orderBy('createdAt', 'desc')

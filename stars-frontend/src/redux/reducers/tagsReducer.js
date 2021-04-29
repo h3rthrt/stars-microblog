@@ -7,7 +7,8 @@ const initialState = {
 export default function tagsReducer(state = initialState, action) {
 	function sortByCount(arr) {
 		arr.sort((a, b) => a.count > b.count ? -1 : 1);
-	  }
+	}
+	
 	switch (action.type) {
 		case LOAD_TAGS_SUCCESS:
 			for (let i = 0; i < action.tags.length; i++) {
