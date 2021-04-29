@@ -6,11 +6,10 @@ import ReactNotification from 'react-notifications-component'
 function Layout(props) {
 
 	const links = [ 
-		{to: '/dashboard', name: 'Лента'}, 
-		{to: '/', name: 'Поиск'}, 
-		{to: '/404', name: 'Страница не найдена :('},
-		{to: `/profile/${props.location.pathname.slice(9)}`, 
-			name: '@' + props.location.pathname.slice(9)} 
+		{ to: '/dashboard', name: 'Лента' }, 
+		{ to: '/', name: 'Глобальная' }, 
+		{ to: '/404', name: 'Страница не найдена :(' },
+		{ to: `/profile/${props.location.pathname.slice(9)}`, name: '@' + props.location.pathname.slice(9) } 
 	]
 
 	function renderLocation() {
@@ -18,7 +17,7 @@ function Layout(props) {
 			if (location.to === props.location.pathname) {
 				return (
                     <h1 className="header-location" key={index}>
-                        {location.name}
+                        { location.name }
                     </h1>
                 )
 			} else {

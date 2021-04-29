@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
+import { loadPopularTags } from '../../redux/actions/tagsAction'
 import './PopularTags.sass'
 
 function Tags(props) {
     useEffect(() => {
-        // props.loadPopularTags()
-    }, [props])
+        props.loadPopularTags()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <div className="right-block">
@@ -13,11 +15,12 @@ function Tags(props) {
             <hr />
             <div className="right-block__list">
                 {
-                    props.tagsList.map((tag, index) => {
+                    props.tags.map((tag, index) => {
                         return(
-                            <a href="/" key={ index }>
-                                #{ tag }
-                            </a>
+                            <div className="tag-block" key={ index }>
+                                <b>#{ tag.name }</b>
+                                <span>x{ tag.count }</span>
+                            </div>
                         )
                     })
                 }
@@ -28,13 +31,13 @@ function Tags(props) {
 
 function mapStateToProps(state) {
     return {
-        tagsList: state.tag.popularTags
+        tags: state.tags.tags
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        // loadPopularTags: () => dispatch(loadPopularTags())
+        loadPopularTags: () => dispatch(loadPopularTags())
     }
 }
 

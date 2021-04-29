@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import popularTags from './popularTags'
+import tagsReducer from './tagsReducer'
 import postsReducer from './postsReducer'
 import profileReducer from './profileReducer'
 import authReducer from './authReducer'
@@ -10,7 +10,7 @@ import { firestoreReducer } from 'redux-firestore'
 import { LOGIN_SIGNOUT } from '../actions/actionsTypes'
 
 const appReducer = combineReducers({
-    tag: popularTags,
+    tags: tagsReducer,
     posts: postsReducer,
     progress: uploadReducer,
     profile: profileReducer,
