@@ -18,13 +18,19 @@ function SubButton(props) {
 			})
 		} else if (disabled) {
 			if (follow) {
-				props.following.forEach((userId) => {
-					console.log(userId === props.profileId)
-					if (userId === props.profileId) return
+				if (!!!props.following.length) {
 					setDisabled(false)
 					props.incFollowers(props.uid, 'unfollow')
 					setFollow(prev => {return !prev})
-				})
+				} else {
+					props.following.forEach((userId) => {
+						console.log(userId === props.profileId)
+						if (userId === props.profileId) return
+						setDisabled(false)
+						props.incFollowers(props.uid, 'unfollow')
+						setFollow(prev => {return !prev})
+					})
+				}
 			} else {
 				props.following.forEach((userId) => {
 					if (userId !== props.profileId) return

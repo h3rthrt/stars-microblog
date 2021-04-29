@@ -15,6 +15,7 @@ const Profile = (props) => {
 	const [ pathname, setPathname ] = useState(props.location.pathname)
 
 	useEffect(() => {
+		// console.log('render')
 		setLikes(false)
 		setPathname(props.location.pathname)
 		props.loadProfile(props.location.pathname.slice(9))
@@ -45,6 +46,7 @@ const Profile = (props) => {
 							нравится
 						</button>
 					</div>
+					{/* { console.log('fetching') } */}
 					{ 
 						props.location.pathname === pathname ?
 						<FetchingPosts 
