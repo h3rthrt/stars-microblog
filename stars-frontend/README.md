@@ -157,7 +157,7 @@ Returns **[object][29]**
 ### Parameters
 
 *   `uid` **[string][30]** uid удаляемого поста
-*   `repost` **bool** если пользователь удаляет репостнутый пост то по идее должно быть true.. (optional, default `false`)
+*   `repost` **[boolean][32]** если пользователь удаляет репостнутый пост то по идее должно быть true.. (optional, default `false`)
 
 ## restorePost
 
@@ -229,3 +229,5 @@ Returns **[object][29]**
 [30]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
 [31]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+
+[32]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean

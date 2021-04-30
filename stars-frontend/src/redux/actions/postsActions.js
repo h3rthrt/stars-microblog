@@ -513,7 +513,7 @@ export function getDashboardPosts(uid = null, userId, followingRefs) {
 	* Удаление поста 
 	* 
 	* @param {string} uid - uid удаляемого поста 
-	* @param {bool} repost - если пользователь удаляет репостнутый пост то по идее должно быть true..
+	* @param {boolean} repost - если пользователь удаляет репостнутый пост то по идее должно быть true..
 */
 export function removePost(uid, repost = false) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
