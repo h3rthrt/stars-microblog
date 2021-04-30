@@ -12,3 +12,7 @@
 
 *  fake-api - иcпользовал при верстке компонентов
 *  stars-frontend - основной проект
+
+## Диаграмма
+
+* relational diagram.drawio
