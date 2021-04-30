@@ -117,7 +117,7 @@ export function getUserPosts(uid, userId) {
 	* Получение постов пользователя относительно последнего поста 
 	* 
 	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
-	* @param {object} lastPost - запрос для последнего поста
+	* @param {object} lastPost - запрос последнего поста
 	* @param {object} userId - uid авторизованого пользователя
 */
 export function getMoreUserPosts(uid, lastPost, userId) {
@@ -200,7 +200,7 @@ export function getUserLikePosts(uid, userId) {
 	* Получение понравившихся постов пользователя относительно последнего поста 
 	* 
 	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
-	* @param {object} lastPost - запрос для последнего поста
+	* @param {object} lastPost - запрос последнего поста
 	* @param {object} userId - uid авторизованого пользователя
 */
 export function getMoreUserLikePosts(uid, lastPost, userId) {
@@ -278,7 +278,7 @@ export function getAllPosts(uid = null, userId) {
 	* Получение всех постов относительно последнего поста 
 	* 
 	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
-	* @param {object} lastPost - запрос для последнего поста
+	* @param {object} lastPost - запрос последнего поста
 	* @param {object} userId - uid авторизованого пользователя
 */
 export function getMoreAllPosts(uid = null, lastPost, userId) {
@@ -354,7 +354,7 @@ export function getSearchPosts(uid = null, userId) {
 	* Получение искомых постов относительно последнего поста 
 	* 
 	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
-	* @param {object} lastPost - запрос для последнего поста
+	* @param {object} lastPost - запрос последнего поста
 	* @param {object} userId - uid авторизованого пользователя
 */
 export function getMoreSearchPosts(uid = null, lastPost, userId) {
@@ -429,7 +429,7 @@ export function getUserSearchPosts(uid = null, userId) {
 	* Получение искомых постов пользователя относительно последнего поста 
 	* 
 	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
-	* @param {object} lastPost - запрос для последнего поста
+	* @param {object} lastPost - запрос последнего поста
 	* @param {object} userId - uid авторизованого пользователя
 */
 export function getMoreUserSearchPosts(uid = null, lastPost, userId) {
