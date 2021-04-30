@@ -61,7 +61,7 @@ Returns **[object][29]**
 ### Parameters
 
 *   `uid` **[object][29]** uid пользователя, по которому необходимо вернуть посты
-*   `lastPost` **[object][29]** запрос для последнего поста
+*   `lastPost` **[object][29]** запрос последнего поста
 *   `userId` **[object][29]** uid авторизованого пользователя
 
 ## getUserLikePosts
@@ -80,7 +80,7 @@ Returns **[object][29]**
 ### Parameters
 
 *   `uid` **[object][29]** uid пользователя, по которому необходимо вернуть посты
-*   `lastPost` **[object][29]** запрос для последнего поста
+*   `lastPost` **[object][29]** запрос последнего поста
 *   `userId` **[object][29]** uid авторизованого пользователя
 
 ## getAllPosts
@@ -99,7 +99,7 @@ Returns **[object][29]**
 ### Parameters
 
 *   `uid` **[object][29]** uid пользователя, по которому необходимо вернуть посты (optional, default `null`)
-*   `lastPost` **[object][29]** запрос для последнего поста
+*   `lastPost` **[object][29]** запрос последнего поста
 *   `userId` **[object][29]** uid авторизованого пользователя
 
 ## getSearchPosts
@@ -118,7 +118,7 @@ Returns **[object][29]**
 ### Parameters
 
 *   `uid` **[object][29]** uid пользователя, по которому необходимо вернуть посты (optional, default `null`)
-*   `lastPost` **[object][29]** запрос для последнего поста
+*   `lastPost` **[object][29]** запрос последнего поста
 *   `userId` **[object][29]** uid авторизованого пользователя
 
 ## getUserSearchPosts
@@ -137,7 +137,7 @@ Returns **[object][29]**
 ### Parameters
 
 *   `uid` **[object][29]** uid пользователя, по которому необходимо вернуть посты (optional, default `null`)
-*   `lastPost` **[object][29]** запрос для последнего поста
+*   `lastPost` **[object][29]** запрос последнего поста
 *   `userId` **[object][29]** uid авторизованого пользователя
 
 ## getDashboardPosts

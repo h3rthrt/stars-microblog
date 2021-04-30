@@ -5,6 +5,7 @@ import { Link, NavLink, withRouter, useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
 import Button from '../UI/Button'
 import CreateAcc from '../../components/Modal/CreateAcc'
+import { IS_EDIT_SEARCH } from '../../redux/actions/actionsTypes'
 
 function Nav(props) {
 	let history = useHistory()
@@ -21,7 +22,8 @@ function Nav(props) {
 
 	function searchPostsHandler(event) {
 		setSearchValue(event.target.value)
-		if (searchValue.length > 2) {
+		props.editSearch(event.target.value)
+		if (searchValue.length > 1) {
 			// редирект
 			setIsSearch(true)
 			history.push(`/search?value=${event.target.value}`)
@@ -32,11 +34,12 @@ function Nav(props) {
 
 	function searchUserPostsHandler(event) {
 		setSearchValue(event.target.value)
-		if (searchValue.length > 2) {
+		props.editSearch(event.target.value)
+		if (searchValue.length > 1) {
 			// редирект
 			setIsUserProfile(true)
 			setIsSearch(true)
-			history.push(`/search?value=${event.target.value}&user=${props.username}`)
+			history.push(`/search?user=${props.username}&value=${event.target.value}`)
 		} else {
 			if (isSearch) {
 				history.push(`/profile/${props.username}`)
@@ -139,4 +142,10 @@ function mapStateToProps(state) {
 	}
 }
 
-export default connect(mapStateToProps)(withRouter(Nav))
+function mapDispatchToProps(dispatch) {
+	return {
+		editSearch: (value) => dispatch({ value: value, type: IS_EDIT_SEARCH })
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Nav))

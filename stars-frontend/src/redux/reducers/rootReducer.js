@@ -5,12 +5,14 @@ import profileReducer from './profileReducer'
 import authReducer from './authReducer'
 import uploadReducer from './uploadReducer'
 import notificationReducer from './notificationReducer'
+import searchReducer from './searchReducer'
 import { firebaseReducer } from 'react-redux-firebase'
 import { firestoreReducer } from 'redux-firestore'
 import { LOGIN_SIGNOUT } from '../actions/actionsTypes'
 
 const appReducer = combineReducers({
     tags: tagsReducer,
+    search: searchReducer,
     posts: postsReducer,
     progress: uploadReducer,
     profile: profileReducer,

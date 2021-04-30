@@ -80,8 +80,8 @@ async function getPostData(doc, usersCollection, postsCollection, likesCollectio
 /**
 	* Получение постов пользователя
 	* 
-	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
-	* @param {object} userId - uid авторизованого пользователя
+	* @param {string} uid - uid пользователя, по которому необходимо вернуть посты 
+	* @param {string} userId - uid авторизованого пользователя
 */
 export function getUserPosts(uid, userId) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -116,9 +116,9 @@ export function getUserPosts(uid, userId) {
 /**
 	* Получение постов пользователя относительно последнего поста 
 	* 
-	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
+	* @param {string} uid - uid пользователя, по которому необходимо вернуть посты 
 	* @param {object} lastPost - запрос последнего поста
-	* @param {object} userId - uid авторизованого пользователя
+	* @param {string} userId - uid авторизованого пользователя
 */
 export function getMoreUserPosts(uid, lastPost, userId) {
 	return (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -154,8 +154,8 @@ export function getMoreUserPosts(uid, lastPost, userId) {
 /**
 	* Получение понравившихся постов пользователя
 	* 
-	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
-	* @param {object} userId - uid авторизованого пользователя
+	* @param {string} uid - uid пользователя, по которому необходимо вернуть посты 
+	* @param {string} userId - uid авторизованого пользователя
 */
 export function getUserLikePosts(uid, userId) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -199,9 +199,9 @@ export function getUserLikePosts(uid, userId) {
 /**
 	* Получение понравившихся постов пользователя относительно последнего поста 
 	* 
-	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
+	* @param {string} uid - uid пользователя, по которому необходимо вернуть посты 
 	* @param {object} lastPost - запрос последнего поста
-	* @param {object} userId - uid авторизованого пользователя
+	* @param {string} userId - uid авторизованого пользователя
 */
 export function getMoreUserLikePosts(uid, lastPost, userId) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -240,8 +240,8 @@ export function getMoreUserLikePosts(uid, lastPost, userId) {
 /**
 	* Получение всех постов
 	* 
-	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
-	* @param {object} userId - uid авторизованого пользователя
+	* @param {string} uid - uid пользователя, по которому необходимо вернуть посты 
+	* @param {string} userId - uid авторизованого пользователя
 */
 export function getAllPosts(uid = null, userId) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -277,9 +277,9 @@ export function getAllPosts(uid = null, userId) {
 /**
 	* Получение всех постов относительно последнего поста 
 	* 
-	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
+	* @param {string} uid - uid пользователя, по которому необходимо вернуть посты 
 	* @param {object} lastPost - запрос последнего поста
-	* @param {object} userId - uid авторизованого пользователя
+	* @param {string} userId - uid авторизованого пользователя
 */
 export function getMoreAllPosts(uid = null, lastPost, userId) {
 	return (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -316,10 +316,11 @@ export function getMoreAllPosts(uid = null, lastPost, userId) {
 /**
 	* Получение искомых постов
 	* 
-	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
-	* @param {object} userId - uid авторизованого пользователя
+	* @param {string} uid - uid пользователя, по которому необходимо вернуть посты 
+	* @param {string} userId - uid авторизованого пользователя
+	* @param {string} value - строка относительно которой нужно найти посты
 */
-export function getSearchPosts(uid = null, userId) {
+export function getSearchPosts(uid = null, userId, value) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
 		dispatch({ type: SET_IS_FETCHING })
 		const firestore = getFirestore()
@@ -330,7 +331,8 @@ export function getSearchPosts(uid = null, userId) {
 		postsCollection
 			.orderBy('createdAt', 'desc')
 			.where('repost', '==', false)
-			.limit(10)
+			.where("tags", "array-contains", value)
+			.limit(5)
 			.get()
 			.then(async (querySnapshot) => {
 				// first fetching posts
@@ -353,11 +355,12 @@ export function getSearchPosts(uid = null, userId) {
 /**
 	* Получение искомых постов относительно последнего поста 
 	* 
-	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
+	* @param {string} uid - uid пользователя, по которому необходимо вернуть посты 
 	* @param {object} lastPost - запрос последнего поста
-	* @param {object} userId - uid авторизованого пользователя
+	* @param {string} userId - uid авторизованого пользователя
+	* @param {string} value - строка относительно которой нужно найти посты
 */
-export function getMoreSearchPosts(uid = null, lastPost, userId) {
+export function getMoreSearchPosts(uid = null, lastPost, userId, value) {
 	return (dispatch, getState, { getFirebase, getFirestore }) => {
 		dispatch({ type: SET_IS_MORE_FETCHING })
 		const firestore = getFirestore()
@@ -367,8 +370,9 @@ export function getMoreSearchPosts(uid = null, lastPost, userId) {
 		postsCollection
 			.orderBy('createdAt', 'desc')
 			.where('repost', '==', false)
+			.where("tags", "array-contains", value)
 			.startAt(lastPost)
-			.limit(10)
+			.limit(5)
 			.get()
 			.then((querySnapshot) => {
 				Promise.all(
@@ -391,10 +395,11 @@ export function getMoreSearchPosts(uid = null, lastPost, userId) {
 /**
 	* Получение искомых постов пользователя
 	* 
-	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
-	* @param {object} userId - uid авторизованого пользователя
+	* @param {string} uid - uid пользователя, по которому необходимо вернуть посты 
+	* @param {string} userId - uid авторизованого пользователя
+	* @param {string} value - строка относительно которой нужно найти посты
 */
-export function getUserSearchPosts(uid = null, userId) {
+export function getUserSearchPosts(uid, userId, value) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
 		dispatch({ type: SET_IS_FETCHING })
 		const firestore = getFirestore()
@@ -404,8 +409,9 @@ export function getUserSearchPosts(uid = null, userId) {
 		let lastPost
 		postsCollection
 			.orderBy('createdAt', 'desc')
-			.where('repost', '==', false)
-			.limit(10)
+			.where('user', '==', usersCollection.doc(uid))
+			.where("tags", "array-contains", value)
+			.limit(5)
 			.get()
 			.then(async (querySnapshot) => {
 				// first fetching posts
@@ -428,11 +434,12 @@ export function getUserSearchPosts(uid = null, userId) {
 /**
 	* Получение искомых постов пользователя относительно последнего поста 
 	* 
-	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
+	* @param {string} uid - uid пользователя, по которому необходимо вернуть посты 
 	* @param {object} lastPost - запрос последнего поста
-	* @param {object} userId - uid авторизованого пользователя
+	* @param {string} userId - uid авторизованого пользователя
+	* @param {string} value - строка относительно которой нужно найти посты
 */
-export function getMoreUserSearchPosts(uid = null, lastPost, userId) {
+export function getMoreUserSearchPosts(uid, lastPost, userId, value) {
 	return (dispatch, getState, { getFirebase, getFirestore }) => {
 		dispatch({ type: SET_IS_MORE_FETCHING })
 		const firestore = getFirestore()
@@ -441,9 +448,10 @@ export function getMoreUserSearchPosts(uid = null, lastPost, userId) {
 		let likesCollection = firestore.collection('likes')
 		postsCollection
 			.orderBy('createdAt', 'desc')
-			.where('repost', '==', false)
+			.where('user', '==', usersCollection.doc(uid))
+			.where("tags", "array-contains", value)
 			.startAt(lastPost)
-			.limit(10)
+			.limit(5)
 			.get()
 			.then((querySnapshot) => {
 				Promise.all(

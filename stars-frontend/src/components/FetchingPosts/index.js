@@ -8,7 +8,9 @@ import
 		getMoreUserLikePosts,
 		getAllPosts,
 		getMoreAllPosts,
-		getDashboardPosts
+		getDashboardPosts,
+		getSearchPosts,
+		getMoreSearchPosts
 	} 
 	from '../../redux/actions/postsActions'
 import useInfiniteScroll from '../../useInfiniteScroll'
@@ -18,9 +20,9 @@ function FetchingPosts(props) {
 
 	const references = [
 		//get posts 
-		[ props.getUserPosts, props.getUserLikePosts, props.getAllPosts, props.getDashboardPosts ], 
+		[ props.getUserPosts, props.getUserLikePosts, props.getAllPosts, props.getDashboardPosts, props.getSearchPosts ], 
 		//get more posts 
-		[ props.getMoreUserPosts, props.getMoreUserLikePosts, props.getMoreAllPosts ] 
+		[ props.getMoreUserPosts, props.getMoreUserLikePosts, props.getMoreAllPosts, props.getMoreSearchPosts ] 
 	]
 
 	let getRefFunction = () => {}
@@ -40,16 +42,19 @@ function FetchingPosts(props) {
 		props.lastPost,
 		props.complete,
 		props.userId,
+		props.value
 	)
 	
 	useEffect(() => {
 		if (getRefFunction.name === 'getDashboardPosts') {
 			getRefFunction(props.uid, props.userId, props.followingRefs)
+		} else if (getRefFunction.name === 'getSearchPosts' || getRefFunction.name === 'getUserSearchPosts') {
+			getRefFunction(props.uid, props.userId, props.value)
 		} else {
 			getRefFunction(props.uid, props.userId)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [props.location.pathname, props.reference, props.uid])
+	}, [props.location.pathname, props.reference, props.uid, props.value])
 
 	return (
 		<div className={ 'fetch-posts' } style={{ marginTop: 28 }}>
@@ -93,7 +98,9 @@ function mapDispatchToProps(dispatch) {
 		getMoreUserLikePosts: (uid, lastPost, userId) => dispatch(getMoreUserLikePosts(uid, lastPost, userId)),
 		getAllPosts: (uid, userId) => dispatch(getAllPosts(uid, userId)),
 		getMoreAllPosts: (uid, lastPost, userId) => dispatch(getMoreAllPosts(uid, lastPost, userId)),
-		getDashboardPosts: (uid, userId, followingRefs) => dispatch(getDashboardPosts(uid, userId, followingRefs))
+		getDashboardPosts: (uid, userId, followingRefs) => dispatch(getDashboardPosts(uid, userId, followingRefs)),
+		getSearchPosts: (uid, userId, value) => dispatch(getSearchPosts(uid, userId, value)),
+		getMoreSearchPosts: (uid, lastPost, userId, value) => dispatch(getMoreSearchPosts(uid, lastPost, userId, value))
 	}
 }
 
