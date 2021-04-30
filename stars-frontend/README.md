@@ -51,8 +51,8 @@ Returns **[object][29]**
 
 ### Parameters
 
-*   `uid` **[object][29]** uid пользователя, по которому необходимо вернуть посты
-*   `userId` **[object][29]** uid авторизованого пользователя
+*   `uid` **[string][30]** uid пользователя, по которому необходимо вернуть посты
+*   `userId` **[string][30]** uid авторизованого пользователя
 
 ## getMoreUserPosts
 
@@ -60,9 +60,9 @@ Returns **[object][29]**
 
 ### Parameters
 
-*   `uid` **[object][29]** uid пользователя, по которому необходимо вернуть посты
+*   `uid` **[string][30]** uid пользователя, по которому необходимо вернуть посты
 *   `lastPost` **[object][29]** запрос последнего поста
-*   `userId` **[object][29]** uid авторизованого пользователя
+*   `userId` **[string][30]** uid авторизованого пользователя
 
 ## getUserLikePosts
 
@@ -70,8 +70,8 @@ Returns **[object][29]**
 
 ### Parameters
 
-*   `uid` **[object][29]** uid пользователя, по которому необходимо вернуть посты
-*   `userId` **[object][29]** uid авторизованого пользователя
+*   `uid` **[string][30]** uid пользователя, по которому необходимо вернуть посты
+*   `userId` **[string][30]** uid авторизованого пользователя
 
 ## getMoreUserLikePosts
 
@@ -79,9 +79,9 @@ Returns **[object][29]**
 
 ### Parameters
 
-*   `uid` **[object][29]** uid пользователя, по которому необходимо вернуть посты
+*   `uid` **[string][30]** uid пользователя, по которому необходимо вернуть посты
 *   `lastPost` **[object][29]** запрос последнего поста
-*   `userId` **[object][29]** uid авторизованого пользователя
+*   `userId` **[string][30]** uid авторизованого пользователя
 
 ## getAllPosts
 
@@ -89,8 +89,8 @@ Returns **[object][29]**
 
 ### Parameters
 
-*   `uid` **[object][29]** uid пользователя, по которому необходимо вернуть посты (optional, default `null`)
-*   `userId` **[object][29]** uid авторизованого пользователя
+*   `uid` **[string][30]** uid пользователя, по которому необходимо вернуть посты (optional, default `null`)
+*   `userId` **[string][30]** uid авторизованого пользователя
 
 ## getMoreAllPosts
 
@@ -98,9 +98,9 @@ Returns **[object][29]**
 
 ### Parameters
 
-*   `uid` **[object][29]** uid пользователя, по которому необходимо вернуть посты (optional, default `null`)
+*   `uid` **[string][30]** uid пользователя, по которому необходимо вернуть посты (optional, default `null`)
 *   `lastPost` **[object][29]** запрос последнего поста
-*   `userId` **[object][29]** uid авторизованого пользователя
+*   `userId` **[string][30]** uid авторизованого пользователя
 
 ## getSearchPosts
 
@@ -108,8 +108,9 @@ Returns **[object][29]**
 
 ### Parameters
 
-*   `uid` **[object][29]** uid пользователя, по которому необходимо вернуть посты (optional, default `null`)
-*   `userId` **[object][29]** uid авторизованого пользователя
+*   `uid` **[string][30]** uid пользователя, по которому необходимо вернуть посты (optional, default `null`)
+*   `userId` **[string][30]** uid авторизованого пользователя
+*   `value` **[string][30]** строка относительно которой нужно найти посты
 
 ## getMoreSearchPosts
 
@@ -117,9 +118,10 @@ Returns **[object][29]**
 
 ### Parameters
 
-*   `uid` **[object][29]** uid пользователя, по которому необходимо вернуть посты (optional, default `null`)
+*   `uid` **[string][30]** uid пользователя, по которому необходимо вернуть посты (optional, default `null`)
 *   `lastPost` **[object][29]** запрос последнего поста
-*   `userId` **[object][29]** uid авторизованого пользователя
+*   `userId` **[string][30]** uid авторизованого пользователя
+*   `value` **[string][30]** строка относительно которой нужно найти посты
 
 ## getUserSearchPosts
 
@@ -127,8 +129,9 @@ Returns **[object][29]**
 
 ### Parameters
 
-*   `uid` **[object][29]** uid пользователя, по которому необходимо вернуть посты (optional, default `null`)
-*   `userId` **[object][29]** uid авторизованого пользователя
+*   `uid` **[string][30]** uid пользователя, по которому необходимо вернуть посты
+*   `userId` **[string][30]** uid авторизованого пользователя
+*   `value` **[string][30]** строка относительно которой нужно найти посты
 
 ## getMoreUserSearchPosts
 
@@ -136,9 +139,10 @@ Returns **[object][29]**
 
 ### Parameters
 
-*   `uid` **[object][29]** uid пользователя, по которому необходимо вернуть посты (optional, default `null`)
+*   `uid` **[string][30]** uid пользователя, по которому необходимо вернуть посты
 *   `lastPost` **[object][29]** запрос последнего поста
-*   `userId` **[object][29]** uid авторизованого пользователя
+*   `userId` **[string][30]** uid авторизованого пользователя
+*   `value` **[string][30]** строка относительно которой нужно найти посты
 
 ## getDashboardPosts
 
