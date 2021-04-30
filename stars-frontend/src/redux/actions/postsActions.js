@@ -9,7 +9,16 @@ import {
 } from './actionsTypes'
 import notification from './notificationActions'
 
-// build post object data 
+/**
+	* Получение объекта с полной информацией о посте
+	* 
+	* @param {object} doc - запрос к посту
+	* @param {object} usersCollection - запрос к коллекции пользователей
+	* @param {object} postsCollection - запрос к коллекции постов
+	* @param {object} likesCollection - запрос к коллекции лайков
+	* @param {string} userId - uid авторизованого пользователя
+	* @returns {object}
+*/
 async function getPostData(doc, usersCollection, postsCollection, likesCollection, userId) {
 	let dataPost = doc.data()
 	dataPost.postId = doc.id
@@ -68,6 +77,12 @@ async function getPostData(doc, usersCollection, postsCollection, likesCollectio
 	return dataPost
 }
 
+/**
+	* Получение постов пользователя
+	* 
+	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
+	* @param {object} userId - uid авторизованого пользователя
+*/
 export function getUserPosts(uid, userId) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
 		dispatch({ type: SET_IS_FETCHING })
@@ -98,6 +113,13 @@ export function getUserPosts(uid, userId) {
 	}
 }
 
+/**
+	* Получение постов пользователя относительно последнего поста 
+	* 
+	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
+	* @param {object} lastPost - запрос для последнего поста
+	* @param {object} userId - uid авторизованого пользователя
+*/
 export function getMoreUserPosts(uid, lastPost, userId) {
 	return (dispatch, getState, { getFirebase, getFirestore }) => {
 		dispatch({ type: SET_IS_MORE_FETCHING })
@@ -129,6 +151,12 @@ export function getMoreUserPosts(uid, lastPost, userId) {
 	}
 }
 
+/**
+	* Получение понравившихся постов пользователя
+	* 
+	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
+	* @param {object} userId - uid авторизованого пользователя
+*/
 export function getUserLikePosts(uid, userId) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
 		dispatch({ type: SET_IS_FETCHING })
@@ -168,6 +196,13 @@ export function getUserLikePosts(uid, userId) {
 	}
 }
 
+/**
+	* Получение понравившихся постов пользователя относительно последнего поста 
+	* 
+	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
+	* @param {object} lastPost - запрос для последнего поста
+	* @param {object} userId - uid авторизованого пользователя
+*/
 export function getMoreUserLikePosts(uid, lastPost, userId) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
 		dispatch({ type: SET_IS_MORE_FETCHING })
@@ -202,6 +237,12 @@ export function getMoreUserLikePosts(uid, lastPost, userId) {
 	}
 }
 
+/**
+	* Получение всех постов
+	* 
+	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
+	* @param {object} userId - uid авторизованого пользователя
+*/
 export function getAllPosts(uid = null, userId) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
 		dispatch({ type: SET_IS_FETCHING })
@@ -233,6 +274,13 @@ export function getAllPosts(uid = null, userId) {
 	}
 }
 
+/**
+	* Получение всех постов относительно последнего поста 
+	* 
+	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
+	* @param {object} lastPost - запрос для последнего поста
+	* @param {object} userId - uid авторизованого пользователя
+*/
 export function getMoreAllPosts(uid = null, lastPost, userId) {
 	return (dispatch, getState, { getFirebase, getFirestore }) => {
 		dispatch({ type: SET_IS_MORE_FETCHING })
@@ -264,6 +312,164 @@ export function getMoreAllPosts(uid = null, lastPost, userId) {
 	}
 }
 
+
+/**
+	* Получение искомых постов
+	* 
+	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
+	* @param {object} userId - uid авторизованого пользователя
+*/
+export function getSearchPosts(uid = null, userId) {
+	return async (dispatch, getState, { getFirebase, getFirestore }) => {
+		dispatch({ type: SET_IS_FETCHING })
+		const firestore = getFirestore()
+		let usersCollection = firestore.collection('users')
+		let postsCollection = firestore.collection('posts')
+		let likesCollection = firestore.collection('likes')
+		let lastPost
+		postsCollection
+			.orderBy('createdAt', 'desc')
+			.where('repost', '==', false)
+			.limit(10)
+			.get()
+			.then(async (querySnapshot) => {
+				// first fetching posts
+				Promise.all(
+					querySnapshot.docs.map((doc) => {
+						return getPostData(doc, usersCollection, postsCollection, likesCollection, userId)
+					})
+				)
+				.then((notes) => {
+					lastPost = querySnapshot.docs[querySnapshot.docs.length - 1]
+					dispatch(addPosts(notes, lastPost))
+				})
+				.catch((err) => {
+					dispatch(notification('Danger', 'Ошибка загрузки постов пользователя.', `${err}`))
+				})
+			})
+	}
+}
+
+/**
+	* Получение искомых постов относительно последнего поста 
+	* 
+	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
+	* @param {object} lastPost - запрос для последнего поста
+	* @param {object} userId - uid авторизованого пользователя
+*/
+export function getMoreSearchPosts(uid = null, lastPost, userId) {
+	return (dispatch, getState, { getFirebase, getFirestore }) => {
+		dispatch({ type: SET_IS_MORE_FETCHING })
+		const firestore = getFirestore()
+		let usersCollection = firestore.collection('users')
+		let postsCollection = firestore.collection('posts')
+		let likesCollection = firestore.collection('likes')
+		postsCollection
+			.orderBy('createdAt', 'desc')
+			.where('repost', '==', false)
+			.startAt(lastPost)
+			.limit(10)
+			.get()
+			.then((querySnapshot) => {
+				Promise.all(
+					querySnapshot.docs.map((doc) => {
+						return getPostData(doc, usersCollection, postsCollection, likesCollection, userId)
+					})
+				).then((notes) => {
+					const lastNote = querySnapshot.docs[querySnapshot.docs.length - 1]
+					if (!!notes.length) notes.shift()
+					if (!!!notes.length) {
+						dispatch({ type: LOAD_POSTS_COMPLETE })
+					} else {
+						dispatch(addMorePosts(notes, lastNote))
+					}
+				})
+			})
+	}
+}
+
+/**
+	* Получение искомых постов пользователя
+	* 
+	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
+	* @param {object} userId - uid авторизованого пользователя
+*/
+export function getUserSearchPosts(uid = null, userId) {
+	return async (dispatch, getState, { getFirebase, getFirestore }) => {
+		dispatch({ type: SET_IS_FETCHING })
+		const firestore = getFirestore()
+		let usersCollection = firestore.collection('users')
+		let postsCollection = firestore.collection('posts')
+		let likesCollection = firestore.collection('likes')
+		let lastPost
+		postsCollection
+			.orderBy('createdAt', 'desc')
+			.where('repost', '==', false)
+			.limit(10)
+			.get()
+			.then(async (querySnapshot) => {
+				// first fetching posts
+				Promise.all(
+					querySnapshot.docs.map((doc) => {
+						return getPostData(doc, usersCollection, postsCollection, likesCollection, userId)
+					})
+				)
+				.then((notes) => {
+					lastPost = querySnapshot.docs[querySnapshot.docs.length - 1]
+					dispatch(addPosts(notes, lastPost))
+				})
+				.catch((err) => {
+					dispatch(notification('Danger', 'Ошибка загрузки постов пользователя.', `${err}`))
+				})
+			})
+	}
+}
+
+/**
+	* Получение искомых постов пользователя относительно последнего поста 
+	* 
+	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
+	* @param {object} lastPost - запрос для последнего поста
+	* @param {object} userId - uid авторизованого пользователя
+*/
+export function getMoreUserSearchPosts(uid = null, lastPost, userId) {
+	return (dispatch, getState, { getFirebase, getFirestore }) => {
+		dispatch({ type: SET_IS_MORE_FETCHING })
+		const firestore = getFirestore()
+		let usersCollection = firestore.collection('users')
+		let postsCollection = firestore.collection('posts')
+		let likesCollection = firestore.collection('likes')
+		postsCollection
+			.orderBy('createdAt', 'desc')
+			.where('repost', '==', false)
+			.startAt(lastPost)
+			.limit(10)
+			.get()
+			.then((querySnapshot) => {
+				Promise.all(
+					querySnapshot.docs.map((doc) => {
+						return getPostData(doc, usersCollection, postsCollection, likesCollection, userId)
+					})
+				).then((notes) => {
+					const lastNote = querySnapshot.docs[querySnapshot.docs.length - 1]
+					if (!!notes.length) notes.shift()
+					if (!!!notes.length) {
+						dispatch({ type: LOAD_POSTS_COMPLETE })
+					} else {
+						dispatch(addMorePosts(notes, lastNote))
+					}
+				})
+			})
+	}
+}
+
+/**
+	* Получение постов блогов на которые подписан пользователь 
+	* 
+	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
+	* @param {object} userId - uid авторизованого пользователя
+	* @param {array} followingRefs - список uid блогов на которые подписан пользователь
+*/
 export function getDashboardPosts(uid = null, userId, followingRefs) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
 		dispatch({ type: SET_IS_FETCHING })
@@ -303,6 +509,12 @@ export function getDashboardPosts(uid = null, userId, followingRefs) {
 	}
 }
 
+/**
+	* Удаление поста 
+	* 
+	* @param {string} uid - uid удаляемого поста 
+	* @param {bool} repost - если пользователь удаляет репостнутый пост то по идее должно быть true..
+*/
 export function removePost(uid, repost = false) {
 	return async (dispatch, getState, { getFirebase, getFirestore }) => {
 		const firestore = getFirestore()
@@ -331,6 +543,12 @@ export function removePost(uid, repost = false) {
 	}
 }
 
+/**
+	* Восстановление поста 
+	* 
+	* @param {string} uid - uid восстанавливаемого поста 
+	* @param {object} post - объект с полной информацией о посте
+*/
 export function restorePost(uid, post) {
 	return (dispatch, getState, { getFirebase, getFirestore }) => {
 		const firestore = getFirestore()

@@ -1,19 +1,50 @@
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Navigation.sass'
-import { Link, NavLink, withRouter } from 'react-router-dom'
+import { Link, NavLink, withRouter, useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
 import Button from '../UI/Button'
 import CreateAcc from '../../components/Modal/CreateAcc'
 
 function Nav(props) {
+	let history = useHistory()
 	const [ modalVisible, setModalVisible ] = useState(false)
+	const [ searchValue, setSearchValue ] = useState('')
+	const [ isUserProfile, setIsUserProfile ] = useState(false)
+	const [ isSearch, setIsSearch ] = useState(false)
 	const links = [
 		{ to: '/dashboard', icon: 'home' },
 		{ to: '/', icon: 'globe' },
 		{ to: `/profile/${props.authName}`, icon: 'user' },
 		{ to: '/settings', icon: 'cog' }
 	]
+
+	function searchPostsHandler(event) {
+		setSearchValue(event.target.value)
+		if (searchValue.length > 2) {
+			// редирект
+			setIsSearch(true)
+			history.push(`/search?value=${event.target.value}`)
+		} else {
+			if (isSearch) history.push(`/`)
+		}
+	}
+
+	function searchUserPostsHandler(event) {
+		setSearchValue(event.target.value)
+		if (searchValue.length > 2) {
+			// редирект
+			setIsUserProfile(true)
+			setIsSearch(true)
+			history.push(`/search?value=${event.target.value}&user=${props.username}`)
+		} else {
+			if (isSearch) {
+				history.push(`/profile/${props.username}`)
+				setIsSearch(false)
+			}
+			setIsUserProfile(false)
+		}
+	}
 
 	function renderLinks() {
 		if (!props.isAuthenticated) {
@@ -77,14 +108,18 @@ function Nav(props) {
 			<div className="search">
 				<FontAwesomeIcon icon="search" size="lg" />
 				{
-					props.location.pathname === `/profile/${props.username}` ? 
+					props.location.pathname === `/profile/${props.username}` || isUserProfile ? 
 					<input 
 						type="text" 
 						placeholder={ `Поиск ${props.username}` } 
+						value={ searchValue }
+						onChange={ (event) => searchUserPostsHandler(event) }
 					/> :
 					<input 
 						type="text" 
 						placeholder='Поиск' 
+						value={ searchValue }
+						onChange={ (event) => searchPostsHandler(event) }
 					/> 
 				}
 			</div>

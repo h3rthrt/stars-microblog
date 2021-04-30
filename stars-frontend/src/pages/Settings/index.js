@@ -12,8 +12,8 @@ function Settings(props) {
 
     const buttons = [
         {icon: 'palette', text: 'Сменить цветовую тему', onClick: () => props.setTheme(props.uid, props.theme)},
-        {icon: 'user', text: 'Сведения об учетной записи'},
-        {icon: 'key', text: 'Изменение пароля'},
+        // {icon: 'user', text: 'Сведения об учетной записи'},
+        // {icon: 'key', text: 'Изменение пароля'},
         {icon: 'heart-broken', text: 'Отключить свою учетную запись'},
         {icon: 'sign-out-alt', text: 'Выйти с аккаунта', onClick: () => props.signOut()}
     ]

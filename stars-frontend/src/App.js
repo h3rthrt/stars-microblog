@@ -8,6 +8,7 @@ import Main from './pages/Main'
 import Profile from './pages/Profile'
 import Settings from './pages/Settings'
 import NotFound from './pages/NotFound'
+import Search from './pages/Search'
 import Auth from './pages/Auth'
 import Loading from './components/UI/Loading'
 
@@ -34,6 +35,7 @@ function App(props) {
       <Route exact path='/' component={Main} />
       <Route exact path='/404' component={NotFound} />
       <Route path='/profile/:id' component={Profile} />
+      <Route path='/search' component={Search} />
       <Redirect from='/dashboard' to='/auth' />
       <Redirect from='/settings' to='/auth' />
       <Redirect from='*' to='/404' />
@@ -48,6 +50,7 @@ function App(props) {
         <Route exact path='/settings' component={Settings} />
         <Route exact path='/404' component={NotFound} />
         <Route path='/profile/:id' component={Profile} />
+        <Route path='/search' component={Search} />
         <Redirect to='/' />
         <Redirect from='*' to='/404' />
       </Switch>

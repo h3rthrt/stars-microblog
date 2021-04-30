@@ -9,7 +9,8 @@ function Layout(props) {
 		{ to: '/dashboard', name: 'Лента' }, 
 		{ to: '/', name: 'Глобальная' }, 
 		{ to: '/404', name: 'Страница не найдена :(' },
-		{ to: `/profile/${props.location.pathname.slice(9)}`, name: '@' + props.location.pathname.slice(9) } 
+		{ to: `/profile/${props.location.pathname.slice(9)}`, name: '@' + props.location.pathname.slice(9) },
+		{ to: `/search`, name: 'Поиск' } 
 	]
 
 	function renderLocation() {
@@ -31,7 +32,7 @@ function Layout(props) {
 			<ReactNotification />
 			<div className="wrapper">
 				<Nav />
-				{renderLocation()}
+				{ renderLocation() }
 				<main>{props.children}</main>
 			</div>
 		</>
