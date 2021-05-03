@@ -474,8 +474,8 @@ export function getMoreUserSearchPosts(uid, lastPost, userId, value) {
 /**
 	* Получение постов блогов на которые подписан пользователь 
 	* 
-	* @param {object} uid - uid пользователя, по которому необходимо вернуть посты 
-	* @param {object} userId - uid авторизованого пользователя
+	* @param {string} uid - uid пользователя, по которому необходимо вернуть посты 
+	* @param {string} userId - uid авторизованого пользователя
 	* @param {array} followingRefs - список uid блогов на которые подписан пользователь
 */
 export function getDashboardPosts(uid = null, userId, followingRefs) {

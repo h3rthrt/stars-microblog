@@ -32,7 +32,7 @@ function Dropdown(props) {
 				{ props.createdAt }
 			</span>
 			{
-				props.username === props.displayName && !props.repost ?
+				props.username === props.displayName || (props.repost && props.username === props.displayName) ?
 				<button onClick={ () => removePostHandler() } >
 					Удалить
 				</button> : null
