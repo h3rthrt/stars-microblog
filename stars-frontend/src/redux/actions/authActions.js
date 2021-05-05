@@ -18,7 +18,20 @@ export function signIn(email, password, isLogin, name, blogname) {
 		}
 
 		if (isLogin) {
-			firebase.auth().createUserWithEmailAndPassword(email, password)
+			const exist = new Promise((resolve, reject) => {
+				firestore.collection('users').where('username', '==', name).get().then((querySnapshot) => {
+					if (querySnapshot.exist) {
+						reject()
+					} else {
+						resolve()
+					}
+				}).catch((err) => {
+					reject(err)
+				})
+			})
+
+			exist.then(() => {
+				firebase.auth().createUserWithEmailAndPassword(email, password)
 				.then(() => {
 					const user = firebase.auth().currentUser
 					user.updateProfile({
@@ -42,6 +55,9 @@ export function signIn(email, password, isLogin, name, blogname) {
 					dispatch(notification('Danger', title, error.message))
 					dispatch({ type: LOGIN_CLEAR })
 				})
+			}).catch((err) => {
+				dispatch(notification('Danger', title, 'Пользователь с таким ником уже существует' || err.message))
+			})
 		} else {
 			firebase.auth().signInWithEmailAndPassword(email, password)
 				.then(() => {
@@ -82,7 +98,7 @@ export function loadSubs(uid) {
 				})).then((following) => {
 					dispatch({ followers: followers, following: following, followingRefs: followingRefs, type: SUBS_LOAD_SUCCESS })
 				}).catch((err) => {
-					dispatch(notification('Danger', 'Ошибка', `${err}`))
+					dispatch(notification('Danger', 'Ошибка', err.message))
 				})
 			})
 		})

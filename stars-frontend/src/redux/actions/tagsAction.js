@@ -13,9 +13,9 @@ export function loadPopularTags() {
 					tagsMass.push(data.tags)
 				}
 				return true
-			})).then(() => {
+			})).then(async () => {
 				for (let mass in tagsMass) {
-					tagsMass[mass].forEach((tag) => {
+					await tagsMass[mass].forEach((tag) => {
 						tags.push({
 							name: tag,
 							count: 1

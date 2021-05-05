@@ -11,14 +11,14 @@ export default function tagsReducer(state = initialState, action) {
 	
 	switch (action.type) {
 		case LOAD_TAGS_SUCCESS:
-			for (let i = 0; i < action.tags.length; i++) {
-				for (let j = i + 1; j < action.tags.length; j++) {
-					if (action.tags[i].name === action.tags[j].name) {
-						action.tags[i].count++
-						action.tags.splice(j)
+			action.tags.forEach((tag, index) => {
+				for (let i = index + 1; i < action.tags.length; i++) {
+					if (tag.name === action.tags[i].name) {
+						tag.count++
+						action.tags.splice(i, 1)
 					}
 				}
-			}
+			})
 			sortByCount(action.tags)
 			return {
 				...state,
