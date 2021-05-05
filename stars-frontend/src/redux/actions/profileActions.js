@@ -149,6 +149,37 @@ export function unfollowOnBlog(uid, userId) {
 	}
 }
 
+export function replaceBlogname(blogname) {
+	return (dispatch, getState, { getFirebase, getFirestore }) => {
+		const firebase = getFirebase()
+		const firestore = getFirestore()
+		const user = firebase.auth().currentUser
+		firestore.collection('user').doc(user.uid).update({
+			blogname: blogname
+		}).then(() => {
+			user.updateProfile({
+				displayName: `${blogname}`
+			})
+		}).catch((err) => {
+			dispatch(notification('Danger', err.code, err.message))
+		})
+	}
+}
+
+export function replaceDescription(desc) {
+	return (dispatch, getState, { getFirebase, getFirestore }) => {
+		const firebase = getFirebase()
+		const firestore = getFirestore()
+		const user = firebase.auth().currentUser
+		firestore.collection('user').doc(user.uid).update({
+			desc: desc
+		}).then(() => {
+			
+		}).catch((err) => {
+			dispatch(notification('Danger', err.code, err.message))
+		})
+	}
+}
 
 export function loadProfileDataSuccess(data) {
 	return {

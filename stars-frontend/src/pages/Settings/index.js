@@ -1,15 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Settings.sass'
 import { connect } from 'react-redux'
 import { signOut } from '../../redux/actions/authActions'
-import { clearPhoto } from '../../redux/actions/profileActions'
+import { clearPhoto, replaceDescription, replaceBlogname } from '../../redux/actions/profileActions'
 import { setTheme } from '../../redux/actions/settingsAction'
 import Spinner from '../../components/UI/Spinner'
 import PhotoUser from '../Profile/User/PhotoUser'
 
 function Settings(props) {
-
     const buttons = [
         {icon: 'palette', text: 'Сменить цветовую тему', onClick: () => props.setTheme(props.uid, props.theme)},
         // {icon: 'user', text: 'Сведения об учетной записи'},
@@ -17,11 +16,10 @@ function Settings(props) {
         {icon: 'heart-broken', text: 'Отключить свою учетную запись'},
         {icon: 'sign-out-alt', text: 'Выйти с аккаунта', onClick: () => props.signOut()}
     ]
-
-    // useEffect(() => {
-    //     props.loadProfile(props.username)
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [])
+    const [ blogname, setBlogname ] = useState(props.blogname)
+    const [ desc, setDesc ] = useState(props.desc || 'нет описания')
+    const [ editName, setEditName ] = useState(false)
+    const [ editDesc, setEditDesc ] = useState(false)
     
     function renderButtons() {
         return buttons.map((item, index) => {
@@ -34,6 +32,16 @@ function Settings(props) {
         })
     }
 
+    function blognameHandler(event) {
+        setBlogname(event.target.value)
+
+    }
+
+    function descHandler(event) {
+        setDesc(event.target.value)
+
+    }
+
     if(!props.isLoaded) {
         return <Spinner />
     } else {
@@ -42,8 +50,26 @@ function Settings(props) {
                 <div className="settings">
                     <div className="settings__profile-info">
                         <PhotoUser photoURL={props.photoURL} username={props.username} />
-                        <div className="settings__username">{ props.blogname }</div>
-                        <div className="settings__desc">null desc</div>
+                        <div className="settings__block">
+                            {
+                                !editName ?
+                                <div className="settings__username">{ blogname }</div> : 
+                                <input className="settings__username" value={ blogname } onChange={ (event) => blognameHandler(event) }></input>
+                            }
+                            <button onClick={() => setEditName(!editName)}>
+                                <FontAwesomeIcon icon={ !editName ? "pen" : "check" } />
+                            </button>
+                        </div>
+                        <div className="settings__block">
+                            {
+                                !editDesc ?
+                                <div className="settings__desc"> { desc || 'нет описания' }</div> : 
+                                <input className="settings__desc" value={ desc } onChange={ (event) => descHandler(event) }></input>
+                            }
+                            <button onClick={ () => setEditDesc(!editDesc) }>
+                                <FontAwesomeIcon icon={ !editDesc ? "pen" : "check" } />
+                            </button>
+                        </div>
                     </div>
                     <div className="settings__buttons">
                         { renderButtons() }
@@ -61,6 +87,7 @@ function mapStateToProps(state) {
         blogname: state.firebase.profile.blogname,
         username: state.firebase.auth.displayName,
         isLoaded: state.firebase.profile.isLoaded,
+        desc: state.firebase.profile.desc,
         theme: state.firebase.profile.theme
     }
     
@@ -70,7 +97,9 @@ function mapDispatchToProps(dispatch) {
     return{
         signOut: () => dispatch(signOut()),
         clearPhoto: () => dispatch(clearPhoto()),
-        setTheme: (uid, theme) => dispatch(setTheme(uid, theme))
+        setTheme: (uid, theme) => dispatch(setTheme(uid, theme)),
+        replaceDescription: (desc) => dispatch(replaceDescription(desc)),
+        replaceBlogname: (blogname) => dispatch(replaceBlogname(blogname))
     }
 }
 
