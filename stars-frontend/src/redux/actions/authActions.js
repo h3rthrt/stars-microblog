@@ -20,8 +20,8 @@ export function signIn(email, password, isLogin, name, blogname) {
 		if (isLogin) {
 			const exist = new Promise((resolve, reject) => {
 				firestore.collection('users').where('username', '==', name).get().then((querySnapshot) => {
-					if (querySnapshot.exist) {
-						reject()
+					if (querySnapshot.size > 0) {
+						reject('Пользователь с таким ником уже существует')
 					} else {
 						resolve()
 					}
@@ -56,7 +56,7 @@ export function signIn(email, password, isLogin, name, blogname) {
 					dispatch({ type: LOGIN_CLEAR })
 				})
 			}).catch((err) => {
-				dispatch(notification('Danger', title, 'Пользователь с таким ником уже существует' || err.message))
+				dispatch(notification('Danger', title, err.message || err ))
 			})
 		} else {
 			firebase.auth().signInWithEmailAndPassword(email, password)
