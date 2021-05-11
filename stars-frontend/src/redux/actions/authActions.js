@@ -72,11 +72,13 @@ export function signIn(email, password, isLogin, name, blogname) {
 	}
 }
 
-export function loadSubs(uid) {
+export function loadSubs() {
 	return async (dispatch, getState, {getFirebase, getFirestore}) => {
 		const firestore = getFirestore()
+		const firebase = getFirebase()
+		let user = await firebase.auth().currentUser
 		const loadFollowers = new Promise(async (resolve, reject) => {
-			await firestore.collection(`users/${uid}/followers`).get().then(async (querySnapshot) => {
+			await firestore.collection(`users/${user.uid}/followers`).get().then(async (querySnapshot) => {
 				Promise.all(querySnapshot.docs.map(async (doc) => {
 					let data = await doc.data()
 					return data.user.id
@@ -89,7 +91,7 @@ export function loadSubs(uid) {
 		})
 
 		loadFollowers.then(async (followers) => {
-			await firestore.collection(`users/${uid}/following`).get().then(async (querySnapshot) => {
+			await firestore.collection(`users/${user.uid}/following`).get().then(async (querySnapshot) => {
 				let followingRefs = []
 				await Promise.all(querySnapshot.docs.map((doc) => {
 					let data = doc.data()

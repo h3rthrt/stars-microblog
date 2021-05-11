@@ -16,7 +16,7 @@ function App(props) {
 
   useEffect(() => {
     defineTheme()
-    props.loadSubs(props.uid)
+    if (props.isLoaded) props.loadSubs()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.isAuthenticated, props.isLoaded, props.isLoadedProfile, props.theme])
 
@@ -77,7 +77,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadSubs: (uid) => dispatch(loadSubs(uid))
+    loadSubs: () => dispatch(loadSubs())
   }
 }
 
