@@ -20,7 +20,7 @@
 ## Конфигурация Firebase
 
 Для подключения Firebase необходимо создать `.env` файл внутри основного проекта и инициализировать переменные окружения.
-### .env example
+#### .env example
 ```dosini
 REACT_APP_API_KEY=
 REACT_APP_AUTH_DOMAIN=
