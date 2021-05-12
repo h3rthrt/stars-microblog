@@ -150,18 +150,19 @@ export function unfollowOnBlog(uid, userId) {
 }
 
 export function replaceBlogname(blogname) {
-	return (dispatch, getState, { getFirebase, getFirestore }) => {
+	return async (dispatch, getState, { getFirebase, getFirestore }) => {
 		const firebase = getFirebase()
 		const firestore = getFirestore()
-		const user = firebase.auth().currentUser
-		firestore.collection('user').doc(user.uid).update({
+		const user = await firebase.auth().currentUser
+		firestore.collection('users').doc(user.uid).update({
 			blogname: blogname
 		}).then(() => {
 			user.updateProfile({
 				displayName: `${blogname}`
 			})
+			dispatch(notification('Success', "Успешно", "Название блога успешно изменено"))
 		}).catch((err) => {
-			dispatch(notification('Danger', err.code, err.message))
+			dispatch(notification('Danger', "Ошибка", "Некорректное слово"))
 		})
 	}
 }
@@ -171,10 +172,10 @@ export function replaceDescription(desc) {
 		const firebase = getFirebase()
 		const firestore = getFirestore()
 		const user = firebase.auth().currentUser
-		firestore.collection('user').doc(user.uid).update({
+		firestore.collection('users').doc(user.uid).update({
 			desc: desc
 		}).then(() => {
-			
+			dispatch(notification('Success', "Успешно", "Описание профиля успешно изменено"))
 		}).catch((err) => {
 			dispatch(notification('Danger', err.code, err.message))
 		})

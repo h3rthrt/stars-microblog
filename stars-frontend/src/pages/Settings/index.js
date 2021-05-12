@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Settings.sass'
 import { connect } from 'react-redux'
@@ -16,10 +16,17 @@ function Settings(props) {
         {icon: 'heart-broken', text: 'Отключить свою учетную запись'},
         {icon: 'sign-out-alt', text: 'Выйти с аккаунта', onClick: () => props.signOut()}
     ]
-    const [ blogname, setBlogname ] = useState(props.blogname)
-    const [ desc, setDesc ] = useState(props.desc || 'нет описания')
+    const [ blogname, setBlogname ] = useState()
+    const [ desc, setDesc ] = useState()
     const [ editName, setEditName ] = useState(false)
     const [ editDesc, setEditDesc ] = useState(false)
+
+    useEffect(() => {
+        if (props.isLoaded) {
+            setBlogname(props.blogname)
+            setDesc(props.desc || "нет описания")
+        }
+    }, [props.blogname, props.desc, props.isLoaded])
     
     function renderButtons() {
         return buttons.map((item, index) => {
@@ -34,12 +41,24 @@ function Settings(props) {
 
     function blognameHandler(event) {
         setBlogname(event.target.value)
+    }
 
+    function setEditBlogname() {
+        if (editName) {
+            props.replaceBlogname(blogname)
+        }
+        setEditName(!editName)
     }
 
     function descHandler(event) {
         setDesc(event.target.value)
+    }
 
+    function setEditDescription() {
+        if (editDesc) {
+            props.replaceDescription(desc)
+        }
+        setEditDesc(!editDesc)
     }
 
     if(!props.isLoaded) {
@@ -53,10 +72,10 @@ function Settings(props) {
                         <div className="settings__block">
                             {
                                 !editName ?
-                                <div className="settings__username">{ blogname }</div> : 
+                                <div className="settings__username">{ props.blogname }</div> : 
                                 <input className="settings__username" value={ blogname } onChange={ (event) => blognameHandler(event) }></input>
                             }
-                            <button onClick={() => setEditName(!editName)}>
+                            <button onClick={() => setEditBlogname()}>
                                 <FontAwesomeIcon icon={ !editName ? "pen" : "check" } />
                             </button>
                         </div>
@@ -66,7 +85,7 @@ function Settings(props) {
                                 <div className="settings__desc"> { desc || 'нет описания' }</div> : 
                                 <input className="settings__desc" value={ desc } onChange={ (event) => descHandler(event) }></input>
                             }
-                            <button onClick={ () => setEditDesc(!editDesc) }>
+                            <button onClick={ () => setEditDescription() }>
                                 <FontAwesomeIcon icon={ !editDesc ? "pen" : "check" } />
                             </button>
                         </div>

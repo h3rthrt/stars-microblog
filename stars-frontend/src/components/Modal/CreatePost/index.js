@@ -210,10 +210,9 @@ function CreateNote(props) {
 								placeholder='теги'
 								validator={
 									(value) => {
-										const validate = value.length > 16
-										console.log(validate)
+										const validate = value.length > 16 || value.length < 2
 										if (validate) {
-											alert('Количество символов в теге не должно превышать 16 символов')
+											alert('Количество символов в теге не должно быть меньше 2 или превышать 16 символов')
 										}
 										return !validate
 									}
