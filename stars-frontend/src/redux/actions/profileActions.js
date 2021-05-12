@@ -157,9 +157,6 @@ export function replaceBlogname(blogname) {
 		firestore.collection('users').doc(user.uid).update({
 			blogname: blogname
 		}).then(() => {
-			user.updateProfile({
-				displayName: `${blogname}`
-			})
 			dispatch(notification('Success', "Успешно", "Название блога успешно изменено"))
 		}).catch((err) => {
 			console.error(err)
