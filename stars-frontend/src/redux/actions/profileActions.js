@@ -162,6 +162,7 @@ export function replaceBlogname(blogname) {
 			})
 			dispatch(notification('Success', "Успешно", "Название блога успешно изменено"))
 		}).catch((err) => {
+			console.error(err)
 			dispatch(notification('Danger', "Ошибка", "Некорректное слово"))
 		})
 	}
@@ -177,6 +178,7 @@ export function replaceDescription(desc) {
 		}).then(() => {
 			dispatch(notification('Success', "Успешно", "Описание профиля успешно изменено"))
 		}).catch((err) => {
+			console.error(err)
 			dispatch(notification('Danger', err.code, err.message))
 		})
 	}
