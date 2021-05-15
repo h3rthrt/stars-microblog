@@ -19,7 +19,7 @@ import notification from './notificationActions'
 	* @param {string} userId - uid авторизованого пользователя
 	* @returns {object}
 */
-async function getPostData(doc, usersCollection, postsCollection, likesCollection, userId) {
+export async function getPostData(doc, usersCollection, postsCollection, likesCollection, userId) {
 	let dataPost = doc.data()
 	dataPost.postId = doc.id
 	dataPost.createdAt =
@@ -175,11 +175,12 @@ export function getUserLikePosts(uid, userId) {
 					let docData = doc.data()
 					let notes
 					await postsCollection.doc(docData.postRef.id).get().then(async (querySnapshot) => {
-						if (querySnapshot.exists) {
+						if (querySnapshot.exists && querySnapshot) {
 							return await getPostData(querySnapshot, usersCollection, postsCollection, likesCollection, userId)
-						}
+						} 
 					})
 					.then((data) => {
+						if(data === undefined) return
 						notes = data
 					})
 					.catch((err) => {
@@ -487,10 +488,8 @@ export function getDashboardPosts(uid = null, userId, followingRefs) {
 		let likesCollection = firestore.collection('likes')
 		let notesMass = []
 		let lastPostsMass
-		let userRef = await usersCollection.doc(userId)
-		followingRefs.push(userRef)
 		await Promise.all(followingRefs.map(async (userRef) => {
-			let notes = await postsCollection
+			const notes = await postsCollection
 				.orderBy('createdAt', 'desc')
 				.where('user', '==', userRef)
 				.get()

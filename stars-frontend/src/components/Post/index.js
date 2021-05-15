@@ -9,19 +9,20 @@ import './Post.sass'
 
 const Post = forwardRef((props, ref) => {
 	const { post } = props
-	const [ notes, setNotes ] = useState(post.notes || 0)
+	const [ notes, setNotes ] = useState(post ? post.notes : 0)
 	const [ dropdown, setDropdown ] = useState(false)
 	const [ remove, setRemove ] = useState(false)
 	const [ endTimeout, setEndTimeout ] = useState(false)
 	let postCls = [ 'post', 'loadAnimation' ]
-
+	
+	if (!post) return false
 	if (post.repost && !post.reposted && post.username === props.displayName) {
 		postCls.push('removeAnimation')
 		setTimeout(() => {
 			setEndTimeout(true)
 		}, 220)
-	if (endTimeout) return null
-	} 
+		if (endTimeout) return null
+	}
 	if (!remove) {
 		return (
 			<div ref={ref} className={ postCls.join(' ') }>
@@ -44,17 +45,19 @@ const Post = forwardRef((props, ref) => {
 							) 
 							: null
 						}
-						<button onClick={ () => setDropdown(true) }>
+						<button onClick={ () => setDropdown(prev => !prev) }>
 							<FontAwesomeIcon icon="ellipsis-h" />
 						</button>
 	
 						<Dropdown 
-							onShow={ () => setDropdown(prev => {return !prev}) }
+							onShow={ () => setDropdown(prev => { 
+								if(prev) return false
+							}) }
 							createdAt={ post.createdAt }
 							username={ post.username }
 							show={ dropdown }
 							postId={ post.repostId || post.postId }
-							remove={ () => setRemove(prev => {return !prev}) }
+							remove={ () => setRemove(prev => !prev) }
 							repost={ post.repost }
 						/>
 					</div>
@@ -73,7 +76,7 @@ const Post = forwardRef((props, ref) => {
 					{ post.text ? (<p>{ post.text }</p>) : null}
 					<div className="footer-post">
 						<div className="footer-post__left">
-							{ `${ notes }  ${ wordForm( notes, ['заметка', 'заметки', 'заметок']) }` }
+							<span>{ `${ notes }  ${ wordForm( notes, ['заметка', 'заметки', 'заметок']) }` }</span>
 							<div className="footer-post__tags">
 								{ post.tags ? (
 									post.tags.map((tag, index) => {

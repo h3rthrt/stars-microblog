@@ -24,7 +24,7 @@ const Profile = (props) => {
 
 	function renderPosts() {
 		return (
-			<div className="container container__main">
+			<div className="container container__main container__profile">
 				<div className="container__left">
 					<div className="select-type">
 						<button

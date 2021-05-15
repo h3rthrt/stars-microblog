@@ -20,7 +20,7 @@ function User(props) {
                             : <span className="blogname s">{props.blogname}</span>
                     }
                     <p>{props.desc}</p>
-                    <SubButton />
+                    { !props.isAuth && <SubButton /> }
                 </div>
             </div>
             <div className="right-block__subs">
@@ -60,7 +60,8 @@ function mapStateToProps(state) {
         media: state.profile.media,
         desc: state.profile.desc,
         followers: state.profile.followers,
-		following: state.profile.following
+		following: state.profile.following,
+        isAuth: state.firebase.auth.isEmpty
     }
 }
 

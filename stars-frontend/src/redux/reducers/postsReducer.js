@@ -23,36 +23,38 @@ const initialState = {
 }
 
 export default function postsReducer(state = initialState, action) {
-	const cachePosts = (posts) => posts.map((post, index) => {
-		if (!!!state.cachePosts[index]) return posts[index]
-		if (post.postId === state.cachePosts[index].postId) {
-			return posts[index] = post 
-		}
-		return action.posts[index]
-	})
-	
+	const cachePosts = (posts) =>
+		posts.map((post, index) => {
+			if (!post) return false
+			if (!!!state.cachePosts[index]) return posts[index]
+			if (post.postId === state.cachePosts[index].postId) {
+				return (posts[index] = post)
+			}
+			return action.posts[index]
+		})
+
 	switch (action.type) {
 		case LOAD_POSTS_SUCCESS:
 			return {
 				...state,
 				posts: cachePosts(action.posts),
 				lastPost: action.lastPost,
-				pathname: action.pathname, 
+				pathname: action.pathname,
 				complete: false,
 				cachePosts: !!state.posts.length ? state.cachePosts.concat(state.posts) : [],
 				isFetching: false
 			}
-		case  LOAD_MORE_POSTS_SUCCESS:
+		case LOAD_MORE_POSTS_SUCCESS:
 			return {
 				...state,
 				posts: state.posts.concat(cachePosts(action.posts)),
-				lastPost: action.lastPost, 
+				lastPost: action.lastPost,
 				isMoreFetching: false
 			}
 		case LOAD_ADDED_POSTS_SUCCESS:
 			return {
 				...state,
-				posts: action.posts.concat(state.posts)
+				posts: [action.posts].concat(state.posts)
 			}
 		case SET_IS_FETCHING:
 			return {
@@ -94,23 +96,25 @@ export default function postsReducer(state = initialState, action) {
 				})
 			}
 		case SET_LIKE_ON_POST:
-			const setLike = (posts) => posts.map((post, index) => {
-				if (post.postId === action.postId) {
-					post.liked = action.liked
-				}
-				return post
-			})
+			const setLike = (posts) =>
+				posts.map((post, index) => {
+					if (post.postId === action.postId) {
+						post.liked = action.liked
+					}
+					return post
+				})
 			return {
 				...state,
 				posts: setLike(state.posts)
 			}
 		case SET_REPOST_ON_POST:
-			const setRepost = (posts) => posts.map((post, index) => {
-				if (post.postId === action.postId) {
-					post.reposted = action.reposted
-				}
-				return post
-			})
+			const setRepost = (posts) =>
+				posts.map((post, index) => {
+					if (post.postId === action.postId) {
+						post.reposted = action.reposted
+					}
+					return post
+				})
 			return {
 				...state,
 				posts: setRepost(state.posts)

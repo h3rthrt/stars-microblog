@@ -38,12 +38,17 @@ export function signIn(email, password, isLogin, name, blogname) {
 						displayName: `${name}`
 					})
 					.then(() => {
-						firestore.collection('users').doc(user.uid).set(data)
+						const currentUser = firestore.collection('users').doc(user.uid)
+						currentUser.set(data)
 						.then(() => {
 							firebase.updateAuth({
 								'displayName': name
 							})
-							dispatch(loginSuccess())
+							firestore.collection(`users/${user.uid}/following`).add({
+								user: currentUser
+							}).then(() => {
+								dispatch(loginSuccess())
+							})
 						})
 						.catch((err) => {
 							dispatch(notification('Danger', title, err.message))
@@ -55,7 +60,8 @@ export function signIn(email, password, isLogin, name, blogname) {
 					dispatch(notification('Danger', title, error.message))
 					dispatch({ type: LOGIN_CLEAR })
 				})
-			}).catch((err) => {
+			})
+			.catch((err) => {
 				dispatch(notification('Danger', title, err.message || err ))
 			})
 		} else {
@@ -77,6 +83,7 @@ export function loadSubs() {
 		const firestore = getFirestore()
 		const firebase = getFirebase()
 		let user = await firebase.auth().currentUser
+		if (!user) return false
 		const loadFollowers = new Promise(async (resolve, reject) => {
 			await firestore.collection(`users/${user.uid}/followers`).get().then(async (querySnapshot) => {
 				Promise.all(querySnapshot.docs.map(async (doc) => {

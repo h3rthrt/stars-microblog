@@ -87,6 +87,10 @@ h2
 	line-height: 22px
 	font-size: 18px
 
+main
+	position: relative
+	z-index: -1
+
 input
 	border: none
 	background-image: none
@@ -165,12 +169,15 @@ hr
 			margin-bottom: 48px
 	&__right
 		width: 42%
-
-@media only screen and (max-width: 768px)
-	.container__main
-		margin-bottom: 14vh
+	.container__right--tags
+		width: 42%
 
 .header-location
+	margin-top: 12px
+	padding-left: calc( 50% - 492px )
+	margin-bottom: 18px
+
+.header-location--profile
 	margin-top: 12px
 	padding-left: calc( 50% - 492px )
 	margin-bottom: 18px
@@ -289,3 +296,57 @@ hr
 @media only screen and (max-width : 1200px)
 	#root
 		margin: 0 10px
+
+@media only screen and (max-width: 768px)
+	.container__main
+		margin-bottom: 14vh
+
+	.header-location--profile
+		display: none
+
+	.container
+		&__left
+			width: 100%
+			.fetch-posts
+				> p
+					padding: 24px 0
+					padding-left: 0
+		&__profile
+			padding-top: 320px
+		&__right
+			width: 100%
+			position: absolute
+			display: flex
+			justify-content: center
+			top: 70px
+			z-index: -1
+
+		.container__right--tags
+			display: none
+
+		.right-block
+			display: flex
+			flex-direction: column
+			justify-content: center
+			align-items: center
+			text-align: center
+			margin-left: 0
+			width: 100%
+			max-width: none
+			.right-block__user-info
+				display: block
+				text-align: center
+			&__subs
+				width: 100%
+				> h2
+					display: none
+				> hr
+					display: none
+				.subs-block
+					width: 100%
+					flex-direction: row-reverse
+					justify-content: space-evenly
+					> a
+						font-size: 16px
+			&__media
+				display: none

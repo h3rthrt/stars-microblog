@@ -9,7 +9,6 @@ function Search(props) {
 	
 	useEffect(() => {
 		props.location.search.slice(12) === '/search?user' ? setIsUserSearch(true) : setIsUserSearch(false) 
-		console.log(props.value)
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	},[props.value, props.location.search])
 
@@ -23,7 +22,7 @@ function Search(props) {
 					value={ props.value }
 				/>
 			</div>
-			<div className="container__right">
+			<div className="container__right--tags">
 				<Tags />
 			</div>
 		</div>

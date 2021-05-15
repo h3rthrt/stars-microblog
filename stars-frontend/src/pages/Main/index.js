@@ -13,7 +13,7 @@ function Main(props) {
 					referenceMore='getMoreAllPosts'
 				/>
 			</div>
-			<div className="container__right">
+			<div className="container__right--tags">
 				<Tags />
 			</div>
 		</div>

@@ -6,8 +6,8 @@ function Dropdown(props) {
 
 	const dropdownRef = useRef()
 	const handleClickOutside = (event) => {
-		if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-			props.onShow();
+		if (dropdownRef.current && !dropdownRef.current.contains(event.target) && props.show) {
+			props.onShow()
 		}
 	}
 

@@ -155,9 +155,9 @@ function CreateAcc(props) {
                     <form onSubmit={(event) => submitHandler(event)} className="modal__form" >
                         {renderInputs()}
                         <Button 
-                        cls="primary button-l"
-                        color="green"
-                        disabled={!isFormValid}
+                            cls="primary button-l"
+                            color="green"
+                            disabled={!isFormValid}
                         >
                             Зарегистрироваться
                         </Button> 

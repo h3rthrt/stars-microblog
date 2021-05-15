@@ -92,13 +92,18 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
 	return {
+		// user posts
 		getUserPosts: (uid, userId) => dispatch(getUserPosts(uid, userId)),
 		getMoreUserPosts: (uid, lastPost, userId) => dispatch(getMoreUserPosts(uid, lastPost, userId)),
+		// user like posts
 		getUserLikePosts: (uid, userId) => dispatch(getUserLikePosts(uid, userId)),
 		getMoreUserLikePosts: (uid, lastPost, userId) => dispatch(getMoreUserLikePosts(uid, lastPost, userId)),
+		// all posts
 		getAllPosts: (uid, userId) => dispatch(getAllPosts(uid, userId)),
 		getMoreAllPosts: (uid, lastPost, userId) => dispatch(getMoreAllPosts(uid, lastPost, userId)),
+		// dashboard posts
 		getDashboardPosts: (uid, userId, followingRefs) => dispatch(getDashboardPosts(uid, userId, followingRefs)),
+		// search posts
 		getSearchPosts: (uid, userId, value) => dispatch(getSearchPosts(uid, userId, value)),
 		getMoreSearchPosts: (uid, lastPost, userId, value) => dispatch(getMoreSearchPosts(uid, lastPost, userId, value))
 	}

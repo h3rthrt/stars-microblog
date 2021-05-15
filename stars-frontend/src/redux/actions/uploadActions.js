@@ -1,5 +1,6 @@
-import { UPLOAD_ON_PROGRESS, UPLOAD_LOADED, UPLOAD_RESET, LOAD_PROFILE_PHOTO } from './actionsTypes'
+import { UPLOAD_ON_PROGRESS, UPLOAD_LOADED, UPLOAD_RESET, LOAD_PROFILE_PHOTO, LOAD_ADDED_POSTS_SUCCESS } from './actionsTypes'
 import notification from './notificationActions'
+import { getPostData } from './postsActions'
 
 const titleSuccess = 'Запись успешно опубликована'
 const titleDanger = 'Ошибка публикации записи'
@@ -17,7 +18,17 @@ export function upload(files, username, uid, forPosts = false, post) {
 			// if post without images
 			if(files.length === 0)
 				firestore.collection('posts').add(post)
-				.then(() => {
+				.then((docRef) => {
+					let userCollection = firestore.collection('users')
+					let postsCollection = firestore.collection('posts')
+					let likesCollection = firestore.collection('likes')
+					postsCollection.doc(docRef.id).get().then(async (querySnapshot) => {
+						const post = await getPostData(querySnapshot, userCollection, postsCollection, likesCollection, uid)
+						dispatch({ 
+							posts: post,
+							type: LOAD_ADDED_POSTS_SUCCESS 
+						})
+					})
 					dispatch(notification('Success', titleSuccess, 'Ура!'))
 					dispatch(uploadComplete(true))
 					dispatch(uploadOnProgress(false))
@@ -54,7 +65,17 @@ export function upload(files, username, uid, forPosts = false, post) {
 				totalEach++
 				if(forPosts && totalEach === files.length) {
 					firestore.collection('posts').add(post)
-						.then(() => {
+						.then(async (docRef) => {
+							let userCollection = firestore.collection('users')
+							let postsCollection = firestore.collection('posts')
+							let likesCollection = firestore.collection('likes')
+							postsCollection.doc(docRef.id).get().then(async (querySnapshot) => {
+								const post = await getPostData(querySnapshot, userCollection, postsCollection, likesCollection, user.uid)
+								dispatch({ 
+									posts: post,
+									type: LOAD_ADDED_POSTS_SUCCESS 
+								})
+							})
 							dispatch(notification('Success', 'Успешно', titleSuccess))
 							dispatch(uploadComplete(true))
 							dispatch(uploadOnProgress(false))

@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { getFirestore } from 'redux-firestore'
 import { SET_LIKE_ON_POST, SET_REPOST_ON_POST } from '../../../redux/actions/actionsTypes'
-import notification from '../../../redux/actions/notificationActions'
 import '../Post.sass'
 
 function PostButtons(props) {
@@ -45,7 +44,7 @@ function PostButtons(props) {
 						setLikeDisabled(false)
 						props.setLikeOnPosts(props.postId, false)
 					}).catch((err) => {
-						notification('Danger', 'Ошибка', `${err}`)
+						console.error(err)
 					})
 				}).catch((err) => {
 					console.error('Не надо так много нажимать на кнопку.. Ошибки..... ' + err)
@@ -86,7 +85,7 @@ function PostButtons(props) {
 				setLikeDisabled(false)
 				props.setLikeOnPosts(props.postId, true)
 			}).catch((err) => {
-				notification('Danger', 'Ошибка', `${err}`)
+				console.error(err)
 			})
 		}
 	}
@@ -123,11 +122,11 @@ function PostButtons(props) {
 						setRepostDisabled(false)
 						props.setRepostOnPosts(props.postId, false)
 					}).catch((err) => {
-						notification('Danger', 'Ошибка', `${err}`)
+						console.error(err)
 					})
 
 				}).catch((err) => {
-					notification('Warning', 'Ошибка', `Не надо так много нажимать на кнопку.. Ошибки.....${err}`)
+					console.error(err)
 				})
 		} else {
 			// setRepostState(true)
@@ -168,7 +167,7 @@ function PostButtons(props) {
 				setRepostDisabled(false)
 				props.setRepostOnPosts(props.postId, true)
 			}).catch((err) => {
-				notification('Warning', 'Ошибка', `Не надо так много нажимать на кнопку.. Ошибки.....${err}`)
+				console.error(err)
 			})
 		}
 	}

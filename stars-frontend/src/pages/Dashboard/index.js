@@ -50,7 +50,7 @@ function Dashboard(props) {
 					/> : <center><h3>Твои подписки пусты..</h3></center>
 				}
 			</div>
-			<div className="container__right">
+			<div className="container__right--tags">
 				<Tags />
 			</div>
 		</div>
