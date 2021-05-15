@@ -11,6 +11,9 @@ export function upload(files, username, uid, forPosts = false, post) {
 		const firebase = getFirebase()
 		const firestore = getFirestore()
 		var totalEach = 0
+		let userCollection = firestore.collection('users')
+		let postsCollection = firestore.collection('posts')
+		let likesCollection = firestore.collection('likes')
 		if(forPosts) {
 			post.user = firestore.doc('users/' + uid)
 			post.createdAt = firestore.Timestamp.now()
@@ -19,9 +22,6 @@ export function upload(files, username, uid, forPosts = false, post) {
 			if(files.length === 0)
 				firestore.collection('posts').add(post)
 				.then((docRef) => {
-					let userCollection = firestore.collection('users')
-					let postsCollection = firestore.collection('posts')
-					let likesCollection = firestore.collection('likes')
 					postsCollection.doc(docRef.id).get().then(async (querySnapshot) => {
 						const post = await getPostData(querySnapshot, userCollection, postsCollection, likesCollection, uid)
 						dispatch({ 
@@ -66,9 +66,6 @@ export function upload(files, username, uid, forPosts = false, post) {
 				if(forPosts && totalEach === files.length) {
 					firestore.collection('posts').add(post)
 						.then(async (docRef) => {
-							let userCollection = firestore.collection('users')
-							let postsCollection = firestore.collection('posts')
-							let likesCollection = firestore.collection('likes')
 							postsCollection.doc(docRef.id).get().then(async (querySnapshot) => {
 								const post = await getPostData(querySnapshot, userCollection, postsCollection, likesCollection, user.uid)
 								dispatch({ 
