@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { connect } from 'react-redux'
 import Button from '../../UI/Button'
@@ -8,18 +8,18 @@ import { SHOW_MODAL } from '../../../redux/actions/actionsTypes'
 const ViewPhoto = ((props) => {
 	// console.log(props.complete, props.upload)
 	useEffect(() => {
-		if(props.complete && props.view) {
+		if(props.complete && props.isShow) {
 			hideModalHandler()
 		}
 	})
 
-	function hideModalHandler() {
+	const hideModalHandler = useCallback(() => {
 		setTimeout(() => {
 			props.showModal()
 		}, 100)
 		document.getElementById('modal').classList.add('hide')
 		props.uploadReset()
-	}
+	}, [props]) 
 
 	async function uploadHandler() {
 		await props.uploadPhoto(props.image.files, props.username, props.uid)

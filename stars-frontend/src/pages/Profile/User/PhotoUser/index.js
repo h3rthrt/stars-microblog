@@ -14,11 +14,6 @@ function Photo(props) {
 	const [ showMenu, setShowMenu ] = useState(false) 
 	//warning modal
 	const [ showWarning, setShowWarning ] = useState(false) 
-	const [ image, setImage ] = useState({
-		base64: '',
-		alt: '',
-		files: ''
-	})
 	const buttonUpdateRef = useRef()
 	const inputImageRef = useRef()
 
@@ -46,57 +41,25 @@ function Photo(props) {
 			return
 		}
 		const files = Array.from(event.target.files)
-		const fetch = new Promise((resolve, reject) => {
-			if (!files[0].type.match('image')) {
-				return
+		if (!files[0].type.match('image')) {
+			return
+		}
+		const reader = new FileReader()
+		reader.onload = async (ev) => {
+			const obj = {
+				base64: ev.target.result,
+				alt: files[0].name,
+				files: Array.from(event.target.files)
 			}
-			const reader = new FileReader()
-			reader.onload = async (ev) => {
-				resolve(
-					setImage((prevState) => {
-					return {
-						...prevState,
-						base64: ev.target.result,
-						alt: files[0].name,
-						files: Array.from(event.target.files)
-					}
-				})
-				)
-			}
-			reader.readAsDataURL(files[0])
-		})
-		fetch.then(() => {
-			props.showModal(image)
-		})
-		// files.forEach((file) => {
-		// 	if (!file.type.match('image')) {
-		// 		return
-		// 	}
-		// 	const reader = new FileReader()
-		// 	reader.onload = (ev) => {
-		// 		setImage((prevState) => {
-		// 			return {
-		// 				...prevState,
-		// 				base64: ev.target.result,
-		// 				alt: file.name,
-		// 				files: Array.from(event.target.files)
-		// 			}
-		// 		})
-		// 	}
-		// 	reader.readAsDataURL(file)
-		// })
+			console.log(obj)
+			props.showModal(obj)
+		}
+		reader.readAsDataURL(files[0])
 	}
 
 	function clickImageHandler() {}
 
 	function clickInputHandler() {
-		if (image) {
-			setImage({
-				base64: '',
-				alt: '',
-				files: ''
-			})
-		}
 		inputImageRef.current.click()
 	}
 
@@ -110,17 +73,6 @@ function Photo(props) {
 			buttonUpdateNode.classList.remove('show')
 		}
 	}
-
-	// function closeModalHandler() {
-	// 	setTimeout(() => {
-	// 		props.showModal()
-	// 		setImage({
-	// 			base64: '',
-	// 			alt: '',
-	// 			files: ''
-	// 		})
-	// 	}, 100)
-	// }
 
 	function removePhoto() {
 		firestore.collection('users').doc(props.uid).update({
@@ -198,7 +150,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 	return {
 		clearPhoto: () => dispatch(clearPhoto()),
-		showModal: (photo) => dispatch({ type: SHOW_MODAL, modalType: 'UploadPhoto', image: photo })
+		showModal: (image) => dispatch({ type: SHOW_MODAL, modalType: 'UploadPhoto', image: image })
 	}
 }
 

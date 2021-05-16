@@ -12,7 +12,7 @@ export default function modalTypeReducer(state = initialState, action) {
 			return {
 				modalType: action.modalType,
 				isShow: !state.isShow,
-				image: action.photo || null
+				image: action.image || null
 			}
 		default:
 			return state
