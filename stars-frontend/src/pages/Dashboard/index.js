@@ -6,6 +6,7 @@ import CreateNote from '../../components/Modal/CreatePost'
 import FetchingPosts from '../../components/FetchingPosts'
 import Spinner from '../../components/UI/Spinner'
 import './Dashboard.sass'
+import { SHOW_MODAL } from '../../redux/actions/actionsTypes'
 
 function Dashboard(props) {
 	const [showCreateNote, setShowCreateNote] = useState(false)
@@ -21,10 +22,6 @@ function Dashboard(props) {
 			<CreateNote
 				view={showCreateNote} 
 				onClose={() => setShowCreateNote(!showCreateNote)}
-				username={props.username}
-				blogname={props.blogname}
-				uid={props.uid}
-				photoURL={props.photoURL}
 			/>
 
 			<div className="container__left">
@@ -38,7 +35,7 @@ function Dashboard(props) {
 							className="ava" />
 						</div>
 						<div className="post__right post__create">
-							<div className="create-note" onClick={() => setShowCreateNote(true)}>Создать запись</div>
+							<div className="create-note" onClick={ () => props.showCreateNote() }>Создать запись</div>
 						</div>
 					</div>
 					: <center><FontAwesomeIcon icon="sync-alt" size="1x" pulse={true} /></center>
@@ -70,6 +67,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
 	return {
+		showCreateNote: () => dispatch({ type: SHOW_MODAL, modalType: 'CreatePost' })
 		// loadPosts: () => dispatch(loadPosts())
 	}
 }

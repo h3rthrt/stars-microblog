@@ -4,16 +4,14 @@ import { connect } from 'react-redux'
 import { clearPhoto } from '../../../../redux/actions/profileActions'
 import { useFirebase, useFirestore } from 'react-redux-firebase'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import ViewPhoto from '../../../../components/Modal/UploadPhoto'
 import WarningMsg from '../../../../components/Modal/WarningMsg'
+import { SHOW_MODAL } from '../../../../redux/actions/actionsTypes'
 
 function Photo(props) {
 	const firebase = useFirebase()
 	const firestore = useFirestore()
 	//for show menu with buttons
 	const [ showMenu, setShowMenu ] = useState(false) 
-	//for update img
-	const [ showModal, setShowModal ] = useState(false) 
 	//warning modal
 	const [ showWarning, setShowWarning ] = useState(false) 
 	const [ image, setImage ] = useState({
@@ -40,31 +38,53 @@ function Photo(props) {
 					document.removeEventListener('click', beforeComponentClick)
 				}
 			}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ showMenu, buttonUpdateNode ])
 
-	function changeHandler(event) {
+	async function changeHandler(event) {
 		if (!event.target.files.length) {
 			return
 		}
 		const files = Array.from(event.target.files)
-		files.forEach((file) => {
-			if (!file.type.match('image')) {
+		const fetch = new Promise((resolve, reject) => {
+			if (!files[0].type.match('image')) {
 				return
 			}
 			const reader = new FileReader()
-			reader.onload = (ev) => {
-				setImage((prevState) => {
+			reader.onload = async (ev) => {
+				resolve(
+					setImage((prevState) => {
 					return {
 						...prevState,
 						base64: ev.target.result,
-						alt: file.name,
+						alt: files[0].name,
 						files: Array.from(event.target.files)
 					}
 				})
+				)
 			}
-			reader.readAsDataURL(file)
+			reader.readAsDataURL(files[0])
 		})
-		setShowModal(true)
+		fetch.then(() => {
+			props.showModal(image)
+		})
+		// files.forEach((file) => {
+		// 	if (!file.type.match('image')) {
+		// 		return
+		// 	}
+		// 	const reader = new FileReader()
+		// 	reader.onload = (ev) => {
+		// 		setImage((prevState) => {
+		// 			return {
+		// 				...prevState,
+		// 				base64: ev.target.result,
+		// 				alt: file.name,
+		// 				files: Array.from(event.target.files)
+		// 			}
+		// 		})
+		// 	}
+		// 	reader.readAsDataURL(file)
+		// })
 	}
 
 	function clickImageHandler() {}
@@ -91,16 +111,16 @@ function Photo(props) {
 		}
 	}
 
-	function closeModalHandler() {
-		setTimeout(() => {
-			setShowModal(false)
-			setImage({
-				base64: '',
-				alt: '',
-				files: ''
-			})
-		}, 100)
-	}
+	// function closeModalHandler() {
+	// 	setTimeout(() => {
+	// 		props.showModal()
+	// 		setImage({
+	// 			base64: '',
+	// 			alt: '',
+	// 			files: ''
+	// 		})
+	// 	}, 100)
+	// }
 
 	function removePhoto() {
 		firestore.collection('users').doc(props.uid).update({
@@ -120,15 +140,14 @@ function Photo(props) {
 
 	return (
 		<div className="photo-user">
-			{showWarning ? (
+			{ showWarning ? (
 				<WarningMsg
 					msg="Вы уверены?"
 					accept="Удалить"
 					onShow={() => setShowWarning(!showWarning)}
 					action={() => removePhoto()}
 				/>
-			) : null}
-			<ViewPhoto blogname={props.blogname} image={image} view={showModal} onClose={() => closeModalHandler()} />
+			) : null }
 			<div className="photo-user__img-block">
 				{ !props.photoURL ? (
 					<img alt="" src="/img/defaultPhoto.svg" />
@@ -152,7 +171,7 @@ function Photo(props) {
 							type="file"
 							accept="image/jpeg,image/pjpeg,image/gif,image/png"
 							multiple={false}
-							ref={inputImageRef}
+							ref={ inputImageRef }
 						/>
 					</li>
 					{ props.photoURL ? (
@@ -178,7 +197,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		clearPhoto: () => dispatch(clearPhoto())
+		clearPhoto: () => dispatch(clearPhoto()),
+		showModal: (photo) => dispatch({ type: SHOW_MODAL, modalType: 'UploadPhoto', image: photo })
 	}
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, forwardRef } from 'react'
+import React, { useState, forwardRef, useRef, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PostButtons from './PostButtons'
@@ -13,7 +13,24 @@ const Post = forwardRef((props, ref) => {
 	const [ dropdown, setDropdown ] = useState(false)
 	const [ remove, setRemove ] = useState(false)
 	const [ endTimeout, setEndTimeout ] = useState(false)
+	const [ clsImg, setClsImg ] = useState(['img-box__opacity'])
+	const imgRef = useRef()
 	let postCls = [ 'post', 'loadAnimation' ]
+
+	const onLoad = useCallback(() => {
+		setClsImg((prev) => {
+			return prev.concat(['img-box__loaded'])
+		})
+	}, [])
+
+	useEffect(() => {
+		if (!post.photoURL?.length) return
+		const {current} = imgRef
+		current.addEventListener("load", onLoad())
+		return () => {
+			current.removeEventListener("load", onLoad())
+		}
+	}, [onLoad, post.photoURL])
 	
 	if (!post) return false
 	if (post.repost && !post.reposted && post.username === props.displayName) {
@@ -67,7 +84,7 @@ const Post = forwardRef((props, ref) => {
 							post.photoURL?.map((image, index) => {
 								return (
 									<div className="img-box" key={ index }>
-										<img alt="" src={ image } />
+										<img ref={ imgRef } className={ clsImg.join(' ') } alt="" src={ image } />
 									</div>
 								)
 							}) || null
@@ -105,7 +122,7 @@ const Post = forwardRef((props, ref) => {
 	} else {
 		return (
 			<div ref={ ref } className="post loadAnimation">
-				<div className="post__left">
+				<div className="post__left d-none">
 					<img src={ post.authorPhoto || '/img/defaultPhoto.svg' } alt="" className="ava" />
 				</div>
 				<RestorePost 

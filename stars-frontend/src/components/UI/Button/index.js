@@ -11,7 +11,7 @@ function Button(props) {
 		<button 
         className={ cls.join(' ') } 
 		disabled={ props.loading ? true : props.disabled }
-		onClick={ props.onClick }>
+		onClick={ () => props.onClick() }>
 			{ props.children }
 			{
 				props.loading 

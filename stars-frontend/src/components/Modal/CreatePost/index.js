@@ -5,6 +5,7 @@ import { upload, uploadReset } from '../../../redux/actions/uploadActions'
 import ReactTagInput from '@pathofdev/react-tag-input'
 import './../Modal.sass'
 import Button from '../../UI/Button'
+import { SHOW_MODAL } from '../../../redux/actions/actionsTypes'
 
 function CreateNote(props) {
 	const inputImageRef = useRef()
@@ -20,7 +21,7 @@ function CreateNote(props) {
     })
 
 	const closeModal = useCallback(() => {
-		props.onClose()
+		props.showCreateNote()
 		setPost(() => {
 			return {
 				header: null,
@@ -133,12 +134,12 @@ function CreateNote(props) {
         })
     }
 
-	if (props.view && props.blogname) {
+	if (props.isShow && props.blogname) {
 		return (
 			<div className="modal">
 				<div className="modal__dialog">
 					<div className="modal__header">
-						<button onClick={() => closeModal()}>
+						<button onClick={ () => props.showCreateNote() }>
 							<FontAwesomeIcon icon="times" className="times" />
 						</button>
 					</div>
@@ -239,16 +240,22 @@ function CreateNote(props) {
 
 function mapStateToProps(state) {
 	return {
+		blogname: state.firebase.profile.blogname,
+		username: state.firebase.auth.displayName,
+		uid: state.firebase.auth.uid,
+		photoURL: state.firebase.auth.photoURL,
 		complete: state.progress.complete,
 		upload: state.progress.upload,
-		tasks: state.progress.tasks
+		tasks: state.progress.tasks,
+		isShow: state.modal.isShow
 	}
 }
 
 function mapDispatchToProps(dispatch) {
 	return {
 		uploadPost: (files, username, uid, forPosts, post) => dispatch(upload(files, username, uid, forPosts, post)),
-		uploadReset: () => dispatch(uploadReset())
+		uploadReset: () => dispatch(uploadReset()),
+		showCreateNote: () => dispatch({ type: SHOW_MODAL, modalType: 'CreatePost' })
 	}
 }
 

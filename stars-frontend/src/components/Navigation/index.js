@@ -4,12 +4,10 @@ import './Navigation.sass'
 import { Link, NavLink, withRouter, useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
 import Button from '../UI/Button'
-import CreateAcc from '../../components/Modal/CreateAcc'
-import { IS_EDIT_SEARCH } from '../../redux/actions/actionsTypes'
+import { IS_EDIT_SEARCH, SHOW_MODAL } from '../../redux/actions/actionsTypes'
 
 function Nav(props) {
 	let history = useHistory()
-	const [ modalVisible, setModalVisible ] = useState(false)
 	const [ searchValue, setSearchValue ] = useState('')
 	const [ isUserProfile, setIsUserProfile ] = useState(false)
 	const [ isSearch, setIsSearch ] = useState(false)
@@ -66,10 +64,9 @@ function Nav(props) {
 		} else if (props.location.pathname === '/auth') {
 			return (
 				<div>
-					<Button cls="navButton button-xl" color="green" onClick={() => setModalVisible(true)}>
+					<Button cls="navButton button-xl" color="green" onClick={() => props.showModal()}>
 						Регистрация
 					</Button>
-					<CreateAcc visible={modalVisible} onClose={() => setModalVisible(false)} />
 				</div>
 			)
 		} else {
@@ -78,7 +75,6 @@ function Nav(props) {
 					<Button cls="navButton button-xl" color="blue" onClick={() => props.history.push('/auth')}>
 						Войти
 					</Button>
-					<CreateAcc visible={modalVisible} onClose={() => setModalVisible(false)} />
 				</div>
 			)
 		}
@@ -144,7 +140,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		editSearch: (value) => dispatch({ value: value, type: IS_EDIT_SEARCH })
+		editSearch: (value) => dispatch({ value: value, type: IS_EDIT_SEARCH }),
+		showModal: () => dispatch({ type: SHOW_MODAL, modalType: 'CreateAcc' })
 	}
 }
 

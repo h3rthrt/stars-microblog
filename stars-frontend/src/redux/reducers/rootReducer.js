@@ -6,6 +6,7 @@ import authReducer from './authReducer'
 import uploadReducer from './uploadReducer'
 import notificationReducer from './notificationReducer'
 import searchReducer from './searchReducer'
+import modalTypeReducer from './modalTypeReducer'
 import { firebaseReducer } from 'react-redux-firebase'
 import { firestoreReducer } from 'redux-firestore'
 import { LOGIN_SIGNOUT } from '../actions/actionsTypes'
@@ -19,7 +20,8 @@ const appReducer = combineReducers({
     auth: authReducer,
     notification: notificationReducer,
     firebase: firebaseReducer,
-    firestore: firestoreReducer
+    firestore: firestoreReducer,
+    modal: modalTypeReducer
 })
 
 export const rootReducer = (state, action) => {

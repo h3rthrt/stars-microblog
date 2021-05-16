@@ -2,6 +2,7 @@ import React from 'react'
 import { withRouter } from 'react-router'
 import Nav from './components/Navigation'
 import ReactNotification from 'react-notifications-component'
+import Modal from './components/Modal'
 
 function Layout(props) {
 
@@ -30,6 +31,7 @@ function Layout(props) {
 	return (
 		<>
 			<ReactNotification />
+			<Modal />
 			<div className="wrapper">
 				<Nav />
 				{ renderLocation() }

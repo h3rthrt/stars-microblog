@@ -6,6 +6,7 @@ import '../Modal.sass'
 import is from 'is_js'
 import Input from '../../UI/Input'
 import Button from '../../UI/Button'
+import { SHOW_MODAL } from '../../../redux/actions/actionsTypes'
 
 function CreateAcc(props) {
     const [isFormValid, setFormValid] = useState(false)
@@ -132,14 +133,14 @@ function CreateAcc(props) {
             blogname
         )
     }
-    if(!props.visible) {
+    if(!props.isShow) {
         return null
     } else {
         return (
             <div className="modal">
                 <div className="modal__dialog mx-width">
                     <div className="modal__header">
-                        <button onClick={props.onClose}>
+                        <button onClick={ () => props.showModal() }>
                             <FontAwesomeIcon icon="times" className="times"/>
                         </button>
                     </div>
@@ -168,10 +169,17 @@ function CreateAcc(props) {
     }
 }
 
-function mapDispatchToProps(dispatch) {
+function mapStateToProps(state) {
     return {
-        signIn: (email, password, name, blogname, isLogin) => dispatch(signIn(email, password, name, blogname, isLogin))
+        isShow: state.modal.isShow
     }
 }
 
-export default connect(null, mapDispatchToProps)(CreateAcc)
+function mapDispatchToProps(dispatch) {
+    return {
+        signIn: (email, password, name, blogname, isLogin) => dispatch(signIn(email, password, name, blogname, isLogin)),
+        showModal: () => dispatch({ type: SHOW_MODAL, modalType: 'CreateAcc' })
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateAcc)
