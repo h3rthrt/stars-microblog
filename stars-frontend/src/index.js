@@ -42,11 +42,11 @@ const rrfProps = {
 const app = (
 	<Provider store={store}>
 		<ReactReduxFirebaseProvider {...rrfProps}>
-			<React.StrictMode>
+			{/* <React.StrictMode> */}
 				<BrowserRouter>
 					<App />
 				</BrowserRouter>
-			</React.StrictMode>
+			{/* </React.StrictMode> */}
 		</ReactReduxFirebaseProvider>
 	</Provider>
 )

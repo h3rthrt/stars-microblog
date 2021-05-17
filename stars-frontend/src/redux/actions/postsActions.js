@@ -22,6 +22,7 @@ import notification from './notificationActions'
 export async function getPostData(doc, usersCollection, postsCollection, likesCollection, userId) {
 	let dataPost = doc.data()
 	dataPost.postId = doc.id
+	dataPost.timestamp = dataPost.createdAt
 	dataPost.createdAt =
 		dataPost.createdAt.toDate().toLocaleDateString('ru-RU') +
 		' ' +

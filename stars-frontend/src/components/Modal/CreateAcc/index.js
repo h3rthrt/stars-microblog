@@ -62,7 +62,7 @@ function CreateAcc(props) {
     ])
 
     useEffect(() => {
-        if (!props.isEmpty) {
+        if (!props.isEmpty && props.isShow) {
             setFormValid(false)
             props.showModal()
         }

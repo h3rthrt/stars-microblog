@@ -35,9 +35,13 @@ export default function postsReducer(state = initialState, action) {
 
 	switch (action.type) {
 		case LOAD_POSTS_SUCCESS:
+			let tempPosts = cachePosts(action.posts)
+			tempPosts.sort((a, b) => {
+				return b.timestamp.seconds - a.timestamp.seconds
+			})
 			return {
 				...state,
-				posts: cachePosts(action.posts),
+				posts: tempPosts,
 				lastPost: action.lastPost,
 				pathname: action.pathname,
 				complete: false,
@@ -54,7 +58,7 @@ export default function postsReducer(state = initialState, action) {
 		case LOAD_ADDED_POSTS_SUCCESS:
 			return {
 				...state,
-				posts: [action.posts].concat(state.posts)
+				posts: [ action.posts ].concat(state.posts)
 			}
 		case SET_IS_FETCHING:
 			return {
