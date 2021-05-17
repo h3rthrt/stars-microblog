@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { CSSTransition } from 'react-transition-group'
+import Modal from 'react-modal'
 import { connect } from 'react-redux'
 import { upload, uploadReset } from '../../../redux/actions/uploadActions'
 import ReactTagInput from '@pathofdev/react-tag-input'
@@ -134,9 +136,22 @@ function CreateNote(props) {
         })
     }
 
-	if (props.isShow && props.blogname) {
-		return (
-			<div className="modal">
+	return (
+		<CSSTransition
+			in={props.isShow}
+			timeout={300}
+		>
+			<Modal
+				closeTimeoutMS={500}
+				isOpen={!!(props.isShow && props.blogname)}
+				className="modal"
+				ariaHideApp={false}
+				style={{
+					overlay: {
+						backgroundColor: 'none',
+					},
+				}}
+			>
 				<div className="modal__dialog">
 					<div className="modal__header">
 						<button onClick={ () => props.showCreateNote() }>
@@ -231,11 +246,9 @@ function CreateNote(props) {
 						</div>
 					</div>
 				</div>
-			</div>
-		)
-	} else {
-		return null
-	}
+			</Modal>
+		</CSSTransition>
+	)
 }
 
 function mapStateToProps(state) {

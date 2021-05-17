@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { CSSTransition } from 'react-transition-group'
+import Modal from 'react-modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { connect } from 'react-redux'
 import { signIn } from '../../../redux/actions/authActions'
@@ -132,12 +134,24 @@ function CreateAcc(props) {
             name,
             blogname
         )
+        props.showModal()
     }
-    if(!props.isShow) {
-        return null
-    } else {
-        return (
-            <div className="modal">
+    return (
+        <CSSTransition
+            in={props.isShow}
+            timeout={300}
+        >
+            <Modal
+                closeTimeoutMS={500}
+                isOpen={props.isShow}
+                className="modal"
+                ariaHideApp={false}
+                style={{
+                    overlay: {
+                        backgroundColor: 'none',
+                    },
+                }}
+            >
                 <div className="modal__dialog mx-width">
                     <div className="modal__header">
                         <button onClick={ () => props.showModal() }>
@@ -164,9 +178,9 @@ function CreateAcc(props) {
                         </Button> 
                     </form>
                 </div>
-            </div>
-        )
-    }
+            </Modal>
+        </CSSTransition>
+    )
 }
 
 function mapStateToProps(state) {

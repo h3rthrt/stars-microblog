@@ -171,7 +171,7 @@ function PostButtons(props) {
 			})
 		}
 	}
-	
+	if (props.isAuthEmpty) return false
 	return (
 		<div className="footer-post__right">
 			{
@@ -195,6 +195,7 @@ function mapStateToProps(state) {
 	return {
 		userId: state.firebase.auth.uid,
 		displayName: state.firebase.auth.displayName,
+		isAuthEmpty: state.firebase.auth.isEmpty
 	}
 }
 

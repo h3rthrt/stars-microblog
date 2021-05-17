@@ -4,7 +4,6 @@
 
 .modal
     @include fadeInAnimation(.2s)
-    background: rgba(0, 0, 0, 0.30)
     position: fixed
     overflow-y: auto
     top: 0
@@ -210,6 +209,30 @@
 
 @keyframes fadeOut
     @include fadeOutKeyframes
+
+// CSSTransition
+
+.ReactModal__Overlay
+    transition: 200ms ease-in-out
+    background-color: none
+    opacity: 0
+    &--after-open
+        background: rgba(0, 0, 0, 0.30)
+        opacity: 1
+    &--before-close
+        background-color: none
+        opacity: 0
+    .ReactModal__Content
+        opacity: 0
+        transform: translateY(-100px)
+        transition: 400ms ease-in-out
+        &--after-open
+            opacity: 1
+            transform: translateY(0px)
+        &--before-close
+            transition: 400ms ease-in-out
+            opacity: 0
+            transform: translateY(-100px)
 
 @media only screen and (max-width: 768px)
     .modal

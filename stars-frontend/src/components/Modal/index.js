@@ -6,31 +6,25 @@ import CreatePost from './CreatePost'
 import CreateAcc from './CreateAcc'
 
 function Modal(props) {
-
-	if (props.isShow) {
-		switch (props.type) {
-			case 'WarningMsg':
-				return (
-					<WarningMsg />
-				)
-			case 'UploadPhoto':
-				return (
-					<UploadPhoto />
-				)
-			case 'CreateAcc':
-				console.log('a')
-				return (
-					<CreateAcc />
-				)
-			case 'CreatePost':
-				return (
-					<CreatePost />
-				)
-			default:
-				return false
-		}
-	} else {
-		return false
+	switch (props.type) {
+		case 'WarningMsg':
+			return (
+				<WarningMsg />
+			)
+		case 'UploadPhoto':
+			return (
+				<UploadPhoto />
+			)
+		case 'CreateAcc':
+			return (
+				<CreateAcc />
+			)
+		case 'CreatePost':
+			return (
+				<CreatePost />
+			)
+		default:
+			return false
 	}
 }
 

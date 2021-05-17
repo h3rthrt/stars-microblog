@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { clearPhoto } from '../../../../redux/actions/profileActions'
 import { useFirebase, useFirestore } from 'react-redux-firebase'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import WarningMsg from '../../../../components/Modal/WarningMsg'
 import { SHOW_MODAL } from '../../../../redux/actions/actionsTypes'
 
 function Photo(props) {
@@ -13,7 +12,6 @@ function Photo(props) {
 	//for show menu with buttons
 	const [ showMenu, setShowMenu ] = useState(false) 
 	//warning modal
-	const [ showWarning, setShowWarning ] = useState(false) 
 	const buttonUpdateRef = useRef()
 	const inputImageRef = useRef()
 
@@ -51,7 +49,6 @@ function Photo(props) {
 				alt: files[0].name,
 				files: Array.from(event.target.files)
 			}
-			console.log(obj)
 			props.showModal(obj)
 		}
 		reader.readAsDataURL(files[0])
@@ -92,14 +89,6 @@ function Photo(props) {
 
 	return (
 		<div className="photo-user">
-			{ showWarning ? (
-				<WarningMsg
-					msg="Вы уверены?"
-					accept="Удалить"
-					onShow={() => setShowWarning(!showWarning)}
-					action={() => removePhoto()}
-				/>
-			) : null }
 			<div className="photo-user__img-block">
 				{ !props.photoURL ? (
 					<img alt="" src="/img/defaultPhoto.svg" />
@@ -128,7 +117,7 @@ function Photo(props) {
 					</li>
 					{ props.photoURL ? (
 						<li>
-							<button className="photo-user__remove" onClick={() => setShowWarning(!showWarning)}>
+							<button className="photo-user__remove" onClick={() => removePhoto()}>
 								Удалить фото
 							</button>
 						</li>

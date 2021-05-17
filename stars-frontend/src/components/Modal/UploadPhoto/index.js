@@ -1,4 +1,6 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect } from 'react'
+import { CSSTransition } from 'react-transition-group'
+import Modal from 'react-modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { connect } from 'react-redux'
 import Button from '../../UI/Button'
@@ -6,34 +8,43 @@ import { upload, uploadReset } from '../../../redux/actions/uploadActions'
 import { SHOW_MODAL } from '../../../redux/actions/actionsTypes'
 
 const ViewPhoto = ((props) => {
-	// console.log(props.complete, props.upload)
 	useEffect(() => {
 		if(props.complete && props.isShow) {
-			hideModalHandler()
-		}
-	})
-
-	const hideModalHandler = useCallback(() => {
-		setTimeout(() => {
 			props.showModal()
-		}, 100)
-		document.getElementById('modal').classList.add('hide')
-		props.uploadReset()
-	}, [props]) 
+		}
+		Modal.setAppElement('body')
+		return () => {
+			props.uploadReset()
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [props.complete, props.isShow] )
 
 	async function uploadHandler() {
 		await props.uploadPhoto(props.image.files, props.username, props.uid)
 	}
 
-	if(props.isShow) { 
-		return (
-			<div id="modal" className="modal">
+	return (
+		<CSSTransition
+			in={props.isShow}
+			timeout={300}
+		>
+			<Modal
+				closeTimeoutMS={500}
+				isOpen={props.isShow}
+				className="modal"
+				ariaHideApp={false}
+				style={{
+					overlay: {
+						backgroundColor: 'none',
+					},
+				}}
+			>
 				<div className="modal__dialog modal__photo">
 					<div className="modal__header">
-                        <button onClick={ () => props.showModal() }>
-                            <FontAwesomeIcon icon="times" className="times"/>
-                        </button>
-                    </div>
+						<button onClick={ () => props.showModal() }>
+							<FontAwesomeIcon icon="times" className="times"/>
+						</button>
+					</div>
 					<h2>{props.blogname}</h2>
 					<div className="image-block">
 						{ props.image && <img alt={props.image.alt} src={props.image.base64} /> }
@@ -54,11 +65,9 @@ const ViewPhoto = ((props) => {
 						</Button>
 					</div>
 				</div>
-			</div>
-		)
-	} else {
-		return null
-	}
+			</Modal>
+		</CSSTransition>
+	)
 })
 
 function mapStateToProps(state) {
