@@ -44,6 +44,8 @@ export async function getPostData(doc, usersCollection, postsCollection, likesCo
 				dataPost.author = docData.blogname
 				dataPost.authorUsername = docData.username 
 			})
+		}).catch(() => {
+			dataPost.removed = true
 		})
 	}
 	// fecth user info

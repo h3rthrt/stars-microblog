@@ -32,7 +32,7 @@ const Post = forwardRef((props, ref) => {
 		}
 	}, [onLoad, post.photoURL])
 	
-	if (!post) return false
+	if (!post || post.removed) return false
 	if (post.repost && !post.reposted && post.username === props.displayName) {
 		postCls.push('removeAnimation')
 		setTimeout(() => {
