@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { CSSTransition } from 'react-transition-group'
 import Modal from 'react-modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -60,6 +60,14 @@ function CreateAcc(props) {
             }
         },
     ])
+
+    useEffect(() => {
+        if (!props.isEmpty) {
+            setFormValid(false)
+            props.showModal()
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.isEmpty])
 
     function validate(value, validation) {
         if(!validation){
@@ -134,7 +142,6 @@ function CreateAcc(props) {
             name,
             blogname
         )
-        props.showModal()
     }
     return (
         <CSSTransition
@@ -185,7 +192,8 @@ function CreateAcc(props) {
 
 function mapStateToProps(state) {
     return {
-        isShow: state.modal.isShow
+        isShow: state.modal.isShow,
+        isEmpty: state.firebase.auth.isEmpty
     }
 }
 
