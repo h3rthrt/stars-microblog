@@ -39,12 +39,14 @@ export async function getPostData(doc, usersCollection, postsCollection, likesCo
 			dataPost.tags = docData.tags
 			dataPost.text = docData.text
 			dataPost.authorId = docData.user.id
+			dataPost.removed = false
 			await usersCollection.doc(docData.user.id).get().then(async (doc) => {
 				let docData = await doc.data()
 				dataPost.author = docData.blogname
 				dataPost.authorUsername = docData.username 
 			})
 		}).catch(() => {
+			dataPost.author = dataPost.postId
 			dataPost.removed = true
 		})
 	}
@@ -192,7 +194,10 @@ export function getUserLikePosts(uid, userId) {
 					return notes
 				})).then((notes) => {
 					lastPost = querySnapshot.docs[querySnapshot.docs.length - 1]
-					dispatch(addPosts(notes, lastPost))
+					let filterNotes = notes.filter((value) => {
+						return value !== undefined	
+					})
+					dispatch(addPosts(filterNotes, lastPost))
 				}).catch((err) => {
 					dispatch(notification('Danger', 'Ошибка загрузки постов пользователя.', `${err}`))
 				})
@@ -228,13 +233,16 @@ export function getMoreUserLikePosts(uid, lastPost, userId) {
 					}
 				})
 				.then((notes) => {
-					if (!!notes.length) notes.shift()
+					if (notes === undefined) return dispatch({ type: LOAD_POSTS_COMPLETE })
 					if (!!!notes.length) {
+						if (!!notes.length) notes.shift()
 						dispatch({ type: LOAD_POSTS_COMPLETE })
 					} else {
 						const lastNote = querySnapshot.docs[querySnapshot.docs.length - 1]
 						dispatch(addMorePosts(notes, lastNote))
 					}
+				}).catch((err) => {
+					console.error(err)
 				})
 			}))
 		})

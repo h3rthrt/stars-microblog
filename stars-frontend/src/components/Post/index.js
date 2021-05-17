@@ -32,7 +32,7 @@ const Post = forwardRef((props, ref) => {
 		}
 	}, [onLoad, post.photoURL])
 	
-	if (!post || post.removed) return false
+	if (!post) return false
 	if (post.repost && !post.reposted && post.username === props.displayName) {
 		postCls.push('removeAnimation')
 		setTimeout(() => {
@@ -51,7 +51,7 @@ const Post = forwardRef((props, ref) => {
 						<Link to={`/profile/${post.username}`} className="blogname__list">
 							{ post.blogname }
 						</Link>
-						{ post.author 
+						{ post.author || post.removed
 							?  (
 								<div className="author-post">
 									<FontAwesomeIcon icon="reply" className="reply" />
@@ -78,7 +78,7 @@ const Post = forwardRef((props, ref) => {
 							repost={ post.repost }
 						/>
 					</div>
-					{ post.header ? (<h2>{ post.header }</h2>) : null  }
+					{ post.header ? (<h2>{ post.header }</h2>) : (post.removed && <h2 style={{ color: 'var(--blue)' }}>Автор удалил пост</h2>)  }
 					<div className="post__images">
 						{
 							post.photoURL?.map((image, index) => {
@@ -93,7 +93,7 @@ const Post = forwardRef((props, ref) => {
 					{ post.text ? (<p>{ post.text }</p>) : null}
 					<div className="footer-post">
 						<div className="footer-post__left">
-							<span>{ `${ notes }  ${ wordForm( notes, ['заметка', 'заметки', 'заметок']) }` }</span>
+							<span>{ `${ notes || 0 }  ${ wordForm( notes || 0, ['заметка', 'заметки', 'заметок']) }` }</span>
 							<div className="footer-post__tags">
 								{ post.tags ? (
 									post.tags.map((tag, index) => {
@@ -114,6 +114,7 @@ const Post = forwardRef((props, ref) => {
 							liked={ post.liked }
 							repost={ post.repost }
 							reposted={ post.reposted }
+							removed={ post.removed }
 						/>
 					</div>
 				</div>

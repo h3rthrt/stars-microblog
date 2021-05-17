@@ -36,9 +36,11 @@ export default function postsReducer(state = initialState, action) {
 	switch (action.type) {
 		case LOAD_POSTS_SUCCESS:
 			let tempPosts = cachePosts(action.posts)
-			tempPosts.sort((a, b) => {
-				return b.timestamp.seconds - a.timestamp.seconds
-			})
+			if (tempPosts.length > 0) {
+				tempPosts.sort((a, b) => {
+					return b.timestamp.seconds - a.timestamp.seconds
+				})
+			}
 			return {
 				...state,
 				posts: tempPosts,

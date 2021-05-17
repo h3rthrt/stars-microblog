@@ -171,7 +171,7 @@ function PostButtons(props) {
 			})
 		}
 	}
-	if (props.isAuthEmpty) return false
+	if (props.isAuthEmpty || props.removed) return false
 	return (
 		<div className="footer-post__right">
 			{
