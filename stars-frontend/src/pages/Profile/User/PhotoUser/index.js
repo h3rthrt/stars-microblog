@@ -47,7 +47,7 @@ function Photo(props) {
 			const obj = {
 				base64: ev.target.result,
 				alt: files[0].name,
-				files: Array.from(event.target.files)
+				files: files
 			}
 			props.showModal(obj)
 		}
