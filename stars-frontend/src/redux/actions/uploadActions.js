@@ -37,13 +37,15 @@ export function upload(files, username, uid, forPosts = false, post) {
 					dispatch(notification('Danger', titleDanger, error.message))
 				})
 		}
-		// if post with images
+		// if obj with images
 		files.forEach((file) => {
 			const user = firebase.auth().currentUser
 			const storagePath = `${username}/${!forPosts ? 'profilePhoto' : 'media'}`
 			const dbPath = !forPosts ? 'users' : `users/${uid}/media`
 			if (forPosts) file = file.file
+			const fileName = file.name.replace('.', Math.floor(Date.now() + Math.random()) + '.')
 			firebase.uploadFile(storagePath, file, dbPath, {
+				name: fileName,
 				progress: true,
 				metadataFactory: (uploadRes, firebase, metadata, downloadURL) => {
 					if(!forPosts) { 

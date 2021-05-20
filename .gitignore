@@ -47,6 +47,7 @@ stars-backend/node_modules/
 stars-backend/jspm_packages/
 stars-frontend/node_modules/
 stars-frontend/jspm_packages/
+stars-frontend/.firebase/
 
 # TypeScript v1 declaration files
 typings/
@@ -158,4 +159,4 @@ stars-backend/process.env
 stars-backend/package-lock.json
 fake-api/yarn.lock
 stars-frontend/yarn.lock
-stars-frontend/.firebase/
+stars-frontend/.firebase
