@@ -158,3 +158,4 @@ stars-backend/process.env
 stars-backend/package-lock.json
 fake-api/yarn.lock
 stars-frontend/yarn.lock
+stars-frontend/.firebase/
