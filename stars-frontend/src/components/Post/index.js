@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useRef, useEffect, useCallback } from 'react'
+import React, { useState, forwardRef, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PostButtons from './PostButtons'
@@ -12,34 +12,11 @@ const Post = forwardRef((props, ref) => {
 	const [ notes, setNotes ] = useState(post ? post.notes : 0)
 	const [ dropdown, setDropdown ] = useState(false)
 	const [ remove, setRemove ] = useState(false)
-	const [ endTimeout, setEndTimeout ] = useState(false)
-	const [ clsImg, setClsImg ] = useState(['img-box__opacity'])
 	const imgRef = useRef()
 	let postCls = [ 'post', 'loadAnimation' ]
-
-	const onLoad = useCallback(() => {
-		setClsImg((prev) => {
-			return prev.concat(['img-box__loaded'])
-		})
-	}, [])
-
-	useEffect(() => {
-		if (!post.photoURL?.length) return
-		const {current} = imgRef
-		current.addEventListener("load", onLoad())
-		return () => {
-			current.removeEventListener("load", onLoad())
-		}
-	}, [onLoad, post.photoURL])
 	
 	if (!post) return false
-	if (post.repost && !post.reposted && post.username === props.displayName) {
-		postCls.push('removeAnimation')
-		setTimeout(() => {
-			setEndTimeout(true)
-		}, 220)
-		if (endTimeout) return null
-	}
+
 	if (!remove) {
 		return (
 			<div ref={ref} className={ postCls.join(' ') }>
@@ -84,7 +61,7 @@ const Post = forwardRef((props, ref) => {
 							post.photoURL?.map((image, index) => {
 								return (
 									<div className="img-box" key={ index }>
-										<img ref={ imgRef } className={ clsImg.join(' ') } alt="" src={ image } />
+										<img ref={ imgRef } alt="" src={ image } />
 									</div>
 								)
 							}) || null
