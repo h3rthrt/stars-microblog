@@ -27,8 +27,8 @@ function User(props) {
                 <h2>Блоги</h2>
                 <hr/>
                 <div className="subs-block">
-                    <a href="/">{ following } в читаемых</a>
-                    <a href="/">{ `${followers} ${wordForm( followers, ['читатель', 'читателя', 'читателей'])}` }</a>
+                    <a href="/#">{ following } в читаемых</a>
+                    <a href="/#">{ `${followers} ${wordForm( followers, ['читатель', 'читателя', 'читателей'])}` }</a>
                 </div>
             </div>
             <div className="right-block__media">
@@ -40,7 +40,7 @@ function User(props) {
                     props.media.map((media, index) => {
                         if (!media.photoURL) return null
                         return (
-                            <a alt="" href="/" key={ index }>
+                            <a alt="" href="/#" key={ index }>
                                 <img alt="" src={ media.photoURL } key={ index } />
                             </a>
                         )

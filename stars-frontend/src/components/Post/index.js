@@ -1,10 +1,12 @@
-import React, { useState, forwardRef, useRef } from 'react'
+import React, { useState, forwardRef } from 'react'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PostButtons from './PostButtons'
 import Dropdown from './Dropdown'
 import RestorePost from './RestorePost'
 import wordForm from '../../wordForm'
+import 'react-lazy-load-image-component/src/effects/blur.css'
 import './Post.sass'
 
 
@@ -12,7 +14,6 @@ function Post(props, ref) {
 	const { post } = props
 	const [ dropdown, setDropdown ] = useState(false)
 	const [ remove, setRemove ] = useState(false)
-	const imgRef = useRef()
 	let postCls = [ 'post', 'loadAnimation' ]
 	
 	if (!post) return false
@@ -61,7 +62,16 @@ function Post(props, ref) {
 							post.photoURL?.map((image, index) => {
 								return (
 									<div className="img-box" key={ index }>
-										<img ref={ imgRef } alt="" src={ image } />
+										<LazyLoadImage
+											delayMethod="debounce"
+											delayTime="200"
+											effect="blur"
+											width={image.width}
+											height={image.height}
+											alt={image.alt}
+											src={image.url}
+											/>
+										{/* <img alt="" src={ image } /> */}
 									</div>
 								)
 							}) || null
@@ -75,7 +85,7 @@ function Post(props, ref) {
 								{ post.tags ? (
 									post.tags.map((tag, index) => {
 										return (
-											<a href="/" key={ index }>
+											<a href="/#" key={ index }>
 												{ '#' + tag }
 											</a>
 										)})

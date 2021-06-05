@@ -84,28 +84,37 @@ function CreateNote(props) {
 	}
 
 	function changeHandler(event) {
+		let _URL = window.URL || window.webkitURL
 		if (!event.target.files.length) {
 			return
 		}
 		const files = Array.from(event.target.files)
 		files.forEach((file, index) => {
-			if (!file.type.match('image')) {
-				return
-			}
+			if (!file.type.match('image')) return
+			let img = new Image()
 			const reader = new FileReader()
 			reader.onload = (ev) => {
-				setImage((prevState) => {
-					return {
-						images: [
-							...prevState.images,
-							{
-								base64: ev.target.result,
-								alt: file.name,
-								file: event.target.files[index]
-							}
-						]
+				img.src = _URL.createObjectURL(file)
+				img.onload = function() {
+					const imgSize = {
+						width: this.width,
+						height: this.height
 					}
-				})
+					setImage((prevState) => {
+						return {
+							images: [
+								...prevState.images,
+								{
+									base64: ev.target.result,
+									alt: file.name,
+									file: event.target.files[index],
+									width: imgSize.width,
+									height: imgSize.height
+								}
+							]
+						}
+					})
+				}
 			}
 			reader.readAsDataURL(file)
 		})
@@ -121,9 +130,7 @@ function CreateNote(props) {
 	function removeImageHandler(img) {
 		setImage((prevState) => {
 			const images = prevState.images.filter((imageState) => imageState.alt !== img.alt)
-			return {
-				images
-			}
+			return images
 		})
 	}
 

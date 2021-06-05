@@ -42,10 +42,16 @@ export function upload(files, username, uid, forPosts = false, post) {
 			const user = firebase.auth().currentUser
 			const storagePath = `${username}/${!forPosts ? 'profilePhoto' : 'media'}`
 			const dbPath = !forPosts ? 'users' : `users/${uid}/media`
+			let customMetadata = {
+				width: file.width,
+				height: file.height,
+				alt: file.alt
+			}
 			if (forPosts) file = file.file
 			const fileName = file.name.replace('.', Math.floor(Date.now() + Math.random()) + '.')
 			firebase.uploadFile(storagePath, file, dbPath, {
 				name: fileName,
+				metadata: { customMetadata },
 				progress: true,
 				metadataFactory: (uploadRes, firebase, metadata, downloadURL) => {
 					if(!forPosts) { 
@@ -58,7 +64,12 @@ export function upload(files, username, uid, forPosts = false, post) {
 						dispatch(loadProfilePhoto(downloadURL))
 						return { photoURL: downloadURL }
 					} else {
-						post.photoURL.push(downloadURL)
+						post.photoURL.push({
+							url: downloadURL,
+							width: customMetadata.width,
+							height: customMetadata.height,
+							alt: customMetadata.alt
+						})
 						return { photoURL: downloadURL }
 					}
 				}, documentId: !forPosts && user.uid

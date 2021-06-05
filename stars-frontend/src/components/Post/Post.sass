@@ -1,6 +1,12 @@
 @import "../../sass/vars"
 @import "../../sass/mixins/fadeIn"
 
+.lazy-load-image-background
+    background-size: cover
+    display: inline-block
+    width: 100%
+    height: 500px
+
 .post__images > .img-box + .img-box
     margin-left: 4px
 
@@ -64,6 +70,10 @@
             display: flex
             justify-content: center
             align-items: center
+            > span
+                display: contents !important
+                width: 100%
+                height: 100%
             &__opacity
                 transition: .3s ease-in-out
                 opacity: 0
@@ -75,6 +85,8 @@
             min-height: 100%
             min-width: 100%
             object-fit: cover
+            width: -moz-available
+            height: -moz-available
     &__right
         min-width: calc(88.6% - 20px)
         margin-left: 20px
