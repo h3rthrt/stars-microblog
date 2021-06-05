@@ -109,4 +109,4 @@ function mapDispatchToProps(dispatch) {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(FetchingPosts))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(React.memo(FetchingPosts)))

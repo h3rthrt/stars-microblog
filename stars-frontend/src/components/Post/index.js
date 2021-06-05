@@ -7,9 +7,9 @@ import RestorePost from './RestorePost'
 import wordForm from '../../wordForm'
 import './Post.sass'
 
-const Post = forwardRef((props, ref) => {
+
+function Post(props, ref) {
 	const { post } = props
-	const [ notes, setNotes ] = useState(post ? post.notes : 0)
 	const [ dropdown, setDropdown ] = useState(false)
 	const [ remove, setRemove ] = useState(false)
 	const imgRef = useRef()
@@ -70,7 +70,7 @@ const Post = forwardRef((props, ref) => {
 					{ post.text ? (<p>{ post.text }</p>) : null}
 					<div className="footer-post">
 						<div className="footer-post__left">
-							<span>{ `${ notes || 0 }  ${ wordForm( notes || 0, ['заметка', 'заметки', 'заметок']) }` }</span>
+							<span>{ `${ post.notes || 0 }  ${ wordForm( post.notes || 0, ['заметка', 'заметки', 'заметок']) }` }</span>
 							<div className="footer-post__tags">
 								{ post.tags ? (
 									post.tags.map((tag, index) => {
@@ -87,7 +87,6 @@ const Post = forwardRef((props, ref) => {
 						<PostButtons
 							postId={ post.postId }
 							username={ post.username }
-							onChangeInc={ (value) => setNotes((prev) => {return prev + value}) }
 							liked={ post.liked }
 							repost={ post.repost }
 							reposted={ post.reposted }
@@ -110,6 +109,5 @@ const Post = forwardRef((props, ref) => {
 			</div>
 		)
 	}
-
-})
-export default Post
+}
+export default forwardRef(Post)

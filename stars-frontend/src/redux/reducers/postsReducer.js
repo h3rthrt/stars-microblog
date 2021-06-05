@@ -60,7 +60,7 @@ export default function postsReducer(state = initialState, action) {
 		case LOAD_ADDED_POSTS_SUCCESS:
 			return {
 				...state,
-				posts: [ action.posts ].concat(state.posts)
+				posts: [ action.posts, ...state.posts ]
 			}
 		case SET_IS_FETCHING:
 			return {
@@ -106,6 +106,7 @@ export default function postsReducer(state = initialState, action) {
 				posts.map((post, index) => {
 					if (post.postId === action.postId) {
 						post.liked = action.liked
+						post.notes = post.notes + action.value
 					}
 					return post
 				})
@@ -118,6 +119,7 @@ export default function postsReducer(state = initialState, action) {
 				posts.map((post, index) => {
 					if (post.postId === action.postId) {
 						post.reposted = action.reposted
+						post.notes = post.notes + action.value
 					}
 					return post
 				})

@@ -40,9 +40,8 @@ function PostButtons(props) {
 						})
 					})
 					postUpdate.then(() => {
-						props.onChangeInc(-1)
 						setLikeDisabled(false)
-						props.setLikeOnPosts(props.postId, false)
+						props.setLikeOnPosts(props.postId, false, -1)
 					}).catch((err) => {
 						console.error(err)
 					})
@@ -81,9 +80,8 @@ function PostButtons(props) {
 			})
 
 			postUpdate.then(() => {
-				props.onChangeInc(1)
 				setLikeDisabled(false)
-				props.setLikeOnPosts(props.postId, true)
+				props.setLikeOnPosts(props.postId, true, 1)
 			}).catch((err) => {
 				console.error(err)
 			})
@@ -118,9 +116,8 @@ function PostButtons(props) {
 					})
 
 					repostDel.then(() => {
-						props.onChangeInc(-1)
 						setRepostDisabled(false)
-						props.setRepostOnPosts(props.postId, false)
+						props.setRepostOnPosts(props.postId, false, -1)
 					}).catch((err) => {
 						console.error(err)
 					})
@@ -163,9 +160,8 @@ function PostButtons(props) {
 			})
 
 			repostAdd.then(() => {
-				props.onChangeInc(1)
 				setRepostDisabled(false)
-				props.setRepostOnPosts(props.postId, true)
+				props.setRepostOnPosts(props.postId, true, 1)
 			}).catch((err) => {
 				console.error(err)
 			})
@@ -201,8 +197,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		setLikeOnPosts: (postId, liked) => dispatch({ postId: postId, liked: liked, type: SET_LIKE_ON_POST }),
-		setRepostOnPosts: (postId, reposted) => dispatch({ postId: postId, reposted: reposted, type: SET_REPOST_ON_POST })
+		setLikeOnPosts: (postId, liked, value) => dispatch({ postId: postId, liked: liked, value: value, type: SET_LIKE_ON_POST }),
+		setRepostOnPosts: (postId, reposted, value) => dispatch({ postId: postId, reposted: reposted, value: value, type: SET_REPOST_ON_POST })
 	}
 }
 
