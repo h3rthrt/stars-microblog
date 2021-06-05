@@ -130,7 +130,7 @@ function CreateNote(props) {
 	function removeImageHandler(img) {
 		setImage((prevState) => {
 			const images = prevState.images.filter((imageState) => imageState.alt !== img.alt)
-			return images
+			return { images }
 		})
 	}
 
@@ -142,6 +142,8 @@ function CreateNote(props) {
             }
         })
     }
+
+	console.log(image)
 
 	return (
 		<CSSTransition
@@ -172,7 +174,7 @@ function CreateNote(props) {
 							onChange={(ev) => changeHeaderHandler(ev)} />
 						<hr />
 						<div className="post__images">
-							{ image.images.length ? (
+							{ image.images ? (
 								image.images.map((image, index) => {
 									return (
 										<div className="img-box" key={index}>
